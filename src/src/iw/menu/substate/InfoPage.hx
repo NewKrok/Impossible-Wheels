@@ -88,7 +88,7 @@ import js.Browser;
 		});
 
 		coconutButton = new BaseButton(libraries, {
-			onClick: function(_) { Browser.window.open("https://lib.haxe.org/p/coconut.ui", "_blank"); },
+			onClick: function(_) { Browser.window.open("https://lib.haxe.org/p/coconut.data", "_blank"); },
 			baseGraphic: Res.image.ui.coconut_credit.toTile(),
 			overAlpha: .5
 		});

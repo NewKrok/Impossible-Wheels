@@ -6,6 +6,7 @@ import com.greensock.TweenMax;
 import h2d.Graphics;
 import h2d.Layers;
 import haxe.Timer;
+import hxd.Key;
 import iw.data.CarDatas;
 import iw.data.LevelData;
 import iw.game.car.PlayerCar;
@@ -48,7 +49,7 @@ class World extends Layers
 	var recorder:Recorder;
 
 	var cameraEasing:SimplePoint = { x: 15, y: 15 };
-	var cameraOffset:SimplePoint = { x: 300, y: 300 };
+	var cameraOffset:SimplePoint = { x: -300, y: -300 };
 	var cameraZoomHelper:Float = 1;
 
 	var now:Float;
@@ -71,6 +72,7 @@ class World extends Layers
 	var isBuilt:Bool = false;
 	var isPhysicsEnabled:Bool = false;
 	var isDemo:Bool = false;
+	var isPlayerCameraAllowed:Bool = false;
 
 	var gameTime:Float = 0;
 	var gameStartTime:Float = 0;
@@ -83,6 +85,8 @@ class World extends Layers
 		this.levelData = levelData;
 		this.isDemo = isDemo;
 		this.isEffectEnabled = isEffectEnabled;
+
+		isPlayerCameraAllowed = !isDemo;
 	}
 
 	public function build():ActionFlow
@@ -242,6 +246,12 @@ class World extends Layers
 	{
 		TweenMax.killTweensOf(camera);
 
+		if (playerCar != null)
+		{
+			x += cameraOffset.x;
+			y += cameraOffset.y;
+		}
+
 		camera.x = -x;
 		camera.y = -y;
 	}
@@ -249,6 +259,12 @@ class World extends Layers
 	public function moveCameraTo(x:Float, y:Float, time:Float):ActionFlow
 	{
 		var result:ActionFlow = { onComplete: null };
+
+		if (playerCar != null)
+		{
+			x += cameraOffset.x;
+			y += cameraOffset.y;
+		}
 
 		TweenMax.killTweensOf(camera);
 		TweenMax.to(camera, time, {
@@ -280,7 +296,6 @@ class World extends Layers
 		isGameStarted = true;
 		/*isRaceStarted = false;
 		isGamePaused = false;
-		isCameraAllowed = true;
 		isDemoFinished = false;*/
 
 		gameTime = 0;
@@ -300,12 +315,34 @@ class World extends Layers
 
 	public function update(delta:Float)
 	{
+		if (!isBuilt) return;
+
 		now = Date.now().getTime();
 		if (isGamePaused) return;
 
 		calculateGameTime();
 
 		if (isPhysicsEnabled) space.step(CPhysicsValue.STEP);
+
+		if (!isDemo)
+		{
+			if (Key.isDown(Key.UP)) playerCar.accelerateToRight();
+			else if (Key.isDown(Key.DOWN)) playerCar.accelerateToLeft();
+			else playerCar.idle();
+
+			if (Key.isDown(Key.LEFT)) playerCar.rotateLeft();
+			else if (Key.isDown(Key.RIGHT)) playerCar.rotateRight();
+
+			playerCar.update(delta);
+
+			if (isPlayerCameraAllowed)
+			{
+				var cameraPointX = -playerCar.x - cameraOffset.x;
+				var cameraPointY = -playerCar.y - cameraOffset.y;
+				camera.x -= (camera.x - cameraPointX) / cameraEasing.x;
+				camera.y -= (camera.y - cameraPointY) / cameraEasing.y;
+			}
+		}
 
 		if (playback != null)
 		{
