@@ -40,18 +40,25 @@ class GameState extends Base2dState
 		);
 		world.build().onComplete = init;
 
-		//ui = new GameUi(resumeRequest, pauseRequest, stage);
+		ui = new GameUi(
+			stage,
+			resumeRequest,
+			pauseRequest,
+			gameModel.observables.gameTime
+		);
 	}
 
 	function init()
 	{
-		var startPoint = appModel.getLevelData(gameModel.levelId).levelData.startPoint;
-		world.jumpCameraTo(startPoint.x + 300, startPoint.y);
+		reset();
 	}
 
 	function reset()
 	{
-		start();
+		gameModel.gameTime = 0;
+
+		var startPoint = appModel.getLevelData(gameModel.levelId).levelData.startPoint;
+		world.jumpCameraTo(startPoint.x + 300, startPoint.y);
 	}
 
 	function start():Void
@@ -64,6 +71,8 @@ class GameState extends Base2dState
 	override public function update(delta:Float)
 	{
 		world.update(delta);
+
+		gameModel.gameTime = world.getGameTime();
 	}
 
 	function resumeRequest()

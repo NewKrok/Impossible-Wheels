@@ -9,4 +9,6 @@ import coconut.data.Model;
 class GameModel implements Model
 {
 	@:external var levelId:UInt;
+
+	@:editable var gameTime:Float = 0;
 }

@@ -371,6 +371,8 @@ class World extends Layers
 		else gameTime = 0;
 	}
 
+	public function getGameTime():Float return gameTime;
+
 	public function pause()
 	{
 		isPhysicsEnabled = false;
