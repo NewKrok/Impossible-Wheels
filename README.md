@@ -5,7 +5,7 @@ Physics based HTML5 2D car game, written in Haxe.
 - soon...
 
 ## Screenshot(s)
-- soon...
+![screenshot_main_menu_v1](https://user-images.githubusercontent.com/13141660/55689407-564db880-5984-11e9-99cf-dc60f2388ff1.jpg)
 
 ## Dependencies
 - **Heaps 4.3.0** A mature cross platform graphics engine designed for high performance games. https://heaps.io/
