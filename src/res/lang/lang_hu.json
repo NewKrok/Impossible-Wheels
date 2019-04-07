@@ -1,0 +1,19 @@
+{
+	"h": {
+		"back": "VISSZA",
+		"lang": "Nyelv",
+		"eng": "English",
+		"hun": "Magyar",
+		"on": "Be",
+		"off": "Ki",
+		"sound": "Hang",
+		"music": "Zene",
+		"effects": "Effektek",
+		"fullscreen": "Fullscreen",
+		"design_and_dev": "Tervezte és Fejlesztette",
+		"sound_by": "Zene és Hangok",
+		"level": "Szint $id",
+		"start_level": "START",
+		"unlock_info": "Teljesítsd az elözö szintet a feloldáshoz!"
+	}
+}

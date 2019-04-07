@@ -1,0 +1,4 @@
+asset_source/
+src/bin/*
+!src/bin/index.html
+!src/bin/TweenMax.min.js

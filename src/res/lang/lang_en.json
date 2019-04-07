@@ -1,0 +1,19 @@
+{
+	"h": {
+		"back": "BACK",
+		"lang": "Language",
+		"eng": "English",
+		"hun": "Magyar",
+		"on": "On",
+		"off": "Off",
+		"sound": "Sound",
+		"music": "Music",
+		"effects": "Effects",
+		"fullscreen": "Fullscreen",
+		"design_and_dev": "Designed and Developed by",
+		"sound_by": "Music and Sounds by",
+		"level": "Level $id",
+		"start_level": "START LEVEL",
+		"unlock_info": "Complete previous level to unlock!"
+	}
+}
