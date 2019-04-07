@@ -1,2 +1,19 @@
 # Impossible-Wheels
-Physics based HTML5 2d car game, written in Haxe. Used Libs: Heaps, Nape, HPP, TweenMax, Coconut
+Physics based HTML5 2D car game, written in Haxe. 
+
+## Try it now
+- soon...
+
+## Dependencies
+- **Heaps 4.3.0** A mature cross platform graphics engine designed for high performance games. https://heaps.io/
+- **Nape 2.0.20** 2D Physics Engine. https://lib.haxe.org/p/nape/
+- **HPP Package** Some useful classes for haxe projects https://github.com/NewKrok/HPP-Package
+- **TweenMax** The most feature-packed (and popular) animation tool https://greensock.com/tweenmax
+- **Coconut Data** A powerful lib for handle/bind/observe data https://lib.haxe.org/p/coconut.data
+- **ReplayKit** Library for recording and replaying gameplays https://github.com/apostx/haxe_replaykit
+
+Our webpage:
+http://flashplusplus.net
+
+Our Facebook page:
+https://www.facebook.com/flashplusplus/
