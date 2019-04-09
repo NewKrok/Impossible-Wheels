@@ -13,24 +13,20 @@ class AbstractCar
 {
 	var carData:CarData;
 
-	var frontSpringHorizontalOffset:Float = 77;
+	var frontSpringHorizontalOffset:Float = 60;
 	var frontSpringVerticalOffset:Float = 1;
-	var backSpringHorizontalOffset:Float = 42;
+	var backSpringHorizontalOffset:Float = 55;
 	var backSpringVerticalOffset:Float = 14;
-	var backTopHolderHorizontalOffset:Float = 8;
+	var backTopHolderHorizontalOffset:Float = -9;
 	var backTopHolderVerticalOffset:Float = 45;
-	var backBottomHolderHorizontalOffset:Float = 6;
+	var backBottomHolderHorizontalOffset:Float = -11;
 	var backBottomHolderVerticalOffset:Float = 62;
-	var frontTopHolderHorizontalOffset:Float = 28;
+	var frontTopHolderHorizontalOffset:Float = 11;
 	var frontTopHolderVerticalOffset:Float = 35;
-	var frontBottomHolderHorizontalOffset:Float = 26;
+	var frontBottomHolderHorizontalOffset:Float = 9;
 	var frontBottomHolderVerticalOffset:Float = 52;
-	var smokeHorizontalOffset:Float = -130;
+	var smokeHorizontalOffset:Float = -150;
 	var smokeVerticalOffset:Float = 10;
-	var rockLeftHorizontalOffset:Float = -100;
-	var rockLeftVerticalOffset:Float = 90;
-	var rockRightHorizontalOffset:Float = 80;
-	var rockRightVerticalOffset:Float = 90;
 
 	public var carScale:Float;
 	public var carBodyGraphics:Bitmap;
@@ -92,55 +88,55 @@ class AbstractCar
 
 	function buildGraphics():Void
 	{
-		backSpring = new Bitmap(Res.image.car.asset.spring.toTile(), container);
+		backSpring = new Bitmap(Res.image.car.spring.toTile(), container);
 		backSpring.scale(carScale);
 		backSpring.smooth = true;
 		backSpring.tile.dx = 0;
 		backSpring.tile.dy = cast -backSpring.tile.height / 2;
 
-		frontSpring = new Bitmap(Res.image.car.asset.spring.toTile(), container);
+		frontSpring = new Bitmap(Res.image.car.spring.toTile(), container);
 		frontSpring.scale(carScale);
 		frontSpring.smooth = true;
 		frontSpring.tile.dx = 0;
 		frontSpring.tile.dy = cast -frontSpring.tile.height / 2;
 
-		carBodyGraphics = new Bitmap(Res.image.car.body.body_a.toTile(), container);
+		carBodyGraphics = new Bitmap(Res.image.car.body.toTile(), container);
 		carBodyGraphics.scale(carScale);
 		carBodyGraphics.smooth = true;
 		carBodyGraphics.tile.dx = cast -carBodyGraphics.tile.width / 2;
 		carBodyGraphics.tile.dy = cast -carBodyGraphics.tile.height / 2;
 
-		wheelBackTopHolderGraphics = new Bitmap(Res.image.car.asset.wheel_holder.toTile(), container);
+		wheelBackTopHolderGraphics = new Bitmap(Res.image.car.wheel_holder.toTile(), container);
 		wheelBackTopHolderGraphics.scale(carScale);
 		wheelBackTopHolderGraphics.smooth = true;
 		wheelBackTopHolderGraphics.tile.dx = 0;
 		wheelBackTopHolderGraphics.tile.dy = 0;
 
-		wheelBackBottomHolderGraphics = new Bitmap(Res.image.car.asset.wheel_holder.toTile(), container);
+		wheelBackBottomHolderGraphics = new Bitmap(Res.image.car.wheel_holder.toTile(), container);
 		wheelBackBottomHolderGraphics.scale(carScale);
 		wheelBackBottomHolderGraphics.smooth = true;
 		wheelBackBottomHolderGraphics.tile.dx = 0;
 		wheelBackBottomHolderGraphics.tile.dy = 0;
 
-		wheelFrontTopHolderGraphics = new Bitmap(Res.image.car.asset.wheel_holder.toTile(), container);
+		wheelFrontTopHolderGraphics = new Bitmap(Res.image.car.wheel_holder.toTile(), container);
 		wheelFrontTopHolderGraphics.scale(carScale);
 		wheelFrontTopHolderGraphics.smooth = true;
 		wheelFrontTopHolderGraphics.tile.dx = 0;
 		wheelFrontTopHolderGraphics.tile.dy = 0;
 
-		wheelFrontBottomHolderGraphics = new Bitmap(Res.image.car.asset.wheel_holder.toTile(), container);
+		wheelFrontBottomHolderGraphics = new Bitmap(Res.image.car.wheel_holder.toTile(), container);
 		wheelFrontBottomHolderGraphics.scale(carScale);
 		wheelFrontBottomHolderGraphics.smooth = true;
 		wheelFrontBottomHolderGraphics.tile.dx = 0;
 		wheelFrontBottomHolderGraphics.tile.dy = 0;
 
-		wheelRightGraphics = new Bitmap(Res.image.car.wheel.wheel_a.toTile(), container);
+		wheelRightGraphics = new Bitmap(Res.image.car.wheel.toTile(), container);
 		wheelRightGraphics.scale(carScale);
 		wheelRightGraphics.smooth = true;
 		wheelRightGraphics.tile.dx = cast -wheelRightGraphics.tile.width / 2;
 		wheelRightGraphics.tile.dy = cast -wheelRightGraphics.tile.height / 2;
 
-		wheelLeftGraphics = new Bitmap(Res.image.car.wheel.wheel_a.toTile(), container);
+		wheelLeftGraphics = new Bitmap(Res.image.car.wheel.toTile(), container);
 		wheelLeftGraphics.scale(carScale);
 		wheelLeftGraphics.smooth = true;
 		wheelLeftGraphics.tile.dx = cast -wheelLeftGraphics.tile.width / 2;
@@ -163,7 +159,7 @@ class AbstractCar
 		smokeParticleGroup.rotSpeed = 3;
 		smokeParticleGroup.fadeIn = 0;
 		smokeParticleGroup.fadeOut = 0;
-		smokeParticleGroup.texture = Res.image.car.asset.smoke.toTexture();
+		smokeParticleGroup.texture = Res.image.car.smoke.toTexture();
 		smokeParticleGroup.rebuildOnChange = false;
 		particles.addGroup(smokeParticleGroup);
 	}

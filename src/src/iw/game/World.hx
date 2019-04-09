@@ -3,10 +3,13 @@ package iw.game;
 import apostx.replaykit.Playback;
 import apostx.replaykit.Recorder;
 import com.greensock.TweenMax;
+import h2d.Bitmap;
 import h2d.Graphics;
 import h2d.Layers;
 import haxe.Timer;
+import hpp.util.GeomUtil;
 import hxd.Key;
+import hxd.Res;
 import iw.data.CarDatas;
 import iw.data.LevelData;
 import iw.game.car.PlayerCar;
@@ -15,6 +18,7 @@ import iw.game.constant.CPhysicsValue;
 import hpp.heaps.HppG;
 import hpp.util.GeomUtil.SimplePoint;
 import hpp.util.Log;
+import nape.constraint.PivotJoint;
 import nape.dynamics.InteractionFilter;
 import nape.geom.Vec2;
 import nape.phys.Body;
@@ -41,6 +45,9 @@ class World extends Layers
 	var camera:Layers;
 	var space:Space;
 	var groundBodies:Array<Body>;
+
+	var bridgeBodies:Array<Array<Body>>;
+	var bridgeGraphics:Array<Array<Bitmap>>;
 
 	var playerCar:PlayerCar;
 
@@ -123,16 +130,16 @@ class World extends Layers
 				createReplayCar();
 
 			case 3:
+				createBridges();
+
+			case 4:
 				isBuilt = true;
 				reset();
 
 				if (buildResult.onComplete != null) buildResult.onComplete();
 				return;
 
-			case 4:
-				/*createBridges();
-
-			case 5:
+			/*case 5:
 				/*createCoins();
 				createLibraryElements();
 
@@ -232,6 +239,77 @@ class World extends Layers
 		replayCar = new ReplayCar(camera, CarDatas.getData(0), .5, isEffectEnabled);
 	}
 
+	function createBridges():Void
+	{
+		bridgeBodies = [];
+		bridgeGraphics = [];
+
+		for (i in 0...levelData.bridgePoints.length)
+		{
+			createBridge(
+				{ x: levelData.bridgePoints[i].bridgeAX, y: levelData.bridgePoints[i].bridgeAY },
+				{ x: levelData.bridgePoints[i].bridgeBX, y: levelData.bridgePoints[i].bridgeBY }
+			);
+		}
+	}
+
+	function createBridge(pointA:SimplePoint, pointB:SimplePoint):Void
+	{
+		var filter:InteractionFilter = new InteractionFilter();
+		filter.collisionGroup = CPhysicsValue.BRIDGE_FILTER_CATEGORY;
+		filter.collisionMask = CPhysicsValue.BRIDGE_FILTER_MASK;
+
+		var bridgeAngle:Float = Math.atan2(pointB.y - pointA.y, pointB.x - pointA.x);
+		var bridgeElementWidth:UInt = 60;
+		var bridgeElementHeight:UInt = 25;
+		var anchorA:Vec2 = new Vec2(bridgeElementWidth / 2, 0);
+		var anchorB:Vec2 = new Vec2(-bridgeElementWidth / 2, 0);
+		var bridgeDistance:Float = GeomUtil.getDistance(pointA, pointB);
+		var pieces:UInt = Math.round(bridgeDistance / bridgeElementWidth) + 1;
+
+		if (bridgeDistance % bridgeElementWidth == 0)
+		{
+			pieces++;
+		}
+
+		bridgeGraphics.push([]);
+		bridgeBodies.push([]);
+
+		for (i in 0...pieces)
+		{
+			var isLockedBridgeElement:Bool = false;
+			if (i == 0 || i == cast(pieces - 1))
+			{
+				isLockedBridgeElement = true;
+			}
+
+			var body:Body = new Body(isLockedBridgeElement ? BodyType.STATIC : BodyType.DYNAMIC);
+			body.shapes.add(new Polygon(Polygon.box(bridgeElementWidth, bridgeElementHeight)));
+			body.setShapeMaterials(Material.wood());
+			body.setShapeFilters(filter);
+			body.allowRotation = !isLockedBridgeElement;
+			body.position.x = pointA.x + i * bridgeElementWidth * Math.cos(bridgeAngle);
+			body.position.y = pointA.y + i * bridgeElementWidth * Math.sin(bridgeAngle);
+			body.rotation = bridgeAngle;
+			body.space = space;
+			bridgeBodies[bridgeBodies.length - 1].push(body);
+
+			var bridge = new Bitmap(Res.image.game_asset.bridge.toTile(), camera);
+			bridge.smooth = true;
+			bridge.tile.dx = cast -bridge.tile.width / 2;
+			bridge.tile.dy = cast -bridge.tile.height / 2;
+			bridgeGraphics[bridgeGraphics.length - 1].push(bridge);
+
+			if (i > 0)
+			{
+				var pivotJointLeftLeftWheel:PivotJoint = new PivotJoint(bridgeBodies[bridgeBodies.length - 1][i - 1], bridgeBodies[bridgeBodies.length - 1][i], anchorA, anchorB);
+				pivotJointLeftLeftWheel.damping = 1;
+				pivotJointLeftLeftWheel.frequency = 20;
+				pivotJointLeftLeftWheel.space = space;
+			}
+		}
+	}
+
 	public function playReplay(replayData:String):ActionFlow
 	{
 		destroyPlayback();
@@ -324,6 +402,8 @@ class World extends Layers
 
 		if (isPhysicsEnabled) space.step(CPhysicsValue.STEP);
 
+		updateBridges();
+
 		if (!isDemo)
 		{
 			if (Key.isDown(Key.UP)) playerCar.accelerateToRight();
@@ -369,6 +449,22 @@ class World extends Layers
 	{
 		if (isGameStarted) gameTime = now - gameStartTime - totalPausedTime;
 		else gameTime = 0;
+	}
+
+	function updateBridges():Void
+	{
+		for (i in 0...bridgeBodies.length)
+		{
+			for (j in 0...bridgeGraphics[i].length)
+			{
+				var graphic:Bitmap = bridgeGraphics[i][j];
+				var body:Body = bridgeBodies[i][j];
+
+				graphic.x = body.position.x;
+				graphic.y = body.position.y;
+				graphic.rotation = body.rotation;
+			}
+		}
 	}
 
 	public function getGameTime():Float return gameTime;

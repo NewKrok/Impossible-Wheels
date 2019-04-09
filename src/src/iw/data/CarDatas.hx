@@ -72,11 +72,6 @@ class CarDatas
 				speed: 		[30],
 				rotation: 	[2500],
 				elasticity: 	[0],
-				firstWheelXOffset: 36,
-				firstWheelYOffset: 25,
-				backWheelXOffset: -12,
-				backWheelYOffset: 25,
-				flagGraphic: "flag_0"
 			};
 	}
 

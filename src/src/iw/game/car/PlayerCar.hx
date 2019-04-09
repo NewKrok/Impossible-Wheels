@@ -5,6 +5,7 @@ import h2d.Bitmap;
 import h2d.Layers;
 import h2d.Sprite;
 import haxe.Serializer;
+import hxd.Res;
 import iw.data.CarData;
 import iw.data.CarData.CarLeveledData;
 import iw.data.CarDatas;
@@ -34,24 +35,24 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 	var wheelJoinDamping:Float = .4;
 	var wheelJoinHertz:Float = 4;
 
-	var firstWheelXOffset:Float = 55;
-	var firstWheelYOffset:Float = 35;
+	var firstWheelXOffset:Float = 78;
+	var firstWheelYOffset:Float = 64;
 	var firstWheelRadius:Float = 40;
-	var backWheelXOffset:Float = -52;
-	var backWheelYOffset:Float = 35;
+	var backWheelXOffset:Float = -78;
+	var backWheelYOffset:Float = 64;
 	var backWheelRadius:Float = 40;
-	var bodyWidth:Float = 150;
-	var bodyHeight:Float = 45;
+	var bodyWidth:Float = 220;
+	var bodyHeight:Float = 50;
 	var hitAreaHeight:Float = 10;
 
 	var flagJoinDamping:Float = .15;
 	var flagJoinHertz:Float = 1.5;
 
-	var flagEndPointXOffet:Float = -115;
-	var flagEndPointYOffet:Float = -72;
-	var flagGraphicXOffset:Float = -55;
-	var flagGraphicYOffset:Float = -20;
-	var flagAngleOffset:Float = 145;
+	var flagEndPointXOffet:Float = -105;
+	var flagEndPointYOffet:Float = -100;
+	var flagGraphicXOffset:Float = -105;
+	var flagGraphicYOffset:Float = -18;
+	var flagAngleOffset:Float = Math.PI / 2;
 
 	var hitArea:Body;
 	public var carBodyPhysics:Body;
@@ -59,7 +60,7 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 	public var wheelLeftPhysics:Body;
 	public var flagPhysics:Body;
 
-	//public var flagGraphic:FlxSprite;
+	public var flagGraphic:Bitmap;
 
 	public var isOnWheelie:Bool;
 	public var onWheelieStartGameTime:Float;
@@ -81,21 +82,13 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 
 	var direction:Int = 1;
 	var space:Space;
-	var hasFlag:Bool;
 
 	public function new(parent:Layers, space:Space, x:Float, y:Float, carData:CarData, carScale:Float = 1, isEffectEnabled:Observable<Bool>, filterCategory:UInt = 0, filterMask:UInt = 0)
 	{
-		//hasFlag = carData.flagGraphic != null && carData.flagGraphic != "";
-
 		super(parent, carData, carScale, isEffectEnabled);
 		carLeveledData = CarDatas.getLeveledData(carData.id);
 
 		this.space = space;
-
-		firstWheelXOffset += Math.isNaN(carData.firstWheelXOffset) ? 0 : carData.firstWheelXOffset;
-		firstWheelYOffset += Math.isNaN(carData.firstWheelYOffset) ? 0 : carData.firstWheelYOffset;
-		backWheelXOffset += Math.isNaN(carData.backWheelXOffset) ? 0 : carData.backWheelXOffset;
-		backWheelYOffset += Math.isNaN(carData.backWheelYOffset) ? 0 : carData.backWheelYOffset;
 
 		firstWheelXOffset *= carScale;
 		firstWheelYOffset *= carScale;
@@ -107,6 +100,8 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 		bodyHeight *= carScale;
 		hitAreaHeight *= carScale;
 
+		flagGraphicXOffset *= carScale;
+		flagGraphicYOffset *= carScale;
 		flagEndPointXOffet *= carScale;
 		flagEndPointYOffet *= carScale;
 
@@ -115,13 +110,11 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 
 	override function buildGraphics():Void
 	{
-		/*if (hasFlag)
-		{
-			add(flagGraphic = HPPAssetManager.getSprite(carData.flagGraphic));
-			flagGraphic.antialiasing = true;
-			flagGraphic.scale = new FlxPoint(carScale, carScale);
-			flagGraphic.origin.set(flagGraphic.width, flagGraphic.height);
-		}*/
+		flagGraphic = new Bitmap(Res.image.car.flag.toTile(), container);
+		flagGraphic.scale(carScale);
+		flagGraphic.smooth = true;
+		flagGraphic.tile.dx = cast -flagGraphic.tile.width / 2;
+		flagGraphic.tile.dy = -flagGraphic.tile.height;
 
 		super.buildGraphics();
 	}
@@ -152,19 +145,24 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 		wheelLeftPhysics.space = space;
 		wheelRightPhysics.mass = 1;
 
-		if (hasFlag)
-		{
-			flagPhysics = new Body();
-			flagPhysics.shapes.add(new Circle(5));
-			flagPhysics.setShapeFilters(noHitFilter);
-			flagPhysics.position.x = x + flagEndPointXOffet;
-			flagPhysics.position.y = y + flagEndPointYOffet;
-			flagPhysics.space = space;
-			flagPhysics.mass = 0.001;
-		}
+		flagPhysics = new Body();
+		flagPhysics.shapes.add(new Circle(5 * carScale));
+		flagPhysics.setShapeFilters(noHitFilter);
+		flagPhysics.position.x = x + flagEndPointXOffet;
+		flagPhysics.position.y = y + flagEndPointYOffet;
+		flagPhysics.space = space;
+		flagPhysics.mass = 0.001;
+
+		var carBodyPolygon:Array<Vec2> = [];
+		carBodyPolygon.push(new Vec2(-bodyWidth / 2, -bodyHeight / 2));
+		carBodyPolygon.push(new Vec2(-bodyWidth / 4, -bodyHeight));
+		carBodyPolygon.push(new Vec2(bodyWidth / 4, -bodyHeight));
+		carBodyPolygon.push(new Vec2(bodyWidth / 2, -bodyHeight / 2));
+		carBodyPolygon.push(new Vec2(bodyWidth / 2, bodyHeight / 2));
+		carBodyPolygon.push(new Vec2( -bodyWidth / 2, bodyHeight / 2));
 
 		carBodyPhysics = new Body();
-		carBodyPhysics.shapes.add(new Polygon(Polygon.box(bodyWidth, bodyHeight)));
+		carBodyPhysics.shapes.add(new Polygon(carBodyPolygon));
 		carBodyPhysics.setShapeFilters(filter);
 		carBodyPhysics.position.x = x;
 		carBodyPhysics.position.y = y;
@@ -199,22 +197,20 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 		var wheelJoin:DistanceJoint = new DistanceJoint(wheelRightPhysics, wheelLeftPhysics, wheelRightPhysics.localCOM, wheelLeftPhysics.localCOM, distance, distance);
 		wheelJoin.space = space;
 
-		if (hasFlag)
-		{
-			var flagWeldAnchorA:Vec2 = new Vec2( flagEndPointXOffet * carScale - 20 * carScale, flagEndPointYOffet * carScale );
-			var flagFrontJointWheel:PivotJoint = new PivotJoint(carBodyPhysics, flagPhysics, flagWeldAnchorA, flagPhysics.localCOM);
-			flagFrontJointWheel.stiff = false;
-			flagFrontJointWheel.damping = flagJoinDamping;
-			flagFrontJointWheel.frequency = flagJoinHertz;
-			flagFrontJointWheel.space = space;
 
-			var flagWeldAnchorB:Vec2 = new Vec2( flagEndPointXOffet * carScale, flagEndPointYOffet * carScale );
-			var flagFrontJointWheel:PivotJoint = new PivotJoint(carBodyPhysics, flagPhysics, flagWeldAnchorB, flagPhysics.localCOM);
-			flagFrontJointWheel.stiff = false;
-			flagFrontJointWheel.damping = flagJoinDamping;
-			flagFrontJointWheel.frequency = flagJoinHertz;
-			flagFrontJointWheel.space = space;
-		}
+		var flagWeldAnchorA:Vec2 = new Vec2( flagEndPointXOffet - 20 * carScale, flagEndPointYOffet );
+		var flagFrontJointWheel:PivotJoint = new PivotJoint(carBodyPhysics, flagPhysics, flagWeldAnchorA, flagPhysics.localCOM);
+		flagFrontJointWheel.stiff = false;
+		flagFrontJointWheel.damping = flagJoinDamping;
+		flagFrontJointWheel.frequency = flagJoinHertz;
+		flagFrontJointWheel.space = space;
+
+		var flagWeldAnchorB:Vec2 = new Vec2( flagEndPointXOffet, flagEndPointYOffet );
+		var flagFrontJointWheel:PivotJoint = new PivotJoint(carBodyPhysics, flagPhysics, flagWeldAnchorB, flagPhysics.localCOM);
+		flagFrontJointWheel.stiff = false;
+		flagFrontJointWheel.damping = flagJoinDamping;
+		flagFrontJointWheel.frequency = flagJoinHertz;
+		flagFrontJointWheel.space = space;
 	}
 
 	public function getMidXPosition():Float
@@ -242,8 +238,7 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 		carAngleRotatedSin = Math.sin(carBodyPhysics.rotation + Math.PI / 2);
 
 		updateMainCarComponnentGraphic();
-
-		//if (hasFlag) updateFlagGraphic();
+		updateFlagGraphic();
 
 		calculateCollision();
 
@@ -265,22 +260,22 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 		wheelLeftGraphics.rotation = wheelLeftPhysics.rotation;
 	}
 
-	/*function updateFlagGraphic()
+	function updateFlagGraphic()
 	{
-		flagGraphic.x = carBodyPhysics.position.x - flagGraphic.origin.x + flagGraphicXOffset * carAngleCos + flagGraphicYOffset * carAngleRotatedCos;
-		flagGraphic.y = carBodyPhysics.position.y - flagGraphic.origin.y + flagGraphicXOffset * carAngleSin + flagGraphicYOffset * carAngleRotatedSin;
+		flagGraphic.x = carBodyPhysics.position.x + flagGraphicXOffset * carAngleCos + flagGraphicYOffset * carAngleRotatedCos;
+		flagGraphic.y = carBodyPhysics.position.y + flagGraphicXOffset * carAngleSin + flagGraphicYOffset * carAngleRotatedSin;
 
-		flagGraphic.angle = flagAngleOffset + FlxAngle.TO_DEG * (GeomUtil.getAngle(
+		flagGraphic.rotation = flagAngleOffset + GeomUtil.getAngle(
 			{
-				x: flagGraphic.x + flagGraphic.origin.x,
-				y: flagGraphic.y + flagGraphic.origin.y
+				x: flagGraphic.x,
+				y: flagGraphic.y
 			},
 			{
 				x: flagPhysics.position.x,
 				y: flagPhysics.position.y
 			}
-		));
-	}*/
+		);
+	}
 
 	function calculateCollision():Void
 	{
@@ -380,12 +375,9 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 		hitArea.velocity.setxy(0, 0);
 		hitArea.angularVel = 0;
 
-		if (hasFlag)
-		{
-			flagPhysics.position.x = x + flagEndPointXOffet;
-			flagPhysics.position.y = y + flagEndPointYOffet;
-			flagPhysics.velocity.setxy(0, 0);
-		}
+		flagPhysics.position.x = x + flagEndPointXOffet;
+		flagPhysics.position.y = y + flagEndPointYOffet;
+		flagPhysics.velocity.setxy(0, 0);
 
 		reset();
 		update(0);
