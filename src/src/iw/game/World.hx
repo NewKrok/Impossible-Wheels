@@ -41,10 +41,13 @@ class World extends Layers
 
 	var levelData:LevelData;
 	var isEffectEnabled:Observable<Bool>;
+	var onCoinCollected:Void->Void;
 
 	var camera:Layers;
 	var space:Space;
 	var groundBodies:Array<Body>;
+
+	var coins:Array<Coin>;
 
 	var bridgeBodies:Array<Array<Body>>;
 	var bridgeGraphics:Array<Array<Bitmap>>;
@@ -86,12 +89,18 @@ class World extends Layers
 	var pauseStartTime:Float = 0;
 	var totalPausedTime:Float = 0;
 
-	public function new(parent, levelData, isDemo:Bool, isEffectEnabled:Observable<Bool>)
-	{
+	public function new(
+		parent,
+		levelData,
+		isDemo:Bool,
+		isEffectEnabled:Observable<Bool>,
+		onCoinCollected:Void->Void
+	){
 		super(parent);
 		this.levelData = levelData;
 		this.isDemo = isDemo;
 		this.isEffectEnabled = isEffectEnabled;
+		this.onCoinCollected = onCoinCollected;
 
 		isPlayerCameraAllowed = !isDemo;
 	}
@@ -133,6 +142,9 @@ class World extends Layers
 				createBridges();
 
 			case 4:
+				createCoins();
+
+			case 5:
 				isBuilt = true;
 				reset();
 
@@ -140,7 +152,7 @@ class World extends Layers
 				return;
 
 			/*case 5:
-				/*createCoins();
+				/*
 				createLibraryElements();
 
 				add(gameGui = new GameGui(resume, pauseRequest, levelData.collectableItems.length));*/
@@ -310,6 +322,19 @@ class World extends Layers
 		}
 	}
 
+	function createCoins():Void
+	{
+		coins = [];
+
+		for (c in levelData.collectableItems)
+		{
+			var coin = new Coin(camera);
+			coin.x = c.x;
+			coin.y = c.y;
+			coins.push(coin);
+		}
+	}
+
 	public function playReplay(replayData:String):ActionFlow
 	{
 		destroyPlayback();
@@ -414,6 +439,7 @@ class World extends Layers
 			else if (Key.isDown(Key.RIGHT)) playerCar.rotateRight();
 
 			playerCar.update(delta);
+			checkCoinPickUp();
 
 			if (isPlayerCameraAllowed)
 			{
@@ -463,6 +489,39 @@ class World extends Layers
 				graphic.x = body.position.x;
 				graphic.y = body.position.y;
 				graphic.rotation = body.rotation;
+			}
+		}
+	}
+
+	function checkCoinPickUp():Void
+	{
+		var backWheelMidPoint:SimplePoint = cast playerCar.wheelLeftGraphics;
+		var frontWheelMidPoint:SimplePoint = cast playerCar.wheelRightGraphics;
+
+		var bodyCos = Math.cos(playerCar.carBodyGraphics.rotation - Math.PI / 2);
+		var bodySin = Math.sin(playerCar.carBodyGraphics.rotation - Math.PI / 2);
+		var backBodyMidPoint:SimplePoint = GeomUtil.cloneSimplePoint(backWheelMidPoint);
+		backBodyMidPoint.x += 30 * bodyCos;
+		backBodyMidPoint.y += 30 * bodySin;
+		var frontBodyMidPoint:SimplePoint = GeomUtil.cloneSimplePoint(frontWheelMidPoint);
+		frontBodyMidPoint.x += 30 * bodyCos;
+		frontBodyMidPoint.y += 30 * bodySin;
+
+		for (c in coins)
+		{
+			var coinMidPoint:SimplePoint = cast c;
+
+			if (
+				!c.isCollected
+				&& (
+					GeomUtil.getDistance(cast c, cast frontWheelMidPoint) < 35
+					|| GeomUtil.getDistance(cast c, cast backWheelMidPoint) < 35
+					|| GeomUtil.getDistance(cast c, cast frontBodyMidPoint) < 35 // simple check for body collision
+					|| GeomUtil.getDistance(cast c, cast backBodyMidPoint) < 35 // simple check for body collision
+				)
+			){
+				c.collect();
+				onCoinCollected();
 			}
 		}
 	}

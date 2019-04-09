@@ -130,7 +130,7 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 		noHitFilter.collisionMask = 0;
 
 		wheelRightPhysics = new Body();
-		wheelRightPhysics.shapes.add(new Circle(firstWheelRadius, null, new Material(0.1,1.0,1.4,1.5,0.01)));
+		wheelRightPhysics.shapes.add(new Circle(firstWheelRadius, null, new Material(0.1, 5, 5, 1.5, 20)));
 		wheelRightPhysics.setShapeFilters(filter);
 		wheelRightPhysics.position.x = x + firstWheelXOffset;
 		wheelRightPhysics.position.y = y + firstWheelYOffset;
@@ -138,7 +138,7 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 		wheelRightPhysics.mass = 1;
 
 		wheelLeftPhysics = new Body();
-		wheelLeftPhysics.shapes.add(new Circle(firstWheelRadius, null, new Material(0.1,1.0,1.4,1.5,0.01)));
+		wheelLeftPhysics.shapes.add(new Circle(firstWheelRadius, null, new Material(0.1, 5, 5, 1.5, 20)));
 		wheelLeftPhysics.setShapeFilters(filter);
 		wheelLeftPhysics.position.x = x + backWheelXOffset;
 		wheelLeftPhysics.position.y = y + backWheelYOffset;

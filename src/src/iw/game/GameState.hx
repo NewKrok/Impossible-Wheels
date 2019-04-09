@@ -36,7 +36,8 @@ class GameState extends Base2dState
 			stage,
 			appModel.getLevelData(gameModel.levelId).levelData,
 			false,
-			appModel.observables.isEffectEnabled
+			appModel.observables.isEffectEnabled,
+			gameModel.collectCoin
 		);
 		world.build().onComplete = init;
 
@@ -44,7 +45,8 @@ class GameState extends Base2dState
 			stage,
 			resumeRequest,
 			pauseRequest,
-			gameModel.observables.gameTime
+			gameModel.observables.gameTime,
+			gameModel.observables.collectedCoins
 		);
 	}
 
