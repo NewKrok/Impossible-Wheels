@@ -48,6 +48,7 @@ class World extends Layers
 	var groundBodies:Array<Body>;
 
 	var coins:Array<Coin>;
+	var effects:EffectHandler;
 
 	var bridgeBodies:Array<Array<Body>>;
 	var bridgeGraphics:Array<Array<Bitmap>>;
@@ -57,6 +58,7 @@ class World extends Layers
 	var replayCar:ReplayCar;
 	var playback:Playback;
 	var recorder:Recorder;
+	var replayEndHelper:UInt;
 
 	var cameraEasing:SimplePoint = { x: 15, y: 15 };
 	var cameraOffset:SimplePoint = { x: -300, y: -300 };
@@ -76,9 +78,6 @@ class World extends Layers
 	var isGameStarted:Bool = false;
 	//var isRaceStarted:Bool = false;
 	var isGamePaused:Bool = false;
-	/*var isDemoFinished:Bool = false;
-	var isMenuMode:Bool = true;
-	var isRecordingMode:Bool = true;*/
 	var isBuilt:Bool = false;
 	var isPhysicsEnabled:Bool = false;
 	var isDemo:Bool = false;
@@ -115,6 +114,8 @@ class World extends Layers
 		background.endFill();
 
 		camera = new Layers(this);
+
+		effects = new EffectHandler(camera);
 
 		asyncBuild();
 
@@ -398,8 +399,7 @@ class World extends Layers
 	{
 		isGameStarted = true;
 		/*isRaceStarted = false;
-		isGamePaused = false;
-		isDemoFinished = false;*/
+		isGamePaused = false;*/
 
 		gameTime = 0;
 		totalPausedTime = 0;
@@ -410,8 +410,9 @@ class World extends Layers
 		{
 			destroyRecorder();
 			recorder = new Recorder(playerCar);
-			recorder.enableAutoRecording(100);
+			recorder.enableAutoRecording(50);
 		}
+		replayEndHelper = 0;
 
 		resume();
 	}
@@ -466,8 +467,10 @@ class World extends Layers
 				&& tempRotation == replayCar.carBodyGraphics.rotation
 				&& replayResult.onComplete != null
 			) {
-				replayResult.onComplete();
+				replayEndHelper++;
+				if (replayEndHelper > 10) replayResult.onComplete();
 			}
+			else replayEndHelper = 0;
 		}
 	}
 
@@ -521,6 +524,7 @@ class World extends Layers
 				)
 			){
 				c.collect();
+				if (isEffectEnabled.value) effects.addCollectCoinEffect(c.x, c.y - 90);
 				onCoinCollected();
 			}
 		}
@@ -580,8 +584,6 @@ class World extends Layers
 			recorder.dispose();
 			recorder = null;
 		}
-
-		remove();
 	}
 }
 

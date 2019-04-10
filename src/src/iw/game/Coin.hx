@@ -36,8 +36,8 @@ class Coin extends Object
 		isCollected = true;
 		anim.speed = 60;
 
-		TweenMax.to(anim, 1, {
-			y: -120,
+		TweenMax.to(anim, .5, {
+			y: -100,
 			onUpdate: function()
 			{
 				anim.y = anim.y;
@@ -45,10 +45,9 @@ class Coin extends Object
 			onComplete: function()
 			{
 				anim.speed = 0;
+				alpha = 0;
 			}
 		});
-
-		TweenMax.to(this, .4, { alpha: 0 }).delay(.6);
 	}
 
 	public function reset()
