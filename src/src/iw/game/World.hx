@@ -27,6 +27,7 @@ import nape.phys.Material;
 import nape.shape.Polygon;
 import nape.space.Space;
 import tink.state.Observable;
+import tink.state.State;
 
 /**
  * ...
@@ -38,9 +39,13 @@ class World extends Layers
 	static inline var isRecordingMode:Bool = false;
 
 	public static var WORLD_PIECE_SIZE:SimplePoint = { x: 5000, y: 2000 };
+	public static var LEVEL_MAX_TIME:UInt = 5 * 60 * 1000;
+
+	public var onLoose:Void->Void = function(){};
 
 	var levelData:LevelData;
 	var isEffectEnabled:Observable<Bool>;
+	var isCameraEnabled:Observable<Bool>;
 	var onCoinCollected:Void->Void;
 
 	var camera:Layers;
@@ -71,17 +76,14 @@ class World extends Layers
 	var buildResult:ActionFlow = { onComplete: null };
 	var replayResult:ActionFlow = { onComplete: null };
 
-	/*var isLost:Bool = false;
-	var isWon:Bool = false;
-	var isLevelFinished:Bool = false;
-	var canControll:Bool = false;*/
+	/*
+	var isLevelFinished:Bool = false;;*/
 	var isGameStarted:Bool = false;
 	//var isRaceStarted:Bool = false;
 	var isGamePaused:Bool = false;
 	var isBuilt:Bool = false;
 	var isPhysicsEnabled:Bool = false;
 	var isDemo:Bool = false;
-	var isPlayerCameraAllowed:Bool = false;
 
 	var gameTime:Float = 0;
 	var gameStartTime:Float = 0;
@@ -93,15 +95,15 @@ class World extends Layers
 		levelData,
 		isDemo:Bool,
 		isEffectEnabled:Observable<Bool>,
-		onCoinCollected:Void->Void
+		isCameraEnabled:Observable<Bool> = null,
+		onCoinCollected:Void->Void = null
 	){
 		super(parent);
 		this.levelData = levelData;
 		this.isDemo = isDemo;
 		this.isEffectEnabled = isEffectEnabled;
+		this.isCameraEnabled = isDemo ? new State<Bool>(false).observe() : isCameraEnabled;
 		this.onCoinCollected = onCoinCollected;
-
-		isPlayerCameraAllowed = !isDemo;
 	}
 
 	public function build():ActionFlow
@@ -414,6 +416,14 @@ class World extends Layers
 		}
 		replayEndHelper = 0;
 
+		if (!isDemo)
+		{
+			playerCar.teleportTo(
+				levelData.startPoint.x,
+				levelData.startPoint.y
+			);
+		}
+
 		resume();
 	}
 
@@ -442,13 +452,15 @@ class World extends Layers
 			playerCar.update(delta);
 			checkCoinPickUp();
 
-			if (isPlayerCameraAllowed)
+			if (isCameraEnabled.value)
 			{
 				var cameraPointX = -playerCar.x - cameraOffset.x;
 				var cameraPointY = -playerCar.y - cameraOffset.y;
 				camera.x -= (camera.x - cameraPointX) / cameraEasing.x;
 				camera.y -= (camera.y - cameraPointY) / cameraEasing.y;
 			}
+
+			checkLoose();
 		}
 
 		if (playback != null)
@@ -528,6 +540,14 @@ class World extends Layers
 				onCoinCollected();
 			}
 		}
+	}
+
+	function checkLoose():Void
+	{
+		var isTimeout:Bool = gameTime >= LEVEL_MAX_TIME;
+		var isFallDown:Bool = playerCar.carBodyGraphics.y > levelData.cameraBounds.y + levelData.cameraBounds.height;
+
+		if (/*car.isCarCrashed || */isTimeout || isFallDown) onLoose();
 	}
 
 	public function getGameTime():Float return gameTime;

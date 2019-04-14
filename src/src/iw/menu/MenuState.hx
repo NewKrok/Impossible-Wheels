@@ -99,8 +99,7 @@ class MenuState extends Base2dState
 			stage,
 			appModel.getLevelData(0).levelData,
 			true,
-			appModel.observables.isEffectEnabled,
-			null
+			appModel.observables.isEffectEnabled
 		);
 
 		menuModel.setSubState(MenuSubState.Intro);

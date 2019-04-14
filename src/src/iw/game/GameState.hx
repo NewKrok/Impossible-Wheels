@@ -27,6 +27,10 @@ class GameState extends Base2dState
 			levelId: levelId
 		});
 
+		gameModel.observables.isLost.bind(function(v) {
+			if (v) TweenMax.delayedCall(1, reset);
+		});
+
 		super(stage);
 	}
 
@@ -37,8 +41,10 @@ class GameState extends Base2dState
 			appModel.getLevelData(gameModel.levelId).levelData,
 			false,
 			appModel.observables.isEffectEnabled,
+			gameModel.observables.isCameraEnabled,
 			gameModel.collectCoin
 		);
+		world.onLoose = gameModel.loose;
 		world.build().onComplete = init;
 
 		ui = new GameUi(
@@ -57,7 +63,8 @@ class GameState extends Base2dState
 
 	function reset()
 	{
-		gameModel.gameTime = 0;
+		gameModel.reset();
+		world.reset();
 
 		var startPoint = appModel.getLevelData(gameModel.levelId).levelData.startPoint;
 		world.jumpCameraTo(startPoint.x + 300, startPoint.y);
