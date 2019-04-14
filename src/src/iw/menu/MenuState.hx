@@ -110,7 +110,7 @@ class MenuState extends Base2dState
 
 	function chooseDemoReplay()
 	{
-		var rnd = Math.floor(Math.random() * 6);
+		var rnd = Math.floor(Math.random() * 7);
 		Log.info('Play replay in menu: $rnd');
 
 		world.playReplay(switch(rnd)
@@ -120,6 +120,7 @@ class MenuState extends Base2dState
 			case 3: Res.data.replay.demo.demo_3.entry.getText();
 			case 4: Res.data.replay.demo.demo_4.entry.getText();
 			case 5: Res.data.replay.demo.demo_5.entry.getText();
+			case 6: Res.data.replay.demo.demo_6.entry.getText();
 			case _: Res.data.replay.demo.demo_0.entry.getText();
 		}).onComplete = function ()
 		{

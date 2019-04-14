@@ -54,8 +54,8 @@ class Main extends Base2dApp
 			{ id: 12, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) }
 		]));
 
-		changeState(GameState, [appModel, 1]);
-		//changeState(MenuState, [appModel]);
+		//changeState(GameState, [appModel, 0]);
+		changeState(MenuState, [appModel]);
 	}
 
 	static function main()

@@ -19,15 +19,7 @@ class ReplayCar extends AbstractCar implements IPlaybackPerformer
 	{
 		sprite.x = calculateLinearTransitionValue(from.unserialize(), to.unserialize(), percent);
 		sprite.y = calculateLinearTransitionValue(from.unserialize(), to.unserialize(), percent);
-
-		var fromAngle:Float = from.unserialize();
-		while (fromAngle > Math.PI * 2) fromAngle -= Math.PI * 2;
-		var toAngle:Float = to.unserialize();
-		while (toAngle > Math.PI * 2) toAngle -= Math.PI * 2;
-		if (fromAngle - Math.PI * 2 > toAngle) toAngle += Math.PI * 2;
-		if (toAngle - Math.PI * 2 > fromAngle) fromAngle += Math.PI * 2;
-		var newAngle:Float = calculateLinearTransitionValue(fromAngle, toAngle, percent);
-		sprite.rotation = newAngle;
+		sprite.rotation = calculateLinearTransitionValue(from.unserialize(), to.unserialize(), percent);
 	}
 
 	private function calculateLinearTransitionValue(from:Float, to:Float, percent:Float):Float
