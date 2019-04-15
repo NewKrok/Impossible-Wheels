@@ -62,18 +62,11 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 
 	public var flagGraphic:Bitmap;
 
-	public var isOnWheelie:Bool;
-	public var onWheelieStartGameTime:Float;
-
-	public var isOnAir:Bool;
-	public var onAirStartGameTime:Float;
-	public var jumpAngle:Float = 0;
-	public var lastAngleOnGround:Float = 0;
 	public var isHorizontalMoveDisabled:Bool = false;
 
 	public var leftWheelOnAir(default, null):Bool;
 	public var rightWheelOnAir(default, null):Bool;
-	public var isCarCrashed(default, null):Bool;
+	public var isCarBodyTouchGround(default, null):Bool;
 
 	var carAngleCos(default, null):Float = 0;
 	var carAngleSin(default, null):Float = 0;
@@ -169,13 +162,22 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 		carBodyPhysics.space = space;
 		carBodyPhysics.mass = 1;
 
+		var hitAreaPadding = 2;
+		var hitAreaPolygon:Array<Vec2> = [];
+		hitAreaPolygon.push(new Vec2(-bodyWidth / 2 + hitAreaPadding, -bodyHeight / 2 - hitAreaPadding));
+		hitAreaPolygon.push(new Vec2(-bodyWidth / 4, -bodyHeight - hitAreaPadding));
+		hitAreaPolygon.push(new Vec2(bodyWidth / 4, -bodyHeight - hitAreaPadding));
+		hitAreaPolygon.push(new Vec2(bodyWidth / 2 - hitAreaPadding, -bodyHeight / 2 - hitAreaPadding));
+		hitAreaPolygon.push(new Vec2(bodyWidth / 2 - hitAreaPadding, bodyHeight / 2 - hitAreaPadding));
+		hitAreaPolygon.push(new Vec2( -bodyWidth / 2 + hitAreaPadding, bodyHeight / 2 - hitAreaPadding));
+
 		hitArea = new Body();
-		hitArea.shapes.add(new Polygon(Polygon.box(bodyWidth * .7, hitAreaHeight)));
+		hitArea.shapes.add(new Polygon(hitAreaPolygon));
 		hitArea.setShapeFilters(filter);
 		hitArea.space = space;
 		hitArea.mass = 1;
 
-		var hitAreaAnchor:Vec2 = new Vec2(0, bodyHeight / 2 + hitAreaHeight / 2);
+		var hitAreaAnchor:Vec2 = new Vec2(0, 0);
 		var hitJoin:WeldJoint = new WeldJoint(carBodyPhysics, hitArea, carBodyPhysics.localCOM, hitAreaAnchor);
 		hitJoin.space = space;
 
@@ -306,14 +308,14 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 		}
 
 		contactList = hitArea.interactingBodies(InteractionType.COLLISION, 1);
-		isCarCrashed = false;
+		isCarBodyTouchGround = false;
 
 		while (!contactList.empty())
 		{
 			var obj:Body = contactList.pop();
 			if (obj != carBodyPhysics && obj != wheelLeftPhysics && obj != wheelRightPhysics)
 			{
-				isCarCrashed = true;
+				isCarBodyTouchGround = true;
 				break;
 			}
 		}
@@ -395,5 +397,12 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 		s.serialize(Math.round(sprite.x));
 		s.serialize(Math.round(sprite.y));
 		s.serialize(Math.round(sprite.rotation * 100) / 100);
+	}
+
+	override function set_alpha(value:Float):Float
+	{
+		flagGraphic.alpha = value;
+
+		return super.set_alpha(value);
 	}
 }

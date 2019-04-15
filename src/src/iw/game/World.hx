@@ -12,6 +12,8 @@ import hxd.Key;
 import hxd.Res;
 import iw.data.CarDatas;
 import iw.data.LevelData;
+import iw.game.TrickCalculator.TrickType;
+import iw.game.car.CarLife;
 import iw.game.car.PlayerCar;
 import iw.game.car.ReplayCar;
 import iw.game.constant.CPhysicsValue;
@@ -42,6 +44,8 @@ class World extends Layers
 	public static var LEVEL_MAX_TIME:UInt = 5 * 60 * 1000;
 
 	public var onLoose:Void->Void = function(){};
+	public var onLooseLife:Void->Void = function(){};
+	public var onTrick:TrickType->Void = function(_){};
 
 	var levelData:LevelData;
 	var isEffectEnabled:Observable<Bool>;
@@ -59,6 +63,8 @@ class World extends Layers
 	var bridgeGraphics:Array<Array<Bitmap>>;
 
 	var playerCar:PlayerCar;
+	var carLife:CarLife;
+	var trickCalculator:TrickCalculator;
 
 	var replayCar:ReplayCar;
 	var playback:Playback;
@@ -117,7 +123,7 @@ class World extends Layers
 
 		camera = new Layers(this);
 
-		effects = new EffectHandler(camera);
+		if (!isDemo) effects = new EffectHandler(camera);
 
 		asyncBuild();
 
@@ -138,7 +144,13 @@ class World extends Layers
 							createGroundPhysics(i, j, backgroundData.polygon);
 
 			case 2:
-				if (!isDemo) createPlayerCar();
+				if (!isDemo)
+				{
+					createPlayerCar();
+
+					trickCalculator = new TrickCalculator(playerCar);
+					trickCalculator.onTrick = onTrick;
+				}
 				createReplayCar();
 
 			case 3:
@@ -245,8 +257,9 @@ class World extends Layers
 			CPhysicsValue.CAR_FILTER_CATEGORY,
 			CPhysicsValue.CAR_FILTER_MASK
 		);
-
 		playerCar.teleportTo(levelData.startPoint.x, levelData.startPoint.y);
+
+		carLife = new CarLife();
 	}
 
 	function createReplayCar():Void
@@ -450,6 +463,7 @@ class World extends Layers
 			else if (Key.isDown(Key.RIGHT)) playerCar.rotateRight();
 
 			playerCar.update(delta);
+			trickCalculator.update(gameTime);
 			checkCoinPickUp();
 
 			if (isCameraEnabled.value)
@@ -460,6 +474,7 @@ class World extends Layers
 				camera.y -= (camera.y - cameraPointY) / cameraEasing.y;
 			}
 
+			checkLife();
 			checkLoose();
 		}
 
@@ -542,12 +557,23 @@ class World extends Layers
 		}
 	}
 
+	function checkLife()
+	{
+		if (!carLife.isInvulnerable && playerCar.isCarBodyTouchGround)
+		{
+			carLife.damage();
+			onLooseLife();
+
+			for (i in 0...6) TweenMax.delayedCall(i * .1, function(){ playerCar.alpha = playerCar.alpha == 1 ? .5 : 1; });
+		}
+	}
+
 	function checkLoose():Void
 	{
 		var isTimeout:Bool = gameTime >= LEVEL_MAX_TIME;
 		var isFallDown:Bool = playerCar.carBodyGraphics.y > levelData.cameraBounds.y + levelData.cameraBounds.height;
 
-		if (/*car.isCarCrashed || */isTimeout || isFallDown) onLoose();
+		if (isTimeout || isFallDown) onLoose();
 	}
 
 	public function getGameTime():Float return gameTime;
@@ -583,6 +609,11 @@ class World extends Layers
 	{
 		TweenMax.killTweensOf(cameraZoomHelper);
 		TweenMax.killTweensOf(camera);
+
+		if (!isDemo)
+		{
+			carLife.destroy();
+		}
 
 		destroyPlayback();
 		destroyRecorder();

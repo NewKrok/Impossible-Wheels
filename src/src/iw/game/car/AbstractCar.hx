@@ -41,6 +41,7 @@ class AbstractCar
 
 	public var x(get, never):Float;
 	public var y(get, never):Float;
+	public var alpha(get, set):Float;
 
 	var carBodyAngleCos:Float = 0;
 	var carBodyAngleSin:Float = 0;
@@ -256,5 +257,25 @@ class AbstractCar
 				particles.addGroup(smokeParticleGroup);
 			}
 		}, 500);
+	}
+
+	function get_alpha():Float
+	{
+		return carBodyGraphics.alpha;
+	}
+
+	function set_alpha(value:Float):Float
+	{
+		carBodyGraphics.alpha = value;
+		wheelBackBottomHolderGraphics.alpha = value;
+		wheelBackTopHolderGraphics.alpha = value;
+		wheelFrontBottomHolderGraphics.alpha = value;
+		wheelFrontTopHolderGraphics.alpha = value;
+		wheelLeftGraphics.alpha = value;
+		wheelRightGraphics.alpha = value;
+		backSpring.alpha = value;
+		frontSpring.alpha = value;
+
+		return value;
 	}
 }

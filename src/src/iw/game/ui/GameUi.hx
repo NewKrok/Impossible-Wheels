@@ -6,6 +6,7 @@ import h2d.Layers;
 import h2d.Text;
 import hpp.util.TimeUtil;
 import hxd.Res;
+import iw.game.TrickCalculator.TrickType;
 import tink.state.Observable;
 
 /**
@@ -18,6 +19,7 @@ import tink.state.Observable;
 	var pauseRequest:Void->Void = _;
 	var gameTime:Observable<Float> = _;
 	var collectedCoins:Observable<UInt> = _;
+	var lifeCount:Observable<UInt> = _;
 
 	var info:Layers;
 
@@ -79,5 +81,15 @@ import tink.state.Observable;
 		collectedCoins.bind(function(v) {
 			cointText.text = v + "/99";
 		});
+
+		lifeCount.bind(function(v) {
+			trace("life:", v);
+		});
+	}
+
+	public function onTrick(t) switch (t)
+	{
+		case TrickType.Flip(d, m): trace("Flip", d, m);
+		case TrickType.Wheelie(d, l): trace("Wheelie", d, l);
 	}
 }

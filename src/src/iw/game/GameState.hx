@@ -44,6 +44,7 @@ class GameState extends Base2dState
 			gameModel.observables.isCameraEnabled,
 			gameModel.collectCoin
 		);
+		world.onLooseLife = gameModel.looseLife;
 		world.onLoose = gameModel.loose;
 		world.build().onComplete = init;
 
@@ -52,8 +53,11 @@ class GameState extends Base2dState
 			resumeRequest,
 			pauseRequest,
 			gameModel.observables.gameTime,
-			gameModel.observables.collectedCoins
+			gameModel.observables.collectedCoins,
+			gameModel.observables.lifeCount
 		);
+
+		world.onTrick = ui.onTrick;
 	}
 
 	function init()
