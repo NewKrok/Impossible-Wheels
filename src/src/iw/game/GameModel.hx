@@ -16,7 +16,7 @@ class GameModel implements Model
 	@:observable var lifeCount:UInt = 3;
 	@:observable var isLost:Bool = false;
 	@:observable var isControlEnabled:Bool = false;
-	@:observable var isCameraEnabled:Bool = false;
+	@:observable var isCameraEnabled:Bool = true;
 
 	@:transition function collectCoin() return { collectedCoins: collectedCoins + 1 };
 
@@ -32,14 +32,12 @@ class GameModel implements Model
 
 	@:transition function loose() return {
 		isLost: true,
-		isControlEnabled: false,
-		isCameraEnabled: false
+		isControlEnabled: false
 	};
 
 	@:transition function reset() return {
 		isLost: false,
 		isControlEnabled: true,
-		isCameraEnabled: true,
 		collectedCoins: 0,
 		lifeCount: 3
 	};

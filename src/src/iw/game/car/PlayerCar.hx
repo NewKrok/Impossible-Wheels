@@ -60,6 +60,10 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 	public var wheelLeftPhysics:Body;
 	public var flagPhysics:Body;
 
+	var pivotJointLeftLeftWheel:PivotJoint;
+	var pivotJointRightRightWheel:PivotJoint;
+	var wheelJoin:DistanceJoint;
+
 	public var flagGraphic:Bitmap;
 
 	public var isHorizontalMoveDisabled:Bool = false;
@@ -182,21 +186,21 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 		hitJoin.space = space;
 
 		var bodyLeftAnchor:Vec2 = new Vec2(backWheelXOffset, backWheelYOffset);
-		var pivotJointLeftLeftWheel:PivotJoint = new PivotJoint(wheelLeftPhysics, carBodyPhysics, wheelLeftPhysics.localCOM, bodyLeftAnchor);
+		pivotJointLeftLeftWheel = new PivotJoint(wheelLeftPhysics, carBodyPhysics, wheelLeftPhysics.localCOM, bodyLeftAnchor);
 		pivotJointLeftLeftWheel.stiff = false;
 		pivotJointLeftLeftWheel.damping = wheelJoinDamping;
 		pivotJointLeftLeftWheel.frequency = wheelJoinHertz;
 		pivotJointLeftLeftWheel.space = space;
 
 		var bodyRightAnchor:Vec2 = new Vec2(firstWheelXOffset, firstWheelYOffset);
-		var pivotJointRightRightWheel:PivotJoint = new PivotJoint(wheelRightPhysics, carBodyPhysics, wheelRightPhysics.localCOM, bodyRightAnchor);
+		pivotJointRightRightWheel = new PivotJoint(wheelRightPhysics, carBodyPhysics, wheelRightPhysics.localCOM, bodyRightAnchor);
 		pivotJointRightRightWheel.stiff = false;
 		pivotJointRightRightWheel.damping = wheelJoinDamping;
 		pivotJointRightRightWheel.frequency = wheelJoinHertz;
 		pivotJointRightRightWheel.space = space;
 
 		var distance:Float = firstWheelXOffset + Math.abs(backWheelXOffset);
-		var wheelJoin:DistanceJoint = new DistanceJoint(wheelRightPhysics, wheelLeftPhysics, wheelRightPhysics.localCOM, wheelLeftPhysics.localCOM, distance, distance);
+		wheelJoin = new DistanceJoint(wheelRightPhysics, wheelLeftPhysics, wheelRightPhysics.localCOM, wheelLeftPhysics.localCOM, distance, distance);
 		wheelJoin.space = space;
 
 
@@ -337,10 +341,6 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 		wheelRightPhysics.angularVel = carLeveledData.speed;
 	}
 
-	public function idle():Void
-	{
-	}
-
 	public function rotateLeft():Void
 	{
 		carBodyPhysics.applyAngularImpulse(-carLeveledData.rotation);
@@ -383,6 +383,30 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 
 		reset();
 		update(0);
+	}
+
+	override public function crash()
+	{
+		super.crash();
+
+		pivotJointLeftLeftWheel.damping = wheelJoinDamping / 10;
+		pivotJointLeftLeftWheel.frequency = wheelJoinHertz / 10;
+		pivotJointRightRightWheel.damping = wheelJoinDamping / 10;
+		pivotJointRightRightWheel.frequency = wheelJoinHertz / 10;
+
+		wheelJoin.active = false;
+	}
+
+	override public function reset()
+	{
+		super.reset();
+
+		pivotJointLeftLeftWheel.damping = wheelJoinDamping;
+		pivotJointLeftLeftWheel.frequency = wheelJoinHertz;
+		pivotJointRightRightWheel.damping = wheelJoinDamping;
+		pivotJointRightRightWheel.frequency = wheelJoinHertz;
+
+		wheelJoin.active = true;
 	}
 
 	public function serialize(s:Serializer):Void

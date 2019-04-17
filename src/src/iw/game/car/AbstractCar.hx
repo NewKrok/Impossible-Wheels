@@ -1,5 +1,6 @@
 package iw.game.car;
 
+import com.greensock.TweenMax;
 import h2d.Bitmap;
 import h2d.Layers;
 import h2d.Particles;
@@ -50,7 +51,10 @@ class AbstractCar
 
 	var particles:Particles;
 	var smokeParticleGroup:ParticleGroup;
+	var explosionParticleGroup:ParticleGroup;
 	var container:Layers;
+
+	var isCrushed:Bool = false;
 
 	var isEffectEnabled:Observable<Bool>;
 
@@ -152,6 +156,7 @@ class AbstractCar
 		smokeParticleGroup.gravity = 300;
 		smokeParticleGroup.gravityAngle = Math.PI;
 		smokeParticleGroup.life = .6;
+		smokeParticleGroup.lifeRand = .2;
 		smokeParticleGroup.speed = 30 * carScale;
 		smokeParticleGroup.nparts = 50;
 		smokeParticleGroup.emitMode = PartEmitMode.Point;
@@ -165,6 +170,33 @@ class AbstractCar
 		particles.addGroup(smokeParticleGroup);
 	}
 
+	public function crash()
+	{
+		isCrushed = true;
+
+		smokeParticleGroup.enable = false;
+
+		explosionParticleGroup = new ParticleGroup(particles);
+		explosionParticleGroup.size = carScale * .5;
+		explosionParticleGroup.sizeRand = 12;
+		explosionParticleGroup.life = .4;
+		explosionParticleGroup.lifeRand = .4;
+		explosionParticleGroup.speed = 300 * carScale;
+		explosionParticleGroup.nparts = 30;
+		explosionParticleGroup.emitLoop = false;
+		explosionParticleGroup.emitMode = PartEmitMode.Point;
+		explosionParticleGroup.emitDist = 10 * carScale;
+		explosionParticleGroup.speedRand = .5;
+		explosionParticleGroup.rotSpeed = 3;
+		explosionParticleGroup.fadeIn = 1;
+		explosionParticleGroup.fadeOut = 0;
+		explosionParticleGroup.texture = Res.image.car.smoke.toTexture();
+		explosionParticleGroup.rebuildOnChange = false;
+		explosionParticleGroup.animationRepeat = 1;
+
+		particles.addGroup(explosionParticleGroup);
+	}
+
 	public function update(elapsed:Float):Void
 	{
 		carBodyAngleCos = Math.cos(carBodyGraphics.rotation);
@@ -172,8 +204,15 @@ class AbstractCar
 		carBodyAngleRotatedCos = Math.cos(carBodyGraphics.rotation + Math.PI / 2);
 		carBodyAngleRotatedSin = Math.sin(carBodyGraphics.rotation + Math.PI / 2);
 
+
 		updateSpringGraphic();
 		updateWheelHolderGraphic();
+
+		if (isCrushed)
+		{
+			explosionParticleGroup.dx = cast carBodyGraphics.x;
+			explosionParticleGroup.dy = cast carBodyGraphics.y;
+		}
 
 		smokeParticleGroup.dx = cast carBodyGraphics.x + smokeHorizontalOffset * carScale * carBodyAngleCos + smokeVerticalOffset * carScale * carBodyAngleRotatedCos;
 		smokeParticleGroup.dy = cast carBodyGraphics.y + smokeHorizontalOffset * carScale * carBodyAngleSin + smokeVerticalOffset * carScale * carBodyAngleRotatedSin;
@@ -184,56 +223,77 @@ class AbstractCar
 	{
 		frontSpring.x = carBodyGraphics.x + frontSpringHorizontalOffset * carBodyAngleCos + frontSpringVerticalOffset * carBodyAngleRotatedCos;
 		frontSpring.y = carBodyGraphics.y + frontSpringHorizontalOffset * carBodyAngleSin + frontSpringVerticalOffset * carBodyAngleRotatedSin;
-		frontSpring.scaleX = GeomUtil.getDistance(
-			{ x: wheelRightGraphics.x, y: wheelRightGraphics.y },
-			{ x: frontSpring.x, y: frontSpring.y }
-		) / 59;
-		frontSpring.rotation = Math.atan2(
-			wheelRightGraphics.y - frontSpring.y,
-			wheelRightGraphics.x - frontSpring.x
-		);
 
 		backSpring.x = carBodyGraphics.x - backSpringHorizontalOffset * carBodyAngleCos + backSpringVerticalOffset * carBodyAngleRotatedCos;
 		backSpring.y = carBodyGraphics.y - backSpringHorizontalOffset * carBodyAngleSin + backSpringVerticalOffset * carBodyAngleRotatedSin;
-		backSpring.scaleX = GeomUtil.getDistance(
-			{ x: wheelLeftGraphics.x, y: wheelLeftGraphics.y },
-			{ x: backSpring.x, y: backSpring.y }
-		) / 59;
-		backSpring.rotation = Math.atan2(
-			wheelLeftGraphics.y - backSpring.y,
-			wheelLeftGraphics.x - backSpring.x
-		);
+
+		if (!isCrushed)
+		{
+			frontSpring.scaleX = GeomUtil.getDistance(
+				{ x: wheelRightGraphics.x, y: wheelRightGraphics.y },
+				{ x: frontSpring.x, y: frontSpring.y }
+			) / 59;
+			frontSpring.rotation = Math.atan2(
+				wheelRightGraphics.y - frontSpring.y,
+				wheelRightGraphics.x - frontSpring.x
+			);
+
+			backSpring.scaleX = GeomUtil.getDistance(
+				{ x: wheelLeftGraphics.x, y: wheelLeftGraphics.y },
+				{ x: backSpring.x, y: backSpring.y }
+			) / 59;
+			backSpring.rotation = Math.atan2(
+				wheelLeftGraphics.y - backSpring.y,
+				wheelLeftGraphics.x - backSpring.x
+			);
+		}
 	}
 
 	function updateWheelHolderGraphic()
 	{
 		wheelBackTopHolderGraphics.x = carBodyGraphics.x + backTopHolderHorizontalOffset * carBodyAngleCos + backTopHolderVerticalOffset * carBodyAngleRotatedCos;
 		wheelBackTopHolderGraphics.y = carBodyGraphics.y + backTopHolderHorizontalOffset * carBodyAngleSin + backTopHolderVerticalOffset * carBodyAngleRotatedSin;
-		wheelBackTopHolderGraphics.rotation = Math.atan2(
-			wheelLeftGraphics.y - wheelBackTopHolderGraphics.y,
-			wheelLeftGraphics.x - wheelBackTopHolderGraphics.x
-		);
+
 
 		wheelBackBottomHolderGraphics.x = carBodyGraphics.x + backBottomHolderHorizontalOffset * carBodyAngleCos + backBottomHolderVerticalOffset * carBodyAngleRotatedCos;
 		wheelBackBottomHolderGraphics.y = carBodyGraphics.y + backBottomHolderHorizontalOffset * carBodyAngleSin + backBottomHolderVerticalOffset * carBodyAngleRotatedSin;
-		wheelBackBottomHolderGraphics.rotation = Math.atan2(
-			wheelLeftGraphics.y - wheelBackBottomHolderGraphics.y,
-			wheelLeftGraphics.x - wheelBackBottomHolderGraphics.x
-		);
 
 		wheelFrontTopHolderGraphics.x = carBodyGraphics.x + frontTopHolderHorizontalOffset * carBodyAngleCos + frontTopHolderVerticalOffset * carBodyAngleRotatedCos;
 		wheelFrontTopHolderGraphics.y = carBodyGraphics.y + frontTopHolderHorizontalOffset * carBodyAngleSin + frontTopHolderVerticalOffset * carBodyAngleRotatedSin;
-		wheelFrontTopHolderGraphics.rotation = Math.atan2(
-			wheelRightGraphics.y - wheelFrontTopHolderGraphics.y,
-			wheelRightGraphics.x - wheelFrontTopHolderGraphics.x
-		);
+
 
 		wheelFrontBottomHolderGraphics.x = carBodyGraphics.x + frontBottomHolderHorizontalOffset * carBodyAngleCos + frontBottomHolderVerticalOffset * carBodyAngleRotatedCos;
 		wheelFrontBottomHolderGraphics.y = carBodyGraphics.y + frontBottomHolderHorizontalOffset * carBodyAngleSin + frontBottomHolderVerticalOffset * carBodyAngleRotatedSin;
-		wheelFrontBottomHolderGraphics.rotation = Math.atan2(
-			wheelRightGraphics.y - wheelFrontBottomHolderGraphics.y,
-			wheelRightGraphics.x - wheelFrontBottomHolderGraphics.x
-		);
+
+		if (isCrushed)
+		{
+			wheelBackTopHolderGraphics.rotation = carBodyGraphics.rotation;
+			wheelBackBottomHolderGraphics.rotation = carBodyGraphics.rotation + Math.PI;
+			wheelFrontTopHolderGraphics.rotation = carBodyGraphics.rotation;
+			wheelFrontBottomHolderGraphics.rotation = carBodyGraphics.rotation + Math.PI;
+		}
+		else
+		{
+			wheelBackTopHolderGraphics.rotation = Math.atan2(
+				wheelLeftGraphics.y - wheelBackTopHolderGraphics.y,
+				wheelLeftGraphics.x - wheelBackTopHolderGraphics.x
+			);
+
+			wheelBackBottomHolderGraphics.rotation = Math.atan2(
+				wheelLeftGraphics.y - wheelBackBottomHolderGraphics.y,
+				wheelLeftGraphics.x - wheelBackBottomHolderGraphics.x
+			);
+
+			wheelFrontTopHolderGraphics.rotation = Math.atan2(
+				wheelRightGraphics.y - wheelFrontTopHolderGraphics.y,
+				wheelRightGraphics.x - wheelFrontTopHolderGraphics.x
+			);
+
+			wheelFrontBottomHolderGraphics.rotation = Math.atan2(
+				wheelRightGraphics.y - wheelFrontBottomHolderGraphics.y,
+				wheelRightGraphics.x - wheelFrontBottomHolderGraphics.x
+			);
+		}
 	}
 
 	function get_x():Float
@@ -248,6 +308,15 @@ class AbstractCar
 
 	public function reset()
 	{
+		isCrushed = false;
+
+		if (explosionParticleGroup != null)
+		{
+			particles.removeGroup(explosionParticleGroup);
+			explosionParticleGroup.enable = false;
+			explosionParticleGroup = null;
+		}
+
 		smokeParticleGroup.enable = false;
 		particles.removeGroup(smokeParticleGroup);
 		Timer.delay(function() {

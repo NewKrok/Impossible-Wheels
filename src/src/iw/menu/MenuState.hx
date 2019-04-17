@@ -1,6 +1,7 @@
 package iw.menu;
 
 import com.greensock.TweenMax;
+import com.greensock.easing.Quad;
 import iw.game.GameState;
 import iw.game.World;
 import iw.menu.MenuModel.MenuSubState;
@@ -76,7 +77,7 @@ class MenuState extends Base2dState
 				case MenuSubState.Welcome:
 					openSubState(welcomePage);
 					world.moveCameraTo(600, 400, 1);
-					world.zoomCamera(1, 1);
+					world.zoomCamera(1, 1, Quad.easeOut);
 
 				case MenuSubState.Info:
 					openSubState(infoPage);
@@ -89,7 +90,7 @@ class MenuState extends Base2dState
 				case MenuSubState.LevelSelect:
 					openSubState(levelSelectPage);
 					world.moveCameraTo(0, 0, 1);
-					world.zoomCamera(.5, 1);
+					world.zoomCamera(.5, 1, Quad.easeOut);
 
 				case _:
 			}

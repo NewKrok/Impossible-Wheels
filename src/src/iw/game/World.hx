@@ -3,6 +3,9 @@ package iw.game;
 import apostx.replaykit.Playback;
 import apostx.replaykit.Recorder;
 import com.greensock.TweenMax;
+import com.greensock.easing.Ease;
+import com.greensock.easing.Linear;
+import com.greensock.easing.Quad;
 import h2d.Bitmap;
 import h2d.Graphics;
 import h2d.Layers;
@@ -50,6 +53,7 @@ class World extends Layers
 	var levelData:LevelData;
 	var isEffectEnabled:Observable<Bool>;
 	var isCameraEnabled:Observable<Bool>;
+	var isLost:Observable<Bool>;
 	var onCoinCollected:Void->Void;
 
 	var camera:Layers;
@@ -102,6 +106,7 @@ class World extends Layers
 		isDemo:Bool,
 		isEffectEnabled:Observable<Bool>,
 		isCameraEnabled:Observable<Bool> = null,
+		isLost:Observable<Bool> = null,
 		onCoinCollected:Void->Void = null
 	){
 		super(parent);
@@ -109,6 +114,7 @@ class World extends Layers
 		this.isDemo = isDemo;
 		this.isEffectEnabled = isEffectEnabled;
 		this.isCameraEnabled = isDemo ? new State<Bool>(false).observe() : isCameraEnabled;
+		this.isLost = isLost;
 		this.onCoinCollected = onCoinCollected;
 	}
 
@@ -161,6 +167,18 @@ class World extends Layers
 
 			case 5:
 				isBuilt = true;
+
+				if (!isDemo)
+				{
+					isLost.bind(function(v) {
+						if (v)
+						{
+							playerCar.crash();
+							zoomCamera(1.5, 1);
+						}
+					});
+				}
+
 				reset();
 
 				if (buildResult.onComplete != null) buildResult.onComplete();
@@ -396,15 +414,18 @@ class World extends Layers
 		return result;
 	}
 
-	public function zoomCamera(scale:Float, time:Float):ActionFlow
+	public function zoomCamera(scale:Float, time:Float, ease:Ease = null):ActionFlow
 	{
 		var result:ActionFlow = { onComplete: null };
 
-		TweenMax.killTweensOf(cameraZoomHelper);
+		if (ease == null) ease = Linear.easeNone;
+
+		TweenMax.killTweensOf(this);
 		TweenMax.to(this, time, {
 			cameraZoomHelper: scale,
 			onUpdate: function() { camera.setScale(cameraZoomHelper); },
-			onComplete: function() { if (result.onComplete != null) result.onComplete(); }
+			onComplete: function() { if (result.onComplete != null) result.onComplete(); },
+			ease: ease
 		});
 
 		return result;
@@ -431,10 +452,15 @@ class World extends Layers
 
 		if (!isDemo)
 		{
+			for ( c in coins) c.reset();
+
 			playerCar.teleportTo(
 				levelData.startPoint.x,
 				levelData.startPoint.y
 			);
+
+			zoomCamera(1.5, 0);
+			zoomCamera(1, 1, Quad.easeOut);
 		}
 
 		resume();
@@ -455,27 +481,33 @@ class World extends Layers
 
 		if (!isDemo)
 		{
-			if (Key.isDown(Key.UP)) playerCar.accelerateToRight();
-			else if (Key.isDown(Key.DOWN)) playerCar.accelerateToLeft();
-			else playerCar.idle();
-
-			if (Key.isDown(Key.LEFT)) playerCar.rotateLeft();
-			else if (Key.isDown(Key.RIGHT)) playerCar.rotateRight();
-
 			playerCar.update(delta);
-			trickCalculator.update(gameTime);
-			checkCoinPickUp();
+
+			if (!isLost.value)
+			{
+				if (Key.isDown(Key.UP)) playerCar.accelerateToRight();
+				else if (Key.isDown(Key.DOWN)) playerCar.accelerateToLeft();
+
+				if (Key.isDown(Key.LEFT)) playerCar.rotateLeft();
+				else if (Key.isDown(Key.RIGHT)) playerCar.rotateRight();
+
+				trickCalculator.update(gameTime);
+				checkCoinPickUp();
+
+				checkLife();
+				checkLoose();
+			}
 
 			if (isCameraEnabled.value)
 			{
-				var cameraPointX = -playerCar.x - cameraOffset.x;
-				var cameraPointY = -playerCar.y - cameraOffset.y;
+				var cameraPointX = -playerCar.x - cameraOffset.x * (1 / camera.scaleX);
+				cameraPointX *= camera.scaleX;
+				var cameraPointY = -playerCar.y - cameraOffset.y * (1 / camera.scaleY);
+				cameraPointY *= camera.scaleY;
+
 				camera.x -= (camera.x - cameraPointX) / cameraEasing.x;
 				camera.y -= (camera.y - cameraPointY) / cameraEasing.y;
 			}
-
-			checkLife();
-			checkLoose();
 		}
 
 		if (playback != null)

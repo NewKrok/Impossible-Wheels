@@ -28,7 +28,7 @@ class GameState extends Base2dState
 		});
 
 		gameModel.observables.isLost.bind(function(v) {
-			if (v) TweenMax.delayedCall(1, reset);
+			if (v) TweenMax.delayedCall(5, reset);
 		});
 
 		super(stage);
@@ -42,6 +42,7 @@ class GameState extends Base2dState
 			false,
 			appModel.observables.isEffectEnabled,
 			gameModel.observables.isCameraEnabled,
+			gameModel.observables.isLost,
 			gameModel.collectCoin
 		);
 		world.onLooseLife = gameModel.looseLife;
