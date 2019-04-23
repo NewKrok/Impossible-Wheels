@@ -21,6 +21,7 @@ import tink.state.Observable;
 	var pauseRequest:Void->Void = _;
 	var gameTime:Observable<Float> = _;
 	var collectedCoins:Observable<UInt> = _;
+	var totalCoinCount:UInt = _;
 	var lifeCount:Observable<UInt> = _;
 
 	var info:Layers;
@@ -70,7 +71,7 @@ import tink.state.Observable;
 		cointText.textAlign = Align.Center;
 		cointText.x = 316;
 		cointText.y = 18;
-		cointText.text = "0/99";
+		cointText.text = "0/" + totalCoinCount;
 
 		gameTime.bind(function(v) {
 			var time:Array<String> = TimeUtil.timeStampToFormattedTime(v, TimeUtil.TIME_FORMAT_MM_SS_MS).split(".");
@@ -79,7 +80,7 @@ import tink.state.Observable;
 		});
 
 		collectedCoins.bind(function(v) {
-			cointText.text = v + "/99";
+			cointText.text = v + "/" + totalCoinCount;
 		});
 
 		notificationUi = new NotificationUi(this);

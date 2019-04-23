@@ -36,9 +36,11 @@ class GameState extends Base2dState
 
 	override function build()
 	{
+		var levelData = appModel.getLevelData(gameModel.levelId).levelData;
+
 		world = new World(
 			stage,
-			appModel.getLevelData(gameModel.levelId).levelData,
+			levelData,
 			false,
 			appModel.observables.isEffectEnabled,
 			gameModel.observables.isCameraEnabled,
@@ -57,6 +59,7 @@ class GameState extends Base2dState
 			pauseRequest,
 			gameModel.observables.gameTime,
 			gameModel.observables.collectedCoins,
+			levelData.collectableItems.length,
 			gameModel.observables.lifeCount
 		);
 
