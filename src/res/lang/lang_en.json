@@ -14,6 +14,9 @@
 		"sound_by": "Music and Sounds by",
 		"level": "Level $id",
 		"start_level": "START LEVEL",
-		"unlock_info": "Complete previous level to unlock!"
+		"unlock_info": "Complete previous level to unlock!",
+		"backflip": "BACKFLIP",
+		"frontflip": "FRONTFLIP",
+		"wheelie": "WHEELIE"
 	}
 }

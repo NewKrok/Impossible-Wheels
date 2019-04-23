@@ -29,6 +29,17 @@ import tink.state.Observable;
 		checkWheelieState(gameTime);
 	}
 
+	public function reset()
+	{
+		isOnWheelie = false;
+		isBackWheelie = false;
+		isOnAir = false;
+		onWheelieStartGameTime = 0;
+		onAirStartGameTime = 0;
+		jumpAngle = 0;
+		lastAngleOnGround = 0;
+	}
+
 	function checkWheelieState(gameTime:Float):Void
 	{
 		var isWheelieInProgress:Bool = (target.rightWheelOnAir && !target.leftWheelOnAir) || (!target.rightWheelOnAir && target.leftWheelOnAir);

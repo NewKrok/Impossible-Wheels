@@ -4,8 +4,10 @@ import h2d.Bitmap;
 import h2d.Flow;
 import h2d.Layers;
 import h2d.Text;
+import hpp.util.Language;
 import hpp.util.TimeUtil;
 import hxd.Res;
+import iw.game.TrickCalculator.TrickDirection;
 import iw.game.TrickCalculator.TrickType;
 import tink.state.Observable;
 
@@ -22,6 +24,7 @@ import tink.state.Observable;
 	var lifeCount:Observable<UInt> = _;
 
 	var info:Layers;
+	var notificationUi:NotificationUi;
 
 	public function new(parent:Layers)
 	{
@@ -41,7 +44,7 @@ import tink.state.Observable;
 
 		new Bitmap(Res.image.ui.game_info_back.toTile(), info);
 
-		var lifeUi = new Life(info, lifeCount);
+		var lifeUi = new LifeUi(info, lifeCount);
 		lifeUi.x = 13;
 		lifeUi.y = 24;
 
@@ -77,11 +80,22 @@ import tink.state.Observable;
 		collectedCoins.bind(function(v) {
 			cointText.text = v + "/99";
 		});
+
+		notificationUi = new NotificationUi(this);
+		notificationUi.x = 20;
+		notificationUi.y = info.y + info.getSize().height + 15;
 	}
 
 	public function onTrick(t) switch (t)
 	{
-		case TrickType.Flip(d, m): trace("Flip", d, m);
-		case TrickType.Wheelie(d, l): trace("Wheelie", d, l);
+		case TrickType.Flip(d, m): notificationUi.show(
+			(m > 1 ? m + "x " : "") + Language.get(d == TrickDirection.Front ? "frontflip" : "backflip"),
+			new Bitmap(d == TrickDirection.Front ? Res.image.ui.frontflip_icon.toTile() : Res.image.ui.backflip_icon.toTile())
+		);
+
+		case TrickType.Wheelie(d, l): notificationUi.show(
+			(Math.floor(l / 100) / 10) + "s " + Language.get("wheelie"),
+			new Bitmap(d == TrickDirection.Front ? Res.image.ui.front_wheelie_icon.toTile() : Res.image.ui.back_wheelie_icon.toTile())
+		);
 	}
 }

@@ -56,6 +56,7 @@ class Coin extends Object
 		isCollected = false;
 		anim.speed = 10;
 		anim.y = -20;
+		anim.currentFrame = 0;
 
 		TweenMax.killTweensOf(this);
 		TweenMax.killTweensOf(anim);

@@ -14,6 +14,9 @@
 		"sound_by": "Zene és Hangok",
 		"level": "Szint $id",
 		"start_level": "START",
-		"unlock_info": "Teljesítsd az elözö szintet a feloldáshoz!"
+		"unlock_info": "Teljesítsd az elözö szintet a feloldáshoz!",
+		"backflip": "HÁTRA SZALTÓ",
+		"frontflip": "ELŐRE SZALTÓ",
+		"wheelie": "EGYKEREKEZÉS"
 	}
 }

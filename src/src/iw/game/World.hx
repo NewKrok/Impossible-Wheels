@@ -469,6 +469,8 @@ class World extends Layers
 		{
 			for ( c in coins) c.reset();
 
+			trickCalculator.reset();
+
 			playerCar.teleportTo(
 				levelData.startPoint.x,
 				levelData.startPoint.y

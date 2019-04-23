@@ -9,7 +9,7 @@ import tink.state.Observable;
  * ...
  * @author Krisztian Somoracz
  */
-class Life extends Flow
+class LifeUi extends Flow
 {
 	var icons:Array<Bitmap> = [];
 
