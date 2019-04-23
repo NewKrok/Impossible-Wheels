@@ -25,6 +25,7 @@ import tink.state.Observable;
 
 	var info:Layers;
 	var notificationUi:NotificationUi;
+	var startCounterUi:StartCounterUi;
 
 	public function new(parent:Layers)
 	{
@@ -84,6 +85,8 @@ import tink.state.Observable;
 		notificationUi = new NotificationUi(this);
 		notificationUi.x = 20;
 		notificationUi.y = info.y + info.getSize().height + 15;
+
+		startCounterUi = new StartCounterUi(this);
 	}
 
 	public function onTrick(t) switch (t)
@@ -97,5 +100,10 @@ import tink.state.Observable;
 			(Math.floor(l / 100) / 10) + "s " + Language.get("wheelie"),
 			new Bitmap(d == TrickDirection.Front ? Res.image.ui.front_wheelie_icon.toTile() : Res.image.ui.back_wheelie_icon.toTile())
 		);
+	}
+
+	public function showCounter()
+	{
+		startCounterUi.start();
 	}
 }

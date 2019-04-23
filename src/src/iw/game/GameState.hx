@@ -28,7 +28,7 @@ class GameState extends Base2dState
 		});
 
 		gameModel.observables.isLost.bind(function(v) {
-			if (v) TweenMax.delayedCall(1, reset);
+			if (v) TweenMax.delayedCall(2, reset);
 		});
 
 		super(stage);
@@ -42,6 +42,8 @@ class GameState extends Base2dState
 			false,
 			appModel.observables.isEffectEnabled,
 			gameModel.observables.isCameraEnabled,
+			gameModel.observables.isControlEnabled,
+			gameModel.observables.isGameStarted,
 			gameModel.observables.isLost,
 			gameModel.collectCoin
 		);
@@ -70,6 +72,9 @@ class GameState extends Base2dState
 	{
 		gameModel.reset();
 		world.reset();
+		ui.showCounter();
+
+		TweenMax.delayedCall(2, gameModel.startLevel);
 
 		var startPoint = appModel.getLevelData(gameModel.levelId).levelData.startPoint;
 		world.jumpCameraTo(startPoint.x + 300, startPoint.y);

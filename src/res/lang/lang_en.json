@@ -17,6 +17,9 @@
 		"unlock_info": "Complete previous level to unlock!",
 		"backflip": "BACKFLIP",
 		"frontflip": "FRONTFLIP",
-		"wheelie": "WHEELIE"
+		"wheelie": "WHEELIE",
+		"ready": "Ready",
+		"set": "Set",
+		"go": "GO!"
 	}
 }

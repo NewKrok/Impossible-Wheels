@@ -53,6 +53,8 @@ class World extends Layers
 	var levelData:LevelData;
 	var isEffectEnabled:Observable<Bool>;
 	var isCameraEnabled:Observable<Bool>;
+	var isControlEnabled:Observable<Bool>;
+	var isGameStarted:Observable<Bool>;
 	var isLost:Observable<Bool>;
 	var onCoinCollected:Void->Void;
 
@@ -76,7 +78,7 @@ class World extends Layers
 	var replayEndHelper:UInt;
 
 	var cameraEasing:SimplePoint = { x: 15, y: 15 };
-	var cameraEasingDuringZoom:SimplePoint = { x: 10, y: 10 };
+	var cameraEasingDuringZoom:SimplePoint = { x: 15, y: 15 };
 	var cameraOffset:SimplePoint = { x: -300, y: -300 };
 	var cameraZoomHelper:Float = 1;
 	var isCameraZoomInProgress:Bool = false;
@@ -90,7 +92,6 @@ class World extends Layers
 
 	/*
 	var isLevelFinished:Bool = false;;*/
-	var isGameStarted:Bool = false;
 	//var isRaceStarted:Bool = false;
 	var isGamePaused:Bool = false;
 	var isBuilt:Bool = false;
@@ -108,6 +109,8 @@ class World extends Layers
 		isDemo:Bool,
 		isEffectEnabled:Observable<Bool>,
 		isCameraEnabled:Observable<Bool> = null,
+		isControlEnabled:Observable<Bool> = null,
+		isGameStarted:Observable<Bool> = null,
 		isLost:Observable<Bool> = null,
 		onCoinCollected:Void->Void = null
 	){
@@ -116,8 +119,12 @@ class World extends Layers
 		this.isDemo = isDemo;
 		this.isEffectEnabled = isEffectEnabled;
 		this.isCameraEnabled = isDemo ? new State<Bool>(false).observe() : isCameraEnabled;
+		this.isControlEnabled = isDemo ? new State<Bool>(false).observe() : isControlEnabled;
+		this.isGameStarted = isDemo ? new State<Bool>(false).observe() : isGameStarted;
 		this.isLost = isLost;
 		this.onCoinCollected = onCoinCollected;
+
+		isGameStarted.bind({ direct: true }, function(v) { if (v) gameStartTime = Date.now().getTime(); });
 	}
 
 	public function build():ActionFlow
@@ -176,8 +183,7 @@ class World extends Layers
 						if (v)
 						{
 							playerCar.crash();
-							cameraEasingDuringZoom.x = 5;
-							cameraEasingDuringZoom.y = 5;
+							cameraEasingDuringZoom.x = 2;
 							zoomCamera(1.5, .5);
 						}
 					});
@@ -448,14 +454,13 @@ class World extends Layers
 
 	public function reset()
 	{
-		isGameStarted = true;
 		/*isRaceStarted = false;
 		isGamePaused = false;*/
 
 		gameTime = 0;
 		totalPausedTime = 0;
 		pauseStartTime = 0;
-		now = gameStartTime = Date.now().getTime();
+		now = Date.now().getTime();
 
 		if (isRecordingMode)
 		{
@@ -511,7 +516,7 @@ class World extends Layers
 		{
 			playerCar.update(delta);
 
-			if (!isLost.value)
+			if (!isLost.value && isControlEnabled.value)
 			{
 				if (Key.isDown(Key.UP)) playerCar.accelerateToRight();
 				else if (Key.isDown(Key.DOWN)) playerCar.accelerateToLeft();
@@ -563,7 +568,7 @@ class World extends Layers
 
 	function calculateGameTime():Void
 	{
-		if (isGameStarted) gameTime = now - gameStartTime - totalPausedTime;
+		if (isGameStarted.value) gameTime = now - gameStartTime - totalPausedTime;
 		else gameTime = 0;
 	}
 

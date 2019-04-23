@@ -17,6 +17,9 @@
 		"unlock_info": "Teljesítsd az elözö szintet a feloldáshoz!",
 		"backflip": "HÁTRA SZALTÓ",
 		"frontflip": "ELŐRE SZALTÓ",
-		"wheelie": "EGYKEREKEZÉS"
+		"wheelie": "EGYKEREKEZÉS",
+		"ready": "Vigyázz",
+		"set": "Kész",
+		"go": "RAJT!"
 	}
 }
