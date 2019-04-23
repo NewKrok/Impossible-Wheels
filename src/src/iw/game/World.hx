@@ -664,7 +664,7 @@ class World extends Layers
 		isPhysicsEnabled = true;
 		isGamePaused = false;
 
-		if (pauseStartTime != 0) totalPausedTime += now - pauseStartTime;
+		if (pauseStartTime != 0 && isGameStarted.value) totalPausedTime += now - pauseStartTime;
 		pauseStartTime = 0;
 
 		if (recorder != null) recorder.resume();
