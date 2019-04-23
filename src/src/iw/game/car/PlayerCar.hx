@@ -389,11 +389,8 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 	{
 		super.crash();
 
-		pivotJointLeftLeftWheel.damping = wheelJoinDamping / 10;
-		pivotJointLeftLeftWheel.frequency = wheelJoinHertz / 10;
-		pivotJointRightRightWheel.damping = wheelJoinDamping / 10;
-		pivotJointRightRightWheel.frequency = wheelJoinHertz / 10;
-
+		pivotJointLeftLeftWheel.active = false;
+		pivotJointRightRightWheel.active = false;
 		wheelJoin.active = false;
 	}
 
@@ -401,11 +398,8 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 	{
 		super.reset();
 
-		pivotJointLeftLeftWheel.damping = wheelJoinDamping;
-		pivotJointLeftLeftWheel.frequency = wheelJoinHertz;
-		pivotJointRightRightWheel.damping = wheelJoinDamping;
-		pivotJointRightRightWheel.frequency = wheelJoinHertz;
-
+		pivotJointLeftLeftWheel.active = true;
+		pivotJointRightRightWheel.active = true;
 		wheelJoin.active = true;
 	}
 

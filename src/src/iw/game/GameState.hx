@@ -28,7 +28,7 @@ class GameState extends Base2dState
 		});
 
 		gameModel.observables.isLost.bind(function(v) {
-			if (v) TweenMax.delayedCall(5, reset);
+			if (v) TweenMax.delayedCall(1, reset);
 		});
 
 		super(stage);

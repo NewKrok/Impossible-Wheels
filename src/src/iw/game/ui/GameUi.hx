@@ -41,13 +41,9 @@ import tink.state.Observable;
 
 		new Bitmap(Res.image.ui.game_info_back.toTile(), info);
 
-		var scoreText = new Text(Fonts.DEFAULT_M, info);
-		scoreText.smooth = true;
-		scoreText.textColor = 0xFFFFFF;
-		scoreText.textAlign = Align.Center;
-		scoreText.x = 58;
-		scoreText.y = 18;
-		scoreText.text = "99 999";
+		var lifeUi = new Life(info, lifeCount);
+		lifeUi.x = 13;
+		lifeUi.y = 24;
 
 		var timeText = new Text(Fonts.DEFAULT_M, info);
 		timeText.smooth = true;
@@ -80,10 +76,6 @@ import tink.state.Observable;
 
 		collectedCoins.bind(function(v) {
 			cointText.text = v + "/99";
-		});
-
-		lifeCount.bind(function(v) {
-			trace("life:", v);
 		});
 	}
 

@@ -76,8 +76,10 @@ class World extends Layers
 	var replayEndHelper:UInt;
 
 	var cameraEasing:SimplePoint = { x: 15, y: 15 };
+	var cameraEasingDuringZoom:SimplePoint = { x: 10, y: 10 };
 	var cameraOffset:SimplePoint = { x: -300, y: -300 };
 	var cameraZoomHelper:Float = 1;
+	var isCameraZoomInProgress:Bool = false;
 
 	var now:Float;
 
@@ -174,7 +176,9 @@ class World extends Layers
 						if (v)
 						{
 							playerCar.crash();
-							zoomCamera(1.5, 1);
+							cameraEasingDuringZoom.x = 5;
+							cameraEasingDuringZoom.y = 5;
+							zoomCamera(1.5, .5);
 						}
 					});
 				}
@@ -420,13 +424,24 @@ class World extends Layers
 
 		if (ease == null) ease = Linear.easeNone;
 
+		isCameraZoomInProgress = true;
 		TweenMax.killTweensOf(this);
 		TweenMax.to(this, time, {
 			cameraZoomHelper: scale,
 			onUpdate: function() { camera.setScale(cameraZoomHelper); },
-			onComplete: function() { if (result.onComplete != null) result.onComplete(); },
+			onComplete: function()
+			{
+				isCameraZoomInProgress = false;
+				if (result.onComplete != null) result.onComplete();
+			},
 			ease: ease
 		});
+
+		if (time == 0)
+		{
+			cameraZoomHelper = scale;
+			camera.setScale(cameraZoomHelper);
+		}
 
 		return result;
 	}
@@ -459,6 +474,10 @@ class World extends Layers
 				levelData.startPoint.y
 			);
 
+			carLife.reset();
+
+			cameraEasingDuringZoom.x = 10;
+			cameraEasingDuringZoom.y = 10;
 			zoomCamera(1.5, 0);
 			zoomCamera(1, 1, Quad.easeOut);
 		}
@@ -469,6 +488,13 @@ class World extends Layers
 	public function update(delta:Float)
 	{
 		if (!isBuilt) return;
+
+		if (Key.isDown(Key.Z) && Key.isPressed(Key.NUMBER_1)) zoomCamera(.15, 1);
+		if (Key.isDown(Key.Z) && Key.isPressed(Key.NUMBER_2)) zoomCamera(.25, 1);
+		if (Key.isDown(Key.Z) && Key.isPressed(Key.NUMBER_3)) zoomCamera(.5, 1);
+		if (Key.isDown(Key.Z) && Key.isPressed(Key.NUMBER_4)) zoomCamera(1, 1);
+		if (Key.isDown(Key.Z) && Key.isPressed(Key.NUMBER_5)) zoomCamera(1.5, 1);
+		if (Key.isDown(Key.Z) && Key.isPressed(Key.NUMBER_6)) zoomCamera(2, 1);
 
 		now = Date.now().getTime();
 		if (isGamePaused) return;
@@ -505,8 +531,8 @@ class World extends Layers
 				var cameraPointY = -playerCar.y - cameraOffset.y * (1 / camera.scaleY);
 				cameraPointY *= camera.scaleY;
 
-				camera.x -= (camera.x - cameraPointX) / cameraEasing.x;
-				camera.y -= (camera.y - cameraPointY) / cameraEasing.y;
+				camera.x -= (camera.x - cameraPointX) / (isCameraZoomInProgress ? cameraEasingDuringZoom.x : cameraEasing.x);
+				camera.y -= (camera.y - cameraPointY) / (isCameraZoomInProgress ? cameraEasingDuringZoom.y : cameraEasing.y);
 			}
 		}
 
@@ -591,7 +617,7 @@ class World extends Layers
 
 	function checkLife()
 	{
-		if (!carLife.isInvulnerable && playerCar.isCarBodyTouchGround)
+		if (!carLife.isInvulnerable && playerCar.isCarBodyTouchGround && gameTime > 1000)
 		{
 			carLife.damage();
 			onLooseLife();

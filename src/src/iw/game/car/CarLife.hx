@@ -23,8 +23,10 @@ class CarLife
 		});
 	}
 
+	public function reset() if (delayCall != null) delayCall.kill();
+
 	public function destroy()
 	{
-		delayCall.kill();
+		reset();
 	}
 }
