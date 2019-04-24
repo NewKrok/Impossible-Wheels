@@ -15,7 +15,7 @@ class NotificationUi extends Object
 	public function show(message:String, icon:Bitmap = null)
 	{
 		var n = new Notification(this, message, icon, onNotificationRemove);
-		n.y = getBounds().height + n.getBounds().height;
+		n.y = getSize().height + n.getSize().height;
 		notifications.push(n);
 
 		order();
@@ -27,7 +27,7 @@ class NotificationUi extends Object
 
 		TweenMax.killTweensOf(n);
 		TweenMax.to(n, .5, {
-			x: -n.getBounds().width,
+			x: -n.getSize().width,
 			alpha: 0,
 			onUpdate: function(){ n.x = n.x; }
 		});
@@ -43,7 +43,7 @@ class NotificationUi extends Object
 
 			TweenMax.killTweensOf(n);
 			TweenMax.to(n, .5, {
-				y: i * n.getBounds().height + i * 5,
+				y: i * n.getSize().height + i * 5,
 				delay: i * .2,
 				onUpdate: function(){ n.y = n.y; }
 			});

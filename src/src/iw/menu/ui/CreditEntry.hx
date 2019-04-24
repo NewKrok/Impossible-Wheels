@@ -75,7 +75,7 @@ import iw.Fonts;
 		if (content == null) Language.registerTextHolder(cast labelText, contentId);
 		else labelText.text = content;
 
-		// It's really-really strange, but without it, it's potision is totally wrong
+		// It's really-really strange, but without it, it's position is totally wrong
 		labelText.maxWidth = labelText.calcTextWidth(labelText.text);
 
 		if (isReversed)

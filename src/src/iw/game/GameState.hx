@@ -1,11 +1,15 @@
 package iw.game;
 
 import com.greensock.TweenMax;
+import h2d.filter.Blur;
 import hpp.heaps.Base2dStage;
 import hpp.heaps.Base2dState;
+import hpp.heaps.HppG;
 import iw.AppModel;
 import iw.game.GameModel;
+import iw.game.substate.PausePage;
 import iw.game.ui.GameUi;
+import iw.menu.MenuState;
 
 /**
  * ...
@@ -20,6 +24,8 @@ class GameState extends Base2dState
 	var world:World;
 	var ui:GameUi;
 
+	var pausePage:PausePage;
+
 	public function new(stage:Base2dStage, appModel:AppModel, levelId:UInt)
 	{
 		this.appModel = appModel;
@@ -31,11 +37,31 @@ class GameState extends Base2dState
 			if (v) TweenMax.delayedCall(2, reset);
 		});
 
+		gameModel.observables.isGamePaused.bind(function(v)
+		{
+			if (v)
+			{
+				openSubState(pausePage);
+				world.filter = new Blur(15);
+			}
+			else
+			{
+				world.filter = null;
+				closeSubState();
+			}
+		});
+
 		super(stage);
 	}
 
 	override function build()
 	{
+		pausePage = new PausePage(
+			gameModel.resumeGame,
+			reset,
+			HppG.changeState.bind(MenuState, [appModel])
+		);
+
 		var levelData = appModel.getLevelData(gameModel.levelId).levelData;
 
 		world = new World(
@@ -43,9 +69,10 @@ class GameState extends Base2dState
 			levelData,
 			false,
 			appModel.observables.isEffectEnabled,
+			gameModel.observables.isGameStarted,
+			gameModel.observables.isGamePaused,
 			gameModel.observables.isCameraEnabled,
 			gameModel.observables.isControlEnabled,
-			gameModel.observables.isGameStarted,
 			gameModel.observables.isLost,
 			gameModel.collectCoin
 		);
@@ -60,7 +87,8 @@ class GameState extends Base2dState
 			gameModel.observables.gameTime,
 			gameModel.observables.collectedCoins,
 			levelData.collectableItems.length,
-			gameModel.observables.lifeCount
+			gameModel.observables.lifeCount,
+			gameModel.observables.isGamePaused
 		);
 
 		world.onTrick = ui.onTrick;
@@ -86,8 +114,6 @@ class GameState extends Base2dState
 	function start():Void
 	{
 		resumeRequest();
-
-		world.resume();
 	}
 
 	override public function update(delta:Float)
@@ -101,19 +127,14 @@ class GameState extends Base2dState
 	{
 		TweenMax.resumeAll(true, true, true);
 
-		world.resume();
+		gameModel.resumeGame();
 	}
 
 	function pauseRequest()
 	{
 		TweenMax.pauseAll(true, true, true);
 
-		world.pause();
-	}
-
-	override public function onFocus()
-	{
-		resumeRequest();
+		gameModel.pauseGame();
 	}
 
 	override public function onFocusLost()

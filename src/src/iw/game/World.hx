@@ -55,6 +55,7 @@ class World extends Layers
 	var isCameraEnabled:Observable<Bool>;
 	var isControlEnabled:Observable<Bool>;
 	var isGameStarted:Observable<Bool>;
+	var isGamePaused:Observable<Bool>;
 	var isLost:Observable<Bool>;
 	var onCoinCollected:Void->Void;
 
@@ -90,10 +91,6 @@ class World extends Layers
 	var buildResult:ActionFlow = { onComplete: null };
 	var replayResult:ActionFlow = { onComplete: null };
 
-	/*
-	var isLevelFinished:Bool = false;;*/
-	//var isRaceStarted:Bool = false;
-	var isGamePaused:Bool = false;
 	var isBuilt:Bool = false;
 	var isPhysicsEnabled:Bool = false;
 	var isDemo:Bool = false;
@@ -108,9 +105,10 @@ class World extends Layers
 		levelData,
 		isDemo:Bool,
 		isEffectEnabled:Observable<Bool>,
+		isGameStarted:Observable<Bool> = null,
+		isGamePaused:Observable<Bool> = null,
 		isCameraEnabled:Observable<Bool> = null,
 		isControlEnabled:Observable<Bool> = null,
-		isGameStarted:Observable<Bool> = null,
 		isLost:Observable<Bool> = null,
 		onCoinCollected:Void->Void = null
 	){
@@ -118,13 +116,15 @@ class World extends Layers
 		this.levelData = levelData;
 		this.isDemo = isDemo;
 		this.isEffectEnabled = isEffectEnabled;
+		this.isGameStarted = isGameStarted;
+		this.isGamePaused = isGamePaused;
 		this.isCameraEnabled = isDemo ? new State<Bool>(false).observe() : isCameraEnabled;
 		this.isControlEnabled = isDemo ? new State<Bool>(false).observe() : isControlEnabled;
-		this.isGameStarted = isDemo ? new State<Bool>(false).observe() : isGameStarted;
 		this.isLost = isLost;
 		this.onCoinCollected = onCoinCollected;
 
 		isGameStarted.bind({ direct: true }, function(v) { if (v) gameStartTime = Date.now().getTime(); });
+		isGamePaused.bind(function(v) { if (v) pause(); else resume(); });
 	}
 
 	public function build():ActionFlow
@@ -193,15 +193,6 @@ class World extends Layers
 
 				if (buildResult.onComplete != null) buildResult.onComplete();
 				return;
-
-			/*case 5:
-				/*
-				createLibraryElements();
-
-				add(gameGui = new GameGui(resume, pauseRequest, levelData.collectableItems.length));*/
-
-			case 6:
-				//levelPreloader.hide(removePreloader);
 		}
 
 		//levelPreloader.step();
@@ -454,9 +445,6 @@ class World extends Layers
 
 	public function reset()
 	{
-		/*isRaceStarted = false;
-		isGamePaused = false;*/
-
 		gameTime = 0;
 		totalPausedTime = 0;
 		pauseStartTime = 0;
@@ -504,7 +492,7 @@ class World extends Layers
 		if (Key.isDown(Key.Z) && Key.isPressed(Key.NUMBER_6)) zoomCamera(2, 1);
 
 		now = Date.now().getTime();
-		if (isGamePaused) return;
+		if (isGamePaused.value) return;
 
 		calculateGameTime();
 
@@ -643,10 +631,9 @@ class World extends Layers
 
 	public function getGameTime():Float return gameTime;
 
-	public function pause()
+	function pause()
 	{
 		isPhysicsEnabled = false;
-		isGamePaused = true;
 
 		if (pauseStartTime != 0) totalPausedTime += now - pauseStartTime;
 		pauseStartTime = now;
@@ -659,10 +646,9 @@ class World extends Layers
 		}
 	}
 
-	public function resume()
+	function resume()
 	{
 		isPhysicsEnabled = true;
-		isGamePaused = false;
 
 		if (pauseStartTime != 0 && isGameStarted.value) totalPausedTime += now - pauseStartTime;
 		pauseStartTime = 0;

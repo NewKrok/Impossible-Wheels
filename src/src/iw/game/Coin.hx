@@ -26,6 +26,7 @@ class Coin extends Object
 			this
 		);
 		anim.loop = true;
+		anim.smooth = true;
 
 		anim.x = -20;
 		anim.y = -20;

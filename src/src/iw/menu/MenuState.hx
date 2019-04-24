@@ -15,6 +15,7 @@ import hpp.heaps.HppG;
 import hpp.util.Log;
 import hxd.Res;
 import iw.AppModel;
+import tink.state.State;
 
 /**
  * ...
@@ -100,12 +101,18 @@ class MenuState extends Base2dState
 			stage,
 			appModel.getLevelData(0).levelData,
 			true,
-			appModel.observables.isEffectEnabled
+			appModel.observables.isEffectEnabled,
+			menuModel.observables.isLoaded,
+			menuModel.observables.isNotInFocus
 		);
 
 		menuModel.setSubState(MenuSubState.Intro);
 
-		world.build().onComplete = chooseDemoReplay;
+		world.build().onComplete = function() {
+			menuModel.isLoaded = true;
+			menuModel.isInFocus = true;
+			chooseDemoReplay();
+		}
 	}
 
 	function chooseDemoReplay()
@@ -143,13 +150,13 @@ class MenuState extends Base2dState
 	function resumeRequest()
 	{
 		TweenMax.resumeAll(true, true, true);
-		world.resume();
+		menuModel.isInFocus = true;
 	}
 
 	function pauseRequest()
 	{
 		TweenMax.pauseAll(true, true, true);
-		world.pause();
+		menuModel.isInFocus = false;
 	}
 
 	override public function onFocus()

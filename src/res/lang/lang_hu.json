@@ -20,6 +20,10 @@
 		"wheelie": "EGYKEREKEZÉS",
 		"ready": "Vigyázz",
 		"set": "Kész",
-		"go": "RAJT!"
+		"go": "RAJT!",
+		"paused": "A játék szünetel",
+		"resume": "FOLYTATÁS",
+		"restart": "ÚJRAKEZD",
+		"exit": "KILÉPÉS"
 	}
 }

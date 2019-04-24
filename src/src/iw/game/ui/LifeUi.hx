@@ -23,6 +23,7 @@ class LifeUi extends Flow
 		for (i in 0...3)
 		{
 			var icon = new Bitmap(Res.image.ui.hearth_icon.toTile(), this);
+			icon.smooth = true;
 			icons.push(icon);
 		}
 

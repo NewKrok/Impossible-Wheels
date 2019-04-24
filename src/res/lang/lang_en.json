@@ -20,6 +20,10 @@
 		"wheelie": "WHEELIE",
 		"ready": "Ready",
 		"set": "Set",
-		"go": "GO!"
+		"go": "GO!",
+		"paused": "Game is paused",
+		"resume": "RESUME",
+		"restart": "RESTART",
+		"exit": "EXIT"
 	}
 }

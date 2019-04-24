@@ -24,6 +24,6 @@ class StartCounterEntry extends Object
 		label.textAlign = Align.Left;
 		label.text = labelText;
 		label.x = 20;
-		label.y = getBounds().height / 2 - label.textHeight / 2;
+		label.y = getSize().height / 2 - label.textHeight / 2;
 	}
 }

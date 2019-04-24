@@ -23,6 +23,7 @@ import tink.state.Observable;
 	var collectedCoins:Observable<UInt> = _;
 	var totalCoinCount:UInt = _;
 	var lifeCount:Observable<UInt> = _;
+	var isGamePaused:Observable<Bool> = _;
 
 	var info:Layers;
 	var notificationUi:NotificationUi;
@@ -36,6 +37,8 @@ import tink.state.Observable;
 		this.pauseRequest = pauseRequest;
 
 		build();
+
+		isGamePaused.bind(function(v) { if (v) startCounterUi.stop(); });
 	}
 
 	function build()

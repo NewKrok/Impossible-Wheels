@@ -36,11 +36,11 @@ class StartCounterUi extends Object
 		{
 			var e = entries[i];
 			e.x = HppG.stage2d.width;
-			e.y = HppG.stage2d.height / 2 - e.getBounds().height / 2;
+			e.y = HppG.stage2d.height / 2 - e.getSize().height / 2;
 			e.alpha = 0;
 
 			TweenMax.to(e, .2, {
-				x: HppG.stage2d.width - e.getBounds().width,
+				x: HppG.stage2d.width - e.getSize().width,
 				alpha: 1,
 				onUpdate: function() { e.x = e.x; },
 				delay: i * 1,
@@ -54,6 +54,19 @@ class StartCounterUi extends Object
 					});
 				}
 			});
+		}
+	}
+
+	public function stop()
+	{
+		for (i in 0...entries.length)
+		{
+			var e = entries[i];
+			e.x = HppG.stage2d.width;
+			e.y = HppG.stage2d.height / 2 - e.getSize().height / 2;
+			e.alpha = 0;
+
+			TweenMax.killTweensOf(e);
 		}
 	}
 }
