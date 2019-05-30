@@ -4,6 +4,8 @@ import h2d.Bitmap;
 import h2d.Flow;
 import h2d.Layers;
 import h2d.Text;
+import hpp.heaps.HppG;
+import hpp.heaps.ui.BaseButton;
 import hpp.util.Language;
 import hpp.util.TimeUtil;
 import hxd.Res;
@@ -17,28 +19,34 @@ import tink.state.Observable;
  */
 @:tink class GameUi extends Layers
 {
-	var resumeRequest:Void->Void = _;
 	var pauseRequest:Void->Void = _;
 	var gameTime:Observable<Float> = _;
 	var collectedCoins:Observable<UInt> = _;
 	var totalCoinCount:UInt = _;
 	var lifeCount:Observable<UInt> = _;
 	var isGamePaused:Observable<Bool> = _;
+	var isGameStarted:Observable<Bool> = _;
 
 	var info:Layers;
 	var notificationUi:NotificationUi;
 	var startCounterUi:StartCounterUi;
+	var pauseButton:BaseButton;
 
 	public function new(parent:Layers)
 	{
 		super(parent);
 
-		this.resumeRequest = resumeRequest;
 		this.pauseRequest = pauseRequest;
 
 		build();
 
-		isGamePaused.bind(function(v) { if (v) startCounterUi.stop(); });
+		isGamePaused.bind(function(v) {
+			if (v && isGameStarted.value) startCounterUi.stop();
+			pauseButton.visible = pauseButton.isEnabled = isGameStarted.value && !v;
+		});
+		isGameStarted.bind(function(v) {
+			pauseButton.visible = pauseButton.isEnabled = isGamePaused.value ? false : v;
+		});
 	}
 
 	function build()
@@ -85,6 +93,14 @@ import tink.state.Observable;
 		collectedCoins.bind(function(v) {
 			cointText.text = v + "/" + totalCoinCount;
 		});
+
+		pauseButton = new BaseButton(this, {
+			onClick: function(_) { pauseRequest(); },
+			baseGraphic: Res.image.ui.pause_button.toTile(),
+			overAlpha: .5
+		});
+		pauseButton.x = HppG.stage2d.width - pauseButton.getSize().width - 20;
+		pauseButton.y = 20;
 
 		notificationUi = new NotificationUi(this);
 		notificationUi.x = 20;

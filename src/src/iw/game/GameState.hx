@@ -5,6 +5,9 @@ import h2d.filter.Blur;
 import hpp.heaps.Base2dStage;
 import hpp.heaps.Base2dState;
 import hpp.heaps.HppG;
+import hxd.Event;
+import hxd.Key;
+import hxd.Window;
 import iw.AppModel;
 import iw.game.GameModel;
 import iw.game.substate.PausePage;
@@ -29,20 +32,25 @@ class GameState extends Base2dState
 	public function new(stage:Base2dStage, appModel:AppModel, levelId:UInt)
 	{
 		this.appModel = appModel;
-		gameModel = new GameModel({
+		gameModel = new GameModel(
+		{
 			levelId: levelId
 		});
 
-		gameModel.observables.isLost.bind(function(v) {
-			if (v) TweenMax.delayedCall(2, reset);
+		gameModel.observables.isLost.bind(function(v)
+		{
+			if (v) TweenMax.delayedCall(1, reset);
 		});
 
 		gameModel.observables.isGamePaused.bind(function(v)
 		{
 			if (v)
 			{
-				openSubState(pausePage);
-				world.filter = new Blur(15);
+				if (gameModel.isGameStarted)
+				{
+					openSubState(pausePage);
+					world.filter = new Blur(15);
+				}
 			}
 			else
 			{
@@ -51,13 +59,27 @@ class GameState extends Base2dState
 			}
 		});
 
+		Window.getInstance().addEventTarget(onKeyEvent);
+
 		super(stage);
+	}
+
+	function onKeyEvent(e:Event)
+	{
+		if (e.kind == EKeyDown)
+			switch (e.keyCode)
+			{
+				case Key.P if (gameModel.isGameStarted && !gameModel.isGamePaused): pauseRequest();
+				case Key.P if (gameModel.isGameStarted && gameModel.isGamePaused): resumeRequest();
+
+				case Key.R if (gameModel.isGameStarted && gameModel.isGamePaused): reset();
+			}
 	}
 
 	override function build()
 	{
 		pausePage = new PausePage(
-			gameModel.resumeGame,
+			resumeRequest,
 			reset,
 			HppG.changeState.bind(MenuState, [appModel])
 		);
@@ -82,13 +104,13 @@ class GameState extends Base2dState
 
 		ui = new GameUi(
 			stage,
-			resumeRequest,
 			pauseRequest,
 			gameModel.observables.gameTime,
 			gameModel.observables.collectedCoins,
 			levelData.collectableItems.length,
 			gameModel.observables.lifeCount,
-			gameModel.observables.isGamePaused
+			gameModel.observables.isGamePaused,
+			gameModel.observables.isGameStarted
 		);
 
 		world.onTrick = ui.onTrick;
@@ -125,14 +147,30 @@ class GameState extends Base2dState
 
 	function resumeRequest()
 	{
-		TweenMax.resumeAll(true, true, true);
+		if (gameModel.isGameStarted)
+		{
+			ui.showCounter();
+			closeSubState();
 
-		gameModel.resumeGame();
+			TweenMax.delayedCall(2, function()
+			{
+				TweenMax.resumeAll(true, true, true);
+				gameModel.resumeGame();
+			});
+		}
+		else
+		{
+			TweenMax.resumeAll(true, true, true);
+			gameModel.resumeGame();
+		}
 	}
 
 	function pauseRequest()
 	{
 		TweenMax.pauseAll(true, true, true);
+
+		// To handle when focus lost during start counter
+		if (gameModel.isGamePaused) gameModel.resumeGame();
 
 		gameModel.pauseGame();
 	}
@@ -140,6 +178,12 @@ class GameState extends Base2dState
 	override public function onFocusLost()
 	{
 		pauseRequest();
+	}
+
+	override public function onFocus():Void
+	{
+		// To handle when focus lost during first start counter
+		if (!gameModel.isGameStarted) resumeRequest();
 	}
 
 	override public function dispose()

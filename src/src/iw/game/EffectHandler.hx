@@ -5,7 +5,6 @@ import h2d.Bitmap;
 import h2d.Layers;
 import h2d.Particles;
 import h2d.Tile;
-import haxe.Timer;
 import hxd.Res;
 
 /**
@@ -16,21 +15,25 @@ class EffectHandler
 {
 	var parent:Layers;
 	var particles:Particles;
+	var imageCache:Array<Bitmap>;
 
 	public function new(s2d:Layers)
 	{
 		this.parent = s2d;
 
 		particles = new Particles(s2d);
+		imageCache = [];
 	}
 
 	public function addCollectCoinEffect(x:Float, y:Float)
 	{
-		Timer.delay(function()
-		{
-			addStarParticles(x, y);
-			addCoinExplosion(x, y);
-		}, 500);
+		TweenMax.delayedCall(.5, addCollectCoinEffectWithoutDelay, [x, y]);
+	}
+
+	function addCollectCoinEffectWithoutDelay(x:Float, y:Float)
+	{
+		addStarParticles(x, y);
+		addCoinExplosion(x, y);
 	}
 
 	function addStarParticles(x:Float, y:Float)
@@ -58,12 +61,13 @@ class EffectHandler
 
 		particles.addGroup(g);
 
-		Timer.delay(function(){ removeEffect(g); }, 500);
+		TweenMax.delayedCall(.5, function(){ removeEffect(g); });
 	}
 
 	public function addCoinExplosion(x:Float, y:Float, scale:Float = 1)
 	{
 		var image:Bitmap = new Bitmap(Res.image.game_asset.light_explosion.toTile(), parent);
+		imageCache.push(image);
 		image.x = x;
 		image.y = y;
 		image.scaleX = image.scaleY = 1;
@@ -95,6 +99,16 @@ class EffectHandler
 
 	function removeBitmap(img:Bitmap)
 	{
+		imageCache.remove(img);
 		img.remove();
+	}
+
+	public function reset()
+	{
+		TweenMax.killDelayedCallsTo(addCollectCoinEffectWithoutDelay);
+
+		particles.removeChildren();
+
+		for (i in imageCache) i.remove();
 	}
 }

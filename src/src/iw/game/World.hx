@@ -425,7 +425,9 @@ class World extends Layers
 		TweenMax.killTweensOf(this);
 		TweenMax.to(this, time, {
 			cameraZoomHelper: scale,
-			onUpdate: function() { camera.setScale(cameraZoomHelper); },
+			onUpdate: function() {
+				camera.setScale(cameraZoomHelper);
+			},
 			onComplete: function()
 			{
 				isCameraZoomInProgress = false;
@@ -475,6 +477,8 @@ class World extends Layers
 			cameraEasingDuringZoom.y = 10;
 			zoomCamera(1.5, 0);
 			zoomCamera(1, 1, Quad.easeOut);
+
+			effects.reset();
 		}
 
 		resume();
