@@ -20,6 +20,7 @@ import tink.state.Observable;
 @:tink class GameUi extends Layers
 {
 	var pauseRequest:Void->Void = _;
+	var level:UInt = _;
 	var gameTime:Observable<Float> = _;
 	var collectedCoins:Observable<UInt> = _;
 	var totalCoinCount:UInt = _;
@@ -30,6 +31,7 @@ import tink.state.Observable;
 	var info:Layers;
 	var notificationUi:NotificationUi;
 	var startCounterUi:StartCounterUi;
+	var levelInfoUi:LevelInfoUi;
 	var pauseButton:BaseButton;
 
 	public function new(parent:Layers)
@@ -40,12 +42,18 @@ import tink.state.Observable;
 
 		build();
 
-		isGamePaused.bind(function(v) {
+		isGamePaused.bind(function(v)
+		{
 			if (v && isGameStarted.value) startCounterUi.stop();
 			pauseButton.visible = pauseButton.isEnabled = isGameStarted.value && !v;
 		});
-		isGameStarted.bind(function(v) {
+
+		isGameStarted.bind(function(v)
+		{
 			pauseButton.visible = pauseButton.isEnabled = isGamePaused.value ? false : v;
+
+			if (v) levelInfoUi.hide();
+			else levelInfoUi.reset();
 		});
 	}
 
@@ -93,6 +101,9 @@ import tink.state.Observable;
 		collectedCoins.bind(function(v) {
 			cointText.text = v + "/" + totalCoinCount;
 		});
+
+		levelInfoUi = new LevelInfoUi(info, level);
+		levelInfoUi.y = 12;
 
 		pauseButton = new BaseButton(this, {
 			onClick: function(_) { pauseRequest(); },

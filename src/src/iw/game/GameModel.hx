@@ -14,6 +14,7 @@ class GameModel implements Model
 
 	@:observable var collectedCoins:UInt = 0;
 	@:observable var lifeCount:UInt = 3;
+	@:observable var isLevelCompleted:Bool = false;
 	@:observable var isLost:Bool = false;
 	@:observable var isControlEnabled:Bool = false;
 	@:observable var isCameraEnabled:Bool = true;
@@ -21,6 +22,11 @@ class GameModel implements Model
 	@:observable var isGamePaused:Bool = false;
 
 	@:transition function collectCoin() return { collectedCoins: collectedCoins + 1 };
+
+	@:transition function onLevelComplete() return {
+		isLevelCompleted: true,
+		isControlEnabled: false
+	};
 
 	@:transition function looseLife()
 	{
@@ -38,6 +44,7 @@ class GameModel implements Model
 	};
 
 	@:transition function reset() return {
+		isLevelCompleted: false,
 		isLost: false,
 		isControlEnabled: false,
 		isGameStarted: false,

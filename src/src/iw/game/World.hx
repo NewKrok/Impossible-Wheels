@@ -46,6 +46,7 @@ class World extends Layers
 	public static var WORLD_PIECE_SIZE:SimplePoint = { x: 5000, y: 2000 };
 	public static var LEVEL_MAX_TIME:UInt = 5 * 60 * 1000;
 
+	public var onLevelComplete:Void->Void = function(){};
 	public var onLoose:Void->Void = function(){};
 	public var onLooseLife:Void->Void = function(){};
 	public var onTrick:TrickType->Void = function(_){};
@@ -519,6 +520,7 @@ class World extends Layers
 				trickCalculator.update(gameTime);
 				checkCoinPickUp();
 
+				checkLevelComplete();
 				checkLife();
 				checkLoose();
 			}
@@ -614,6 +616,11 @@ class World extends Layers
 		}
 	}
 
+	function checkLevelComplete():Void
+	{
+		if (GeomUtil.getDistance(cast levelData.finishPoint, cast playerCar.wheelRightGraphics) < 20) onLevelComplete();
+	}
+
 	function checkLife()
 	{
 		if (!carLife.isInvulnerable && playerCar.isCarBodyTouchGround && gameTime > 1000)
@@ -648,6 +655,8 @@ class World extends Layers
 			recorder.takeSnapshot();
 			trace(recorder.toString());
 		}
+
+		if (coins != null) for (c in coins) c.pause();
 	}
 
 	function resume()
@@ -658,6 +667,8 @@ class World extends Layers
 		pauseStartTime = 0;
 
 		if (recorder != null) recorder.resume();
+
+		if (coins != null) for (c in coins) c.resume();
 	}
 
 	public function destroy()

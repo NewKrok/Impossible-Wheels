@@ -10,6 +10,7 @@ import hxd.Key;
 import hxd.Window;
 import iw.AppModel;
 import iw.game.GameModel;
+import iw.game.substate.LevelCompletePage;
 import iw.game.substate.PausePage;
 import iw.game.ui.GameUi;
 import iw.menu.MenuState;
@@ -28,6 +29,7 @@ class GameState extends Base2dState
 	var ui:GameUi;
 
 	var pausePage:PausePage;
+	var levelCompletePage:LevelCompletePage;
 
 	public function new(stage:Base2dStage, appModel:AppModel, levelId:UInt)
 	{
@@ -40,6 +42,11 @@ class GameState extends Base2dState
 		gameModel.observables.isLost.bind(function(v)
 		{
 			if (v) TweenMax.delayedCall(1, reset);
+		});
+
+		gameModel.observables.isLevelCompleted.bind(function(v)
+		{
+			if (v) openSubState(levelCompletePage);
 		});
 
 		gameModel.observables.isGamePaused.bind(function(v)
@@ -84,6 +91,12 @@ class GameState extends Base2dState
 			HppG.changeState.bind(MenuState, [appModel])
 		);
 
+		levelCompletePage = new LevelCompletePage(
+			HppG.changeState.bind(MenuState, [appModel]),
+			reset,
+			HppG.changeState.bind(GameState, [appModel, gameModel.levelId + 1])
+		);
+
 		var levelData = appModel.getLevelData(gameModel.levelId).levelData;
 
 		world = new World(
@@ -98,6 +111,7 @@ class GameState extends Base2dState
 			gameModel.observables.isLost,
 			gameModel.collectCoin
 		);
+		world.onLevelComplete = gameModel.onLevelComplete;
 		world.onLooseLife = gameModel.looseLife;
 		world.onLoose = gameModel.loose;
 		world.build().onComplete = init;
@@ -105,6 +119,7 @@ class GameState extends Base2dState
 		ui = new GameUi(
 			stage,
 			pauseRequest,
+			levelData.levelId,
 			gameModel.observables.gameTime,
 			gameModel.observables.collectedCoins,
 			levelData.collectableItems.length,
@@ -123,6 +138,8 @@ class GameState extends Base2dState
 
 	function reset()
 	{
+		closeSubState();
+
 		gameModel.reset();
 		world.reset();
 		ui.showCounter();

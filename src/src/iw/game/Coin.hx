@@ -51,6 +51,9 @@ class Coin extends Object
 		});
 	}
 
+	public function pause() anim.pause = true;
+	public function resume() anim.pause = false;
+
 	public function reset()
 	{
 		alpha = 1;

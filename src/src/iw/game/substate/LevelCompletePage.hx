@@ -15,27 +15,27 @@ import hxd.Res;
  * ...
  * @author Krisztian Somoracz
  */
-class PausePage extends Base2dSubState
+class LevelCompletePage extends Base2dSubState
 {
-	var onResumeRequest:Void->Void;
-	var onRestartRequest:Void->Void;
 	var onExitRequest:Void->Void;
+	var onRestartRequest:Void->Void;
+	var onNextLevelRequest:Void->Void;
 
-	var resumeButton:BaseButton;
-	var restartButton:BaseButton;
 	var exitButton:BaseButton;
+	var restartButton:BaseButton;
+	var nextLevelButton:BaseButton;
 
 	var fullBackground:Graphics;
 	var titleBackground:Graphics;
 
 	public function new(
-		onResumeRequest:Void->Void,
+		onExitRequest:Void->Void,
 		onRestartRequest:Void->Void,
-		onExitRequest:Void->Void
+		onNextLevelRequest:Void->Void
 	){
-		this.onResumeRequest = onResumeRequest;
-		this.onRestartRequest = onRestartRequest;
 		this.onExitRequest = onExitRequest;
+		this.onRestartRequest = onRestartRequest;
+		this.onNextLevelRequest = onNextLevelRequest;
 
 		super();
 	}
@@ -56,7 +56,7 @@ class PausePage extends Base2dSubState
 		titleText.smooth = true;
 		titleText.textColor = 0xFFFFFF;
 		titleText.textAlign = Align.Center;
-		titleText.text = Language.get("paused");
+		titleText.text = Language.get("completed");
 		titleText.maxWidth = titleText.calcTextWidth(titleText.text);
 		titleText.x = HppG.stage2d.width / 2 - titleText.textWidth / 2;
 		titleText.y = 43 / 2 - titleText.textHeight / 2;
@@ -65,9 +65,9 @@ class PausePage extends Base2dSubState
 		flow.isVertical = false;
 		flow.horizontalSpacing = 20;
 
-		resumeButton = new BaseButton(flow, {
-			onClick: function(_) { onResumeRequest(); },
-			labelText: Language.get("resume"),
+		exitButton = new BaseButton(flow, {
+			onClick: function(_) { onExitRequest(); },
+			labelText: Language.get("exit"),
 			baseGraphic: Res.image.ui.long_button.toTile(),
 			font: Fonts.DEFAULT_M,
 			overAlpha: .5
@@ -81,9 +81,9 @@ class PausePage extends Base2dSubState
 			overAlpha: .5
 		});
 
-		exitButton = new BaseButton(flow, {
-			onClick: function(_) { onExitRequest(); },
-			labelText: Language.get("exit"),
+		nextLevelButton = new BaseButton(flow, {
+			onClick: function(_) { onNextLevelRequest(); },
+			labelText: Language.get("resume"),
 			baseGraphic: Res.image.ui.long_button.toTile(),
 			font: Fonts.DEFAULT_M,
 			overAlpha: .5
@@ -104,10 +104,10 @@ class PausePage extends Base2dSubState
 		titleBackground.drawRect(0, 0, HppG.stage2d.width, 43);
 		titleBackground.endFill();
 
-		resumeButton.alpha = 0;
-		resumeButton.y = 20;
-		TweenMax.killTweensOf(resumeButton);
-		TweenMax.to(resumeButton, .3, { alpha: 1, y: 0, onUpdate: function () { resumeButton.y = resumeButton.y; } });
+		exitButton.alpha = 0;
+		exitButton.y = 20;
+		TweenMax.killTweensOf(exitButton);
+		TweenMax.to(exitButton, .3, { alpha: 1, y: 0, onUpdate: function () { exitButton.y = exitButton.y; } });
 
 		// Really dirty but when I'm using just this: "delay: .1" or ".delay(.1)" it breaks completly the "y tween"
 		restartButton.alpha = 0;
@@ -124,16 +124,16 @@ class PausePage extends Base2dSubState
 			}
 		});
 
-		exitButton.alpha = 0;
-		TweenMax.killTweensOf(exitButton);
-		TweenMax.to(exitButton, .2, {
+		nextLevelButton.alpha = 0;
+		TweenMax.killTweensOf(nextLevelButton);
+		TweenMax.to(nextLevelButton, .2, {
 			onComplete: function ()
 			{
-				exitButton.y = 20;
-				TweenMax.to(exitButton, .3, {
+				nextLevelButton.y = 20;
+				TweenMax.to(nextLevelButton, .3, {
 					alpha: 1,
 					y: 0,
-					onUpdate: function () { exitButton.y = exitButton.y; }
+					onUpdate: function () { nextLevelButton.y = nextLevelButton.y; }
 				});
 			}
 		});
