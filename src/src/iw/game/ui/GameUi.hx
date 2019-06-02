@@ -1,13 +1,11 @@
 package iw.game.ui;
 
 import h2d.Bitmap;
-import h2d.Flow;
 import h2d.Layers;
 import h2d.Text;
 import hpp.heaps.HppG;
 import hpp.heaps.ui.BaseButton;
 import hpp.util.Language;
-import hpp.util.TimeUtil;
 import hxd.Res;
 import iw.game.TrickCalculator.TrickDirection;
 import iw.game.TrickCalculator.TrickType;
@@ -69,20 +67,9 @@ import tink.state.Observable;
 		lifeUi.x = 13;
 		lifeUi.y = 24;
 
-		var timeText = new Text(Fonts.DEFAULT_M, info);
-		timeText.smooth = true;
-		timeText.textColor = 0xFFFFFF;
-		timeText.textAlign = Align.Right;
-		timeText.x = 214;
-		timeText.y = 18;
-
-		var timeSmallText = new Text(Fonts.DEFAULT_S, info);
-		timeSmallText.smooth = true;
-		timeSmallText.textColor = 0xFFFFFF;
-		timeSmallText.textAlign = Align.Left;
-		timeSmallText.x = 214;
-		timeSmallText.y = 24;
-		timeSmallText.text = "999";
+		var timeUi = new TimeUi(info, gameTime);
+		timeUi.x = 130;
+		timeUi.y = 18;
 
 		var cointText = new Text(Fonts.DEFAULT_M, info);
 		cointText.smooth = true;
@@ -92,18 +79,12 @@ import tink.state.Observable;
 		cointText.y = 18;
 		cointText.text = "0/" + totalCoinCount;
 
-		gameTime.bind(function(v) {
-			var time:Array<String> = TimeUtil.timeStampToFormattedTime(v, TimeUtil.TIME_FORMAT_MM_SS_MS).split(".");
-			timeText.text = time[0] + ".";
-			timeSmallText.text = time[1];
-		});
-
 		collectedCoins.bind(function(v) {
 			cointText.text = v + "/" + totalCoinCount;
 		});
 
 		levelInfoUi = new LevelInfoUi(info, level);
-		levelInfoUi.y = 12;
+		levelInfoUi.y = 1200;
 
 		pauseButton = new BaseButton(this, {
 			onClick: function(_) { pauseRequest(); },

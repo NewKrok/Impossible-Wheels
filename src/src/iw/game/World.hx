@@ -57,6 +57,7 @@ class World extends Layers
 	var isControlEnabled:Observable<Bool>;
 	var isGameStarted:Observable<Bool>;
 	var isGamePaused:Observable<Bool>;
+	var isLevelCompleted:Observable<Bool>;
 	var isLost:Observable<Bool>;
 	var onCoinCollected:Void->Void;
 
@@ -108,6 +109,7 @@ class World extends Layers
 		isEffectEnabled:Observable<Bool>,
 		isGameStarted:Observable<Bool> = null,
 		isGamePaused:Observable<Bool> = null,
+		isLevelCompleted:Observable<Bool> = null,
 		isCameraEnabled:Observable<Bool> = null,
 		isControlEnabled:Observable<Bool> = null,
 		isLost:Observable<Bool> = null,
@@ -119,6 +121,7 @@ class World extends Layers
 		this.isEffectEnabled = isEffectEnabled;
 		this.isGameStarted = isGameStarted;
 		this.isGamePaused = isGamePaused;
+		this.isLevelCompleted = isLevelCompleted;
 		this.isCameraEnabled = isDemo ? new State<Bool>(false).observe() : isCameraEnabled;
 		this.isControlEnabled = isDemo ? new State<Bool>(false).observe() : isControlEnabled;
 		this.isLost = isLost;
@@ -499,7 +502,7 @@ class World extends Layers
 		now = Date.now().getTime();
 		if (isGamePaused.value) return;
 
-		calculateGameTime();
+		if (!isLevelCompleted.value) calculateGameTime();
 
 		if (isPhysicsEnabled) space.step(CPhysicsValue.STEP);
 
@@ -655,6 +658,7 @@ class World extends Layers
 			recorder.takeSnapshot();
 			trace(recorder.toString());
 		}
+		else trace("Car current position:", Math.floor(playerCar.wheelRightGraphics.x), Math.floor(playerCar.wheelRightGraphics.y));
 
 		if (coins != null) for (c in coins) c.pause();
 	}

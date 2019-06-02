@@ -25,7 +25,8 @@ class GameModel implements Model
 
 	@:transition function onLevelComplete() return {
 		isLevelCompleted: true,
-		isControlEnabled: false
+		isControlEnabled: false,
+		isCameraEnabled: false
 	};
 
 	@:transition function looseLife()
@@ -47,6 +48,7 @@ class GameModel implements Model
 		isLevelCompleted: false,
 		isLost: false,
 		isControlEnabled: false,
+		isCameraEnabled: true,
 		isGameStarted: false,
 		isGamePaused: false,
 		collectedCoins: 0,

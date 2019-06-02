@@ -10,6 +10,9 @@ typedef LevelData =
 {
 	var worldId(default, never):UInt;
 	var levelId(default, never):UInt;
+
+	@:optional var opponentsScore(default, never):UInt;
+
 	@:skipCheck var cameraBounds(default, never):{ x:Float, y:Float, width:Float, height:Float };
 	@:skipCheck var startPoint(default, never):SimplePoint;
 	@:skipCheck var finishPoint(default, never):SimplePoint;

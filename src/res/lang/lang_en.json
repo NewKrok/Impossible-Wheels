@@ -24,6 +24,10 @@
 		"paused": "Game is paused",
 		"resume": "RESUME",
 		"restart": "RESTART",
-		"exit": "EXIT"
+		"exit": "EXIT",
+		"your_score": "Your Score",
+		"bonus_score": "Bonus $score",
+		"total_score": "Total Score",
+		"opponent_score": "Your Opponent's Score"
 	}
 }

@@ -47,13 +47,14 @@ class GameState extends Base2dState
 		gameModel.observables.isLevelCompleted.bind(function(v)
 		{
 			if (v) openSubState(levelCompletePage);
+			ui.visible = !v;
 		});
 
 		gameModel.observables.isGamePaused.bind(function(v)
 		{
 			if (v)
 			{
-				if (gameModel.isGameStarted)
+				if (gameModel.isGameStarted && !gameModel.isLevelCompleted)
 				{
 					openSubState(pausePage);
 					world.filter = new Blur(15);
@@ -62,7 +63,7 @@ class GameState extends Base2dState
 			else
 			{
 				world.filter = null;
-				closeSubState();
+				if (!gameModel.isLevelCompleted) closeSubState();
 			}
 		});
 
@@ -85,6 +86,8 @@ class GameState extends Base2dState
 
 	override function build()
 	{
+		var levelData = appModel.getLevelData(gameModel.levelId).levelData;
+
 		pausePage = new PausePage(
 			resumeRequest,
 			reset,
@@ -92,12 +95,15 @@ class GameState extends Base2dState
 		);
 
 		levelCompletePage = new LevelCompletePage(
+			gameModel.observables.lifeCount,
+			gameModel.observables.gameTime,
+			gameModel.observables.collectedCoins,
+			levelData.collectableItems.length,
+			levelData.opponentsScore,
 			HppG.changeState.bind(MenuState, [appModel]),
 			reset,
 			HppG.changeState.bind(GameState, [appModel, gameModel.levelId + 1])
 		);
-
-		var levelData = appModel.getLevelData(gameModel.levelId).levelData;
 
 		world = new World(
 			stage,
@@ -106,6 +112,7 @@ class GameState extends Base2dState
 			appModel.observables.isEffectEnabled,
 			gameModel.observables.isGameStarted,
 			gameModel.observables.isGamePaused,
+			gameModel.observables.isLevelCompleted,
 			gameModel.observables.isCameraEnabled,
 			gameModel.observables.isControlEnabled,
 			gameModel.observables.isLost,
@@ -164,7 +171,7 @@ class GameState extends Base2dState
 
 	function resumeRequest()
 	{
-		if (gameModel.isGameStarted)
+		if (gameModel.isGameStarted && !gameModel.isLevelCompleted)
 		{
 			ui.showCounter();
 			closeSubState();
@@ -199,8 +206,8 @@ class GameState extends Base2dState
 
 	override public function onFocus():Void
 	{
-		// To handle when focus lost during first start counter
-		if (!gameModel.isGameStarted) resumeRequest();
+		// To handle when focus lost during first start counter or during level completed page
+		if (!gameModel.isGameStarted || gameModel.isLevelCompleted) resumeRequest();
 	}
 
 	override public function dispose()

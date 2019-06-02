@@ -24,6 +24,10 @@
 		"paused": "A játék szünetel",
 		"resume": "FOLYTATÁS",
 		"restart": "ÚJRAKEZD",
-		"exit": "KILÉPÉS"
+		"exit": "KILÉPÉS",
+		"your_score": "Elért Pontszámod",
+		"bonus_score": "Bonusz $score",
+		"total_score": "Összesen",
+		"opponent_score": "Az Ellenfeled Összpontja"
 	}
 }
