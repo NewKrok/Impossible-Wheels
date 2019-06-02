@@ -1,6 +1,8 @@
 package iw.game.substate;
 
 import com.greensock.TweenMax;
+import com.greensock.easing.Back;
+import h2d.Bitmap;
 import h2d.Flow;
 import h2d.Graphics;
 import h2d.Object;
@@ -51,6 +53,10 @@ import tink.state.Observable;
 	var coinScoreResult:ResultEntry;
 	var totalScoreResult:ResultEntry;
 	var opponentScoreResult:ResultEntry;
+
+	var failBadge:Object;
+	var successBadge:Object;
+	var totalScore:UInt = 0;
 
 	public function new(
 		lifeValue:Observable<UInt>,
@@ -157,6 +163,30 @@ import tink.state.Observable;
 			font: Fonts.DEFAULT_M,
 			overAlpha: .5
 		});
+
+		failBadge = new Object(container);
+		var failBadgeBmp = new Bitmap(Res.image.ui.level_result_badge_failed.toTile(), failBadge);
+		failBadgeBmp.smooth = true;
+		var failBadgeLabel = new Text(Fonts.DEFAULT_L, failBadge);
+		failBadgeLabel.smooth = true;
+		failBadgeLabel.textColor = 0xFFFFFF;
+		failBadgeLabel.textAlign = Align.Center;
+		failBadgeLabel.text = Language.get("level_failed");
+		failBadgeLabel.maxWidth = 200;
+		failBadgeLabel.x = failBadge.getSize().width / 2 - 100;
+		failBadgeLabel.y = failBadge.getSize().height / 2 - failBadgeLabel.textHeight / 2;
+
+		successBadge = new Object(container);
+		var successBadgeBmp = new Bitmap(Res.image.ui.level_result_badge_completed.toTile(), successBadge);
+		successBadgeBmp.smooth = true;
+		var successBadgeLabel = new Text(Fonts.DEFAULT_L, successBadge);
+		successBadgeLabel.smooth = true;
+		successBadgeLabel.textColor = 0x000000;
+		successBadgeLabel.textAlign = Align.Center;
+		successBadgeLabel.text = Language.get("level_completed");
+		successBadgeLabel.maxWidth = 200;
+		successBadgeLabel.x = successBadge.getSize().width / 2 - 100;
+		successBadgeLabel.y = successBadge.getSize().height / 2 - successBadgeLabel.textHeight / 2;
 	}
 
 	override public function onOpen():Void
@@ -232,6 +262,12 @@ import tink.state.Observable;
 		opponentScoreResult.alpha = 0;
 		opponentScoreResult.reset();
 
+		totalScore = 0;
+		totalScore += ScoreCalculator.lifeCountToScore(lifeValue.value);
+		totalScore += ScoreCalculator.elapsedTimeToScore(timeValue.value);
+		totalScore += ScoreCalculator.collectedCoinsToScore(coinValue.value);
+		totalScore += coinValue.value == totalCoinCount ? ScoreCalculator.getCollectedCoinMaxBonus() : 0;
+
 		TweenMax.delayedCall(1, showLifeResult);
 		TweenMax.delayedCall(3, showTimeResult);
 		TweenMax.delayedCall(5, showCoinResult);
@@ -239,6 +275,15 @@ import tink.state.Observable;
 		TweenMax.delayedCall(9, showOpponentsResult);
 
 		content.y = HppG.stage2d.height / 2 - content.getSize().height / 2;
+		failBadge.y = successBadge.y = content.y + 55;
+
+		TweenMax.killTweensOf(failBadge);
+		failBadge.alpha = 0;
+
+		TweenMax.killTweensOf(successBadge);
+		successBadge.alpha = 0;
+
+		TweenMax.delayedCall(11, (totalScore > opponentScore) ? handleWin : handleLoose);
 	}
 
 	function showLifeResult()
@@ -264,12 +309,6 @@ import tink.state.Observable;
 
 	function showTotalResult()
 	{
-		var totalScore = 0;
-		totalScore += ScoreCalculator.lifeCountToScore(lifeValue.value);
-		totalScore += ScoreCalculator.elapsedTimeToScore(timeValue.value);
-		totalScore += ScoreCalculator.collectedCoinsToScore(coinValue.value);
-		totalScore += coinValue.value == totalCoinCount ? ScoreCalculator.getCollectedCoinMaxBonus() : 0;
-
 		totalScoreResult.alpha = 1;
 		totalScoreResult.setScore(totalScore);
 	}
@@ -280,6 +319,42 @@ import tink.state.Observable;
 		opponentScoreResult.setScore(opponentScore);
 	}
 
+	function handleWin()
+	{
+		successBadge.scaleX = successBadge.scaleY = 1.4;
+		successBadge.x = HppG.stage2d.width - 220 - 80;
+		TweenMax.to(successBadge, .5, {
+			alpha: 1,
+			scaleX: 1,
+			scaleY: 1,
+			x: HppG.stage2d.width - 220 - 100,
+			onUpdate: function() {
+				successBadge.x = successBadge.x;
+				successBadge.scaleX = successBadge.scaleX;
+				successBadge.scaleY = successBadge.scaleY;
+			},
+			ease: Back.easeOut
+		});
+	}
+
+	function handleLoose()
+	{
+		failBadge.scaleX = failBadge.scaleY = 1.4;
+		failBadge.x = 120;
+		TweenMax.to(failBadge, .5, {
+			alpha: 1,
+			scaleX: 1,
+			scaleY: 1,
+			x: 100,
+			onUpdate: function() {
+				failBadge.x = failBadge.x;
+				failBadge.scaleX = failBadge.scaleX;
+				failBadge.scaleY = failBadge.scaleY;
+			},
+			ease: Back.easeOut
+		});
+	}
+
 	override public function onClose():Void
 	{
 		TweenMax.killDelayedCallsTo(showLifeResult);
@@ -287,5 +362,7 @@ import tink.state.Observable;
 		TweenMax.killDelayedCallsTo(showCoinResult);
 		TweenMax.killDelayedCallsTo(showTotalResult);
 		TweenMax.killDelayedCallsTo(showOpponentsResult);
+		TweenMax.killDelayedCallsTo(handleWin);
+		TweenMax.killDelayedCallsTo(handleLoose);
 	}
 }

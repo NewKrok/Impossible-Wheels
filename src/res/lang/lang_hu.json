@@ -28,6 +28,8 @@
 		"your_score": "Elért Pontszámod",
 		"bonus_score": "Bonusz $score",
 		"total_score": "Összesen",
-		"opponent_score": "Az Ellenfeled Összpontja"
+		"opponent_score": "Az Ellenfeled Összpontja",
+		"level_failed": "Szint elbukva!",
+		"level_completed": "Szint Teljesítve!"
 	}
 }

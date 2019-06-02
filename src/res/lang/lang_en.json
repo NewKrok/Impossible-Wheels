@@ -28,6 +28,8 @@
 		"your_score": "Your Score",
 		"bonus_score": "Bonus $score",
 		"total_score": "Total Score",
-		"opponent_score": "Your Opponent's Score"
+		"opponent_score": "Your Opponent's Score",
+		"level_failed": "Level Failed!",
+		"level_completed": "Level Completed!"
 	}
 }
