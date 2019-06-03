@@ -1,6 +1,7 @@
 package iw.game;
 
 import coconut.data.Model;
+import iw.util.ScoreCalculator;
 
 /**
  * ...
@@ -20,6 +21,7 @@ class GameModel implements Model
 	@:observable var isCameraEnabled:Bool = true;
 	@:observable var isGameStarted:Bool = false;
 	@:observable var isGamePaused:Bool = false;
+	@:observable var totalScore:UInt = 0;
 
 	@:transition function collectCoin() return { collectedCoins: collectedCoins + 1 };
 
@@ -62,4 +64,15 @@ class GameModel implements Model
 
 	@:transition function pauseGame() return { isGamePaused: true };
 	@:transition function resumeGame() return { isGamePaused: false };
+
+	@:transition function calculateTotalScore(bonusScore:UInt = 0)
+	{
+		var result = 0;
+		result += ScoreCalculator.lifeCountToScore(lifeCount);
+		result += ScoreCalculator.elapsedTimeToScore(gameTime);
+		result += ScoreCalculator.collectedCoinsToScore(collectedCoins);
+		result += bonusScore;
+
+		return { totalScore: result };
+	}
 }

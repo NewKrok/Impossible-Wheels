@@ -9,11 +9,14 @@ import hxd.Event;
 import hxd.Key;
 import hxd.Window;
 import iw.AppModel;
+import iw.data.LevelData;
 import iw.game.GameModel;
 import iw.game.substate.LevelCompletePage;
 import iw.game.substate.PausePage;
 import iw.game.ui.GameUi;
 import iw.menu.MenuState;
+import iw.util.SaveUtil.LevelState;
+import iw.util.ScoreCalculator;
 
 /**
  * ...
@@ -22,8 +25,8 @@ import iw.menu.MenuState;
 class GameState extends Base2dState
 {
 	var appModel:AppModel;
-
 	var gameModel:GameModel;
+	var levelData:LevelData;
 
 	var world:World;
 	var ui:GameUi;
@@ -38,6 +41,7 @@ class GameState extends Base2dState
 		{
 			levelId: levelId
 		});
+		levelData = appModel.getLevelData(gameModel.levelId).levelData;
 
 		gameModel.observables.isLost.bind(function(v)
 		{
@@ -46,7 +50,29 @@ class GameState extends Base2dState
 
 		gameModel.observables.isLevelCompleted.bind(function(v)
 		{
-			if (v) openSubState(levelCompletePage);
+			if (v)
+			{
+				gameModel.calculateTotalScore(gameModel.collectedCoins == levelData.collectableItems.length ? ScoreCalculator.getCollectedCoinMaxBonus() : 0);
+				openSubState(levelCompletePage);
+
+				var levelStates = appModel.levelStates;
+				var levelState:LevelState;
+
+				levelState = levelStates.get(levelId);
+				if (!levelState.isCompleted)
+				{
+					levelState.isCompleted = true;
+					if (levelId < 11)
+					{
+						var nextLevelState = { isUnlocked: true, isCompleted: false, score: 0 };
+						levelStates.set(levelId + 1, nextLevelState);
+					}
+				}
+				if (levelState.score < gameModel.totalScore) levelState.score = gameModel.totalScore;
+
+				levelStates.set(levelId, levelState);
+				appModel.setLevelStates(levelStates);
+			}
 			ui.visible = !v;
 		});
 
@@ -86,8 +112,6 @@ class GameState extends Base2dState
 
 	override function build()
 	{
-		var levelData = appModel.getLevelData(gameModel.levelId).levelData;
-
 		pausePage = new PausePage(
 			resumeRequest,
 			reset,
@@ -100,6 +124,7 @@ class GameState extends Base2dState
 			gameModel.observables.collectedCoins,
 			levelData.collectableItems.length,
 			levelData.opponentsScore,
+			gameModel.observables.totalScore,
 			HppG.changeState.bind(MenuState, [appModel]),
 			reset,
 			HppG.changeState.bind(GameState, [appModel, gameModel.levelId + 1])

@@ -26,7 +26,7 @@ class SaveUtil
 			game: {
 				// Unlock the first level by default (0 is the demo level)
 				levelStates: [
-					1 => { isUnlocked: true, score: 0 }
+					1 => { isUnlocked: true, isCompleted: false, score: 0 }
 				]
 			}
 		};
@@ -55,5 +55,6 @@ typedef GameInfo = {
 
 typedef LevelState = {
 	var isUnlocked:Bool;
+	var isCompleted:Bool;
 	var score:UInt;
 }

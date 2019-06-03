@@ -23,12 +23,12 @@ class LevelUtil
 			if (level.staticElementData == null) level.staticElementData = [];
 			level.staticElementData.push({
 				position: { x: level.finishPoint.x, y: level.finishPoint.y },
-				pivotX: 0,
-				pivotY: 0,
+				pivotX: 5,
+				pivotY: 63,
 				scaleX: 1,
 				scaleY: 1,
 				rotation: 0,
-				elementId: "finish_table",
+				elementId: "finishFlag",
 			});
 		}
 		catch( e:String )

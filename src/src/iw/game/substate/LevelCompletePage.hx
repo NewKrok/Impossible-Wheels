@@ -31,6 +31,7 @@ import tink.state.Observable;
 	var coinValue:Observable<UInt>;
 	var totalCoinCount:UInt;
 	var opponentScore:UInt;
+	var totalScore:Observable<UInt>;
 
 	var onExitRequest:Void->Void = _;
 	var onRestartRequest:Void->Void = _;
@@ -56,20 +57,21 @@ import tink.state.Observable;
 
 	var failBadge:Object;
 	var successBadge:Object;
-	var totalScore:UInt = 0;
 
 	public function new(
 		lifeValue:Observable<UInt>,
 		timeValue:Observable<Float>,
 		coinValue:Observable<UInt>,
 		totalCoinCount:UInt,
-		opponentScore:UInt
+		opponentScore:UInt,
+		totalScore:Observable<UInt>
 	){
 		this.lifeValue = lifeValue;
 		this.timeValue = timeValue;
 		this.coinValue = coinValue;
 		this.totalCoinCount = totalCoinCount;
 		this.opponentScore = opponentScore;
+		this.totalScore = totalScore;
 
 		super();
 	}
@@ -261,12 +263,6 @@ import tink.state.Observable;
 
 		opponentScoreResult.alpha = 0;
 		opponentScoreResult.reset();
-
-		totalScore = 0;
-		totalScore += ScoreCalculator.lifeCountToScore(lifeValue.value);
-		totalScore += ScoreCalculator.elapsedTimeToScore(timeValue.value);
-		totalScore += ScoreCalculator.collectedCoinsToScore(coinValue.value);
-		totalScore += coinValue.value == totalCoinCount ? ScoreCalculator.getCollectedCoinMaxBonus() : 0;
 
 		TweenMax.delayedCall(1, showLifeResult);
 		TweenMax.delayedCall(3, showTimeResult);

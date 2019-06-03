@@ -13,6 +13,7 @@ import haxe.Timer;
 import hpp.util.GeomUtil;
 import hxd.Key;
 import hxd.Res;
+import iw.data.AssetData;
 import iw.data.CarDatas;
 import iw.data.LevelData;
 import iw.game.TrickCalculator.TrickType;
@@ -177,6 +178,7 @@ class World extends Layers
 
 			case 4:
 				createCoins();
+				createStaticElements();
 
 			case 5:
 				isBuilt = true;
@@ -361,7 +363,7 @@ class World extends Layers
 		}
 	}
 
-	function createCoins():Void
+	function createCoins()
 	{
 		coins = [];
 
@@ -371,6 +373,21 @@ class World extends Layers
 			coin.x = c.x;
 			coin.y = c.y;
 			coins.push(coin);
+		}
+	}
+
+	function createStaticElements()
+	{
+		for (e in levelData.staticElementData)
+		{
+			var img = AssetData.getBitmap(e.elementId, camera);
+			img.tile.dx = cast -e.pivotX;
+			img.tile.dy = cast -e.pivotY;
+			img.x = e.position.x;
+			img.y = e.position.y;
+			img.rotation = e.rotation;
+			img.scaleX = e.scaleX;
+			img.scaleY = e.scaleY;
 		}
 	}
 
@@ -502,7 +519,7 @@ class World extends Layers
 		now = Date.now().getTime();
 		if (isGamePaused.value) return;
 
-		if (!isLevelCompleted.value) calculateGameTime();
+		if (isLevelCompleted != null && !isLevelCompleted.value) calculateGameTime();
 
 		if (isPhysicsEnabled) space.step(CPhysicsValue.STEP);
 
@@ -658,7 +675,7 @@ class World extends Layers
 			recorder.takeSnapshot();
 			trace(recorder.toString());
 		}
-		else trace("Car current position:", Math.floor(playerCar.wheelRightGraphics.x), Math.floor(playerCar.wheelRightGraphics.y));
+		else if (playerCar != null) trace("Car current position:", Math.floor(playerCar.wheelRightGraphics.x), Math.floor(playerCar.wheelRightGraphics.y));
 
 		if (coins != null) for (c in coins) c.pause();
 	}
