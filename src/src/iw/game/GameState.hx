@@ -7,7 +7,11 @@ import hpp.heaps.Base2dState;
 import hpp.heaps.HppG;
 import hxd.Event;
 import hxd.Key;
+import hxd.Res;
 import hxd.Window;
+import hxd.res.Sound;
+import hxd.snd.Channel;
+import hxd.snd.Manager;
 import iw.AppModel;
 import iw.data.LevelData;
 import iw.game.GameModel;
@@ -33,6 +37,11 @@ class GameState extends Base2dState
 
 	var pausePage:PausePage;
 	var levelCompletePage:LevelCompletePage;
+
+	var backgroundLoopMusic:Sound;
+	var backgroundLoopChannel:Channel;
+	var engineMusic:Sound;
+	var engineChannel:Channel;
 
 	public function new(stage:Base2dStage, appModel:AppModel, levelId:UInt)
 	{
@@ -112,6 +121,20 @@ class GameState extends Base2dState
 
 	override function build()
 	{
+		backgroundLoopMusic = if (Sound.supportedFormat(Mp3)) Res.sound.The_Sewer_Rat_Puzzle_Game else null;
+		if (backgroundLoopMusic != null)
+		{
+			backgroundLoopChannel = backgroundLoopMusic.play(true, .8);
+
+			appModel.observables.isMusicEnabled.bind(function (v) {
+				backgroundLoopChannel.pause = !v;
+				engineChannel.pause = !v;
+			});
+		}
+
+		engineMusic = if (Sound.supportedFormat(Mp3)) Res.sound.Inside_Freezer else null;
+		if (engineMusic != null) engineChannel = engineMusic.play(true, .3);
+
 		pausePage = new PausePage(
 			resumeRequest,
 			reset,
@@ -212,6 +235,8 @@ class GameState extends Base2dState
 			TweenMax.resumeAll(true, true, true);
 			gameModel.resumeGame();
 		}
+
+		Manager.get().masterChannelGroup.mute = false;
 	}
 
 	function pauseRequest()
@@ -222,6 +247,8 @@ class GameState extends Base2dState
 		if (gameModel.isGamePaused) gameModel.resumeGame();
 
 		gameModel.pauseGame();
+
+		Manager.get().masterChannelGroup.mute = true;
 	}
 
 	override public function onFocusLost()
@@ -237,6 +264,14 @@ class GameState extends Base2dState
 
 	override public function dispose()
 	{
+		if (backgroundLoopMusic != null)
+		{
+			backgroundLoopMusic.stop();
+			backgroundLoopMusic.dispose();
+			engineMusic.stop();
+			engineMusic.dispose();
+		}
+
 		world.destroy();
 
 		super.dispose();

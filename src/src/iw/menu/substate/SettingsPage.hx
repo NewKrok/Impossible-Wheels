@@ -59,7 +59,7 @@ class SettingsPage extends Base2dSubState
 		backButton.y = HppG.stage2d.height - backButton.getSize().height - 30;
 
 		var flow = new Flow(container);
-		flow.isVertical = true;
+		flow.layout = Vertical;
 		flow.verticalSpacing = 20;
 		flow.y = 50;
 

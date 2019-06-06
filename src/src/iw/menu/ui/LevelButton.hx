@@ -72,7 +72,7 @@ import iw.Fonts;
 	function createLevelDetailsFlow()
 	{
 		levelDetailsFlow = new Flow(this);
-		levelDetailsFlow.isVertical = true;
+		levelDetailsFlow.layout = Vertical;
 		levelDetailsFlow.verticalSpacing = 5;
 		levelDetailsFlow.y = 53;
 
@@ -91,7 +91,7 @@ import iw.Fonts;
 	function createUnlockedFlow()
 	{
 		unlockedFlow = new Flow(this);
-		unlockedFlow.isVertical = true;
+		unlockedFlow.layout = Vertical;
 		unlockedFlow.verticalSpacing = 5;
 		unlockedFlow.horizontalAlign = FlowAlign.Middle;
 

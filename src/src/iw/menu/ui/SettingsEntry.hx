@@ -79,7 +79,10 @@ import iw.Fonts;
 	function createOption(flow, labelId, onClick):LinkedButton
 	{
 		var button = new LinkedButton(flow, {
-			onClick: function(_) { onClick(); },
+			onClick: function(_) {
+				SoundManager.playClickSound();
+				onClick();
+			},
 			baseGraphic: Res.image.ui.toggle_button.toTile(),
 			overGraphic: Res.image.ui.toggle_button_selected.toTile(),
 			disabledGraphic: Res.image.ui.toggle_button_selected.toTile(),

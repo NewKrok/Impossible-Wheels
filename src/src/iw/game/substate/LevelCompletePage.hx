@@ -81,7 +81,7 @@ import tink.state.Observable;
 		fullBackground = new Graphics(container);
 
 		content = new Flow(container);
-		content.isVertical = true;
+		content.layout = Vertical;
 		content.verticalSpacing = 10;
 		content.horizontalAlign = FlowAlign.Middle;
 
@@ -139,7 +139,7 @@ import tink.state.Observable;
 		placeHolder3 = new Graphics(content);
 
 		var flow = new Flow(content);
-		flow.isVertical = false;
+		flow.layout = Horizontal;
 		flow.horizontalSpacing = 20;
 
 		exitButton = new BaseButton(flow, {

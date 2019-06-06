@@ -45,7 +45,7 @@ class PausePage extends Base2dSubState
 		fullBackground = new Graphics(container);
 
 		var content = new Flow(container);
-		content.isVertical = true;
+		content.layout = Vertical;
 		content.verticalSpacing = 20;
 		content.horizontalAlign = FlowAlign.Middle;
 
@@ -62,7 +62,7 @@ class PausePage extends Base2dSubState
 		titleText.y = 43 / 2 - titleText.textHeight / 2;
 
 		var flow = new Flow(content);
-		flow.isVertical = false;
+		flow.layout = Horizontal;
 		flow.horizontalSpacing = 20;
 
 		resumeButton = new BaseButton(flow, {

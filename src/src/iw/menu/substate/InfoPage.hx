@@ -49,12 +49,12 @@ import js.Browser;
 		libraryBackground = new Graphics(container);
 
 		var entries:Flow = new Flow(container);
-		entries.isVertical = true;
+		entries.layout = Vertical;
 		entries.horizontalAlign = FlowAlign.Middle;
 		entries.verticalSpacing = 20;
 
 		var libraries:Flow = new Flow(entries);
-		libraries.isVertical = false;
+		libraries.layout = Horizontal;
 		libraries.horizontalSpacing = 30;
 
 		haxeButton = new BaseButton(libraries, {

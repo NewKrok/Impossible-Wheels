@@ -3,6 +3,7 @@ package;
 import coconut.data.List;
 import iw.AppModel;
 import iw.Fonts;
+import iw.SoundManager;
 import iw.data.CarDatas;
 import iw.game.GameState;
 import haxe.Json;
@@ -54,7 +55,9 @@ class Main extends Base2dApp
 			{ id: 12, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) }
 		]));
 
-		//changeState(GameState, [appModel, 1]);
+		SoundManager.init(appModel.observables.isSoundEnabled, appModel.observables.isMusicEnabled);
+
+		//changeState(GameState, [appModel, 1]); // just for testing
 		changeState(MenuState, [appModel]);
 	}
 
@@ -67,3 +70,18 @@ class Main extends Base2dApp
 		new Main();
 	}
 }
+
+// TODO
+// Implement "New highscore" info
+// Add star view to level completed badge
+// Add game completed window
+// Add Enable/Disable next level button logic
+// Add sounds/music
+// Add dynamic physics elements
+// Clear memory properly after state change
+// Check is it possible to mask the level based on the camera
+// Create levels
+// Create enemies/replays
+// Handle next level request
+// Fix menu replays
+// Minimize the result

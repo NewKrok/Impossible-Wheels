@@ -50,7 +50,7 @@ class LevelSelectPage extends Base2dSubState
 		backButton.y = HppG.stage2d.height - backButton.getSize().height - 30;
 
 		var flow = new Flow(container);
-		flow.isVertical = false;
+		flow.layout = Horizontal;
 		flow.horizontalSpacing = 20;
 		flow.verticalSpacing = 20;
 		flow.multiline = true;

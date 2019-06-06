@@ -16,7 +16,7 @@ class Notification extends Flow
 	{
 		super(p);
 
-		isVertical = false;
+		layout = Horizontal;
 		horizontalSpacing = 10;
 
 		if (icon != null) addChild(icon);

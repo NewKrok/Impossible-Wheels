@@ -56,7 +56,7 @@ import js.Browser;
 	function buildLeftFlow()
 	{
 		leftFlow = new Flow(container);
-		leftFlow.isVertical = false;
+		leftFlow.layout = Horizontal;
 		leftFlow.horizontalSpacing = 20;
 
 		fppButton = new BaseButton(leftFlow, {
@@ -90,7 +90,7 @@ import js.Browser;
 	function buildRightFlow()
 	{
 		rightFlow = new Flow(container);
-		rightFlow.isVertical = false;
+		rightFlow.layout = Horizontal;
 		rightFlow.horizontalSpacing = 20;
 
 		settingsButton = new BaseButton(rightFlow, {

@@ -17,7 +17,7 @@ class LifeUi extends Flow
 	{
 		super(p);
 
-		isVertical = false;
+		layout = Horizontal;
 		horizontalSpacing = 10;
 
 		for (i in 0...3)

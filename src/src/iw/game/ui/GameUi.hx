@@ -84,7 +84,7 @@ import tink.state.Observable;
 		});
 
 		levelInfoUi = new LevelInfoUi(info, level);
-		levelInfoUi.y = 1200;
+		levelInfoUi.y = 12;
 
 		pauseButton = new BaseButton(this, {
 			onClick: function(_) { pauseRequest(); },
