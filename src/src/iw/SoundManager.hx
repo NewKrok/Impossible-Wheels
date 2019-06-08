@@ -89,12 +89,12 @@ import tink.state.Observable;
 
 	public static function playLevelCompletedSound()
 	{
-		if (instance.levelCompletedSfx != null && instance.isSoundEnabled.value) instance.levelCompletedSfx.play(false, 1);
+		if (instance.levelCompletedSfx != null && instance.isSoundEnabled.value) instance.levelCompletedSfx.play(false, .8);
 	}
 
 	public static function playLevelFailedSound()
 	{
-		if (instance.levelFailedSfx != null && instance.isSoundEnabled.value) instance.levelFailedSfx.play(false, 1);
+		if (instance.levelFailedSfx != null && instance.isSoundEnabled.value) instance.levelFailedSfx.play(false, .8);
 	}
 
 	public static function playScoreSound()

@@ -51,13 +51,14 @@ class MenuState extends Base2dState
 	{
 		super.build();
 
+		Manager.get().masterChannelGroup.mute = false;
 		backgroundLoopMusic = if (Sound.supportedFormat(Mp3)) Res.sound.Starting_Line else null;
 
 		if (backgroundLoopMusic != null)
 		{
 			backgroundLoopChannel = backgroundLoopMusic.play(true, .8);
 
-			appModel.observables.isMusicEnabled.bind(function (v) {
+			appModel.observables.isMusicEnabled.bind({ direct:true }, function (v) {
 				backgroundLoopChannel.pause = !v;
 			});
 		}

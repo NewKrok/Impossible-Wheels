@@ -17,6 +17,7 @@ import iw.game.ui.CoinUi;
 import iw.game.ui.LifeUi;
 import iw.game.ui.ResultEntry;
 import iw.game.ui.TimeUi;
+import iw.menu.ui.StarView;
 import iw.util.ScoreCalculator;
 import tink.state.Observable;
 
@@ -56,7 +57,10 @@ import tink.state.Observable;
 	var opponentScoreResult:ResultEntry;
 
 	var failBadge:Object;
+
 	var successBadge:Object;
+	var successBadgeFlow:Flow;
+	var starView:StarView;
 
 	public function new(
 		lifeValue:Observable<UInt>,
@@ -179,21 +183,37 @@ import tink.state.Observable;
 		failBadgeLabel.y = failBadge.getSize().height / 2 - failBadgeLabel.textHeight / 2;
 
 		successBadge = new Object(container);
+
 		var successBadgeBmp = new Bitmap(Res.image.ui.level_result_badge_completed.toTile(), successBadge);
 		successBadgeBmp.smooth = true;
-		var successBadgeLabel = new Text(Fonts.DEFAULT_L, successBadge);
+
+		successBadgeFlow = new Flow(successBadge);
+		successBadgeFlow.layout = Vertical;
+		successBadgeFlow.verticalSpacing = 10;
+		successBadgeFlow.horizontalAlign = FlowAlign.Middle;
+
+		// Force offset because the horizontal flow align with centered text is a magic
+		var forceOffsetContainer = new Object(successBadgeFlow);
+		var successBadgeLabel = new Text(Fonts.DEFAULT_L, forceOffsetContainer);
 		successBadgeLabel.smooth = true;
 		successBadgeLabel.textColor = 0x000000;
 		successBadgeLabel.textAlign = Align.Center;
 		successBadgeLabel.text = Language.get("level_completed");
 		successBadgeLabel.maxWidth = 200;
-		successBadgeLabel.x = successBadge.getSize().width / 2 - 100;
-		successBadgeLabel.y = successBadge.getSize().height / 2 - successBadgeLabel.textHeight / 2;
+		successBadgeLabel.x = -10;
+
+		starView = new StarView(successBadgeFlow);
 	}
+
+	public function setStarCount(c) starView.setCount(c);
 
 	override public function onOpen():Void
 	{
 		super.onOpen();
+
+		successBadgeFlow.reflow();
+		successBadgeFlow.x = successBadge.getSize().width / 2 - successBadgeFlow.getSize().width / 2;
+		successBadgeFlow.y = successBadge.getSize().height / 2 - successBadgeFlow.getSize().height / 2;
 
 		placeHolder1.beginFill(0x000000, 0);
 		placeHolder1.drawRect(0, 0, 1, 10);

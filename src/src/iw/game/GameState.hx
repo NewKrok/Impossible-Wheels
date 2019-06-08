@@ -21,6 +21,7 @@ import iw.game.ui.GameUi;
 import iw.menu.MenuState;
 import iw.util.SaveUtil.LevelState;
 import iw.util.ScoreCalculator;
+import iw.util.StarCountUtil;
 
 /**
  * ...
@@ -63,9 +64,11 @@ class GameState extends Base2dState
 		{
 			if (v)
 			{
+				backgroundLoopChannel.volume = .4;
 				SoundManager.playWinSound();
 
 				gameModel.calculateTotalScore(gameModel.collectedCoins == levelData.collectableItems.length ? ScoreCalculator.getCollectedCoinMaxBonus() : 0);
+				levelCompletePage.setStarCount(StarCountUtil.scoreToStarCount(gameModel.totalScore, levelData.starValues));
 				openSubState(levelCompletePage);
 
 				var levelStates = appModel.levelStates;
@@ -85,6 +88,10 @@ class GameState extends Base2dState
 
 				levelStates.set(levelId, levelState);
 				appModel.setLevelStates(levelStates);
+			}
+			else
+			{
+				backgroundLoopChannel.volume = .8;
 			}
 			ui.visible = !v;
 		});
@@ -130,7 +137,7 @@ class GameState extends Base2dState
 		{
 			backgroundLoopChannel = backgroundLoopMusic.play(true, .8);
 
-			appModel.observables.isMusicEnabled.bind(function (v) {
+			appModel.observables.isMusicEnabled.bind({ direct:true }, function (v) {
 				backgroundLoopChannel.pause = !v;
 			});
 		}
@@ -203,6 +210,8 @@ class GameState extends Base2dState
 
 		var startPoint = appModel.getLevelData(gameModel.levelId).levelData.startPoint;
 		world.jumpCameraTo(startPoint.x + 300, startPoint.y);
+
+		Manager.get().masterChannelGroup.mute = false;
 	}
 
 	function start():Void

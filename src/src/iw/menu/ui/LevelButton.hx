@@ -1,6 +1,6 @@
 package iw.menu.ui;
-import iw.util.SaveUtil;
 
+import iw.util.SaveUtil;
 import com.greensock.TweenMax;
 import h2d.Bitmap;
 import h2d.Flow;
@@ -95,7 +95,8 @@ import iw.Fonts;
 		unlockedFlow.verticalSpacing = 5;
 		unlockedFlow.horizontalAlign = FlowAlign.Middle;
 
-		new Bitmap(Res.image.ui.locked_icon.toTile(), unlockedFlow);
+		var icon = new Bitmap(Res.image.ui.locked_icon.toTile(), unlockedFlow);
+		icon.tile.dx = 20;
 
 		unlockText = new Text(Fonts.DEFAULT_S, unlockedFlow);
 		unlockText.smooth = true;
@@ -103,6 +104,8 @@ import iw.Fonts;
 		unlockText.textAlign = Align.Center;
 		unlockText.maxWidth = background.tile.width - 20;
 		Language.registerTextHolder(cast unlockText, "unlock_info");
+
+		unlockedFlow.x = 10;
 	}
 
 	public function refresh(levelState:LevelState)
@@ -114,8 +117,6 @@ import iw.Fonts;
 
 		if (levelState == null || !levelState.isUnlocked)
 		{
-			unlockedFlow.x = getSize().width / 2 - unlockedFlow.getSize().width / 2;
-
 			levelDetailsFlow.visible = false;
 			unlockedFlow.visible = true;
 			interactive.visible = false;

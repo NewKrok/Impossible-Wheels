@@ -73,10 +73,8 @@ class Main extends Base2dApp
 
 // TODO
 // Implement "New highscore" info
-// Add star view to level completed badge
 // Add game completed window
 // Add Enable/Disable next level button logic
-// Add sounds/music
 // Add dynamic physics elements
 // Clear memory properly after state change
 // Create levels
