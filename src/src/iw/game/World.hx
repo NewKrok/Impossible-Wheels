@@ -9,6 +9,7 @@ import com.greensock.easing.Quad;
 import h2d.Bitmap;
 import h2d.Graphics;
 import h2d.Layers;
+import h2d.Mask;
 import haxe.Timer;
 import hpp.util.GeomUtil;
 import hxd.Key;
@@ -63,6 +64,7 @@ class World extends Layers
 	var onCoinCollected:Void->Void;
 
 	var camera:Layers;
+	var cameraMask:Mask;
 	var space:Space;
 	var groundBodies:Array<Body>;
 
@@ -141,7 +143,8 @@ class World extends Layers
 		background.drawRect(0, 0, HppG.stage2d.width, HppG.stage2d.height);
 		background.endFill();
 
-		camera = new Layers(this);
+		cameraMask = new Mask(HppG.stage2d.width, HppG.stage2d.height, this);
+		camera = new Layers(cameraMask);
 
 		if (!isDemo) effects = new EffectHandler(camera);
 
@@ -395,6 +398,9 @@ class World extends Layers
 	{
 		destroyPlayback();
 
+		gameStartTime = now;
+		totalPausedTime = 0;
+
 		playback = new Playback(replayCar, replayData);
 		playback.showSnapshot(0);
 
@@ -519,7 +525,7 @@ class World extends Layers
 		now = Date.now().getTime();
 		if (isGamePaused.value) return;
 
-		if (isLevelCompleted != null && !isLevelCompleted.value) calculateGameTime();
+		if (isDemo || (isLevelCompleted != null && !isLevelCompleted.value)) calculateGameTime();
 
 		if (isPhysicsEnabled) space.step(CPhysicsValue.STEP);
 

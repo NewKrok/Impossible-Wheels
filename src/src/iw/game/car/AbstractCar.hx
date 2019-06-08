@@ -174,27 +174,30 @@ class AbstractCar
 	{
 		isCrushed = true;
 
-		smokeParticleGroup.enable = false;
+		if (isEffectEnabled.value)
+		{
+			smokeParticleGroup.enable = false;
 
-		explosionParticleGroup = new ParticleGroup(particles);
-		explosionParticleGroup.size = carScale * .5;
-		explosionParticleGroup.sizeRand = 12;
-		explosionParticleGroup.life = .4;
-		explosionParticleGroup.lifeRand = .4;
-		explosionParticleGroup.speed = 300 * carScale;
-		explosionParticleGroup.nparts = 30;
-		explosionParticleGroup.emitLoop = false;
-		explosionParticleGroup.emitMode = PartEmitMode.Point;
-		explosionParticleGroup.emitDist = 10 * carScale;
-		explosionParticleGroup.speedRand = .5;
-		explosionParticleGroup.rotSpeed = 3;
-		explosionParticleGroup.fadeIn = 1;
-		explosionParticleGroup.fadeOut = 0;
-		explosionParticleGroup.texture = Res.image.car.smoke.toTexture();
-		explosionParticleGroup.rebuildOnChange = false;
-		explosionParticleGroup.animationRepeat = 1;
+			explosionParticleGroup = new ParticleGroup(particles);
+			explosionParticleGroup.size = carScale * .5;
+			explosionParticleGroup.sizeRand = 12;
+			explosionParticleGroup.life = .4;
+			explosionParticleGroup.lifeRand = .4;
+			explosionParticleGroup.speed = 300 * carScale;
+			explosionParticleGroup.nparts = 30;
+			explosionParticleGroup.emitLoop = false;
+			explosionParticleGroup.emitMode = PartEmitMode.Point;
+			explosionParticleGroup.emitDist = 10 * carScale;
+			explosionParticleGroup.speedRand = .5;
+			explosionParticleGroup.rotSpeed = 3;
+			explosionParticleGroup.fadeIn = 1;
+			explosionParticleGroup.fadeOut = 0;
+			explosionParticleGroup.texture = Res.image.car.smoke.toTexture();
+			explosionParticleGroup.rebuildOnChange = false;
+			explosionParticleGroup.animationRepeat = 1;
 
-		particles.addGroup(explosionParticleGroup);
+			particles.addGroup(explosionParticleGroup);
+		}
 	}
 
 	public function update(elapsed:Float):Void
@@ -208,7 +211,7 @@ class AbstractCar
 		updateSpringGraphic();
 		updateWheelHolderGraphic();
 
-		if (isCrushed)
+		if (isCrushed && isEffectEnabled.value)
 		{
 			explosionParticleGroup.dx = cast carBodyGraphics.x;
 			explosionParticleGroup.dy = cast carBodyGraphics.y;

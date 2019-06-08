@@ -79,9 +79,7 @@ class Main extends Base2dApp
 // Add sounds/music
 // Add dynamic physics elements
 // Clear memory properly after state change
-// Check is it possible to mask the level based on the camera
 // Create levels
 // Create enemies/replays
 // Handle next level request
-// Fix menu replays
 // Minimize the result
