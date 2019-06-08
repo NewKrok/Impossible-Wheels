@@ -317,6 +317,8 @@ import tink.state.Observable;
 
 	function handleWin()
 	{
+		SoundManager.playLevelCompletedSound();
+
 		successBadge.scaleX = successBadge.scaleY = 1.4;
 		successBadge.x = HppG.stage2d.width - 220 - 80;
 		TweenMax.to(successBadge, .5, {
@@ -335,6 +337,8 @@ import tink.state.Observable;
 
 	function handleLoose()
 	{
+		SoundManager.playLevelFailedSound();
+
 		failBadge.scaleX = failBadge.scaleY = 1.4;
 		failBadge.x = 120;
 		TweenMax.to(failBadge, .5, {

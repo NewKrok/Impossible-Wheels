@@ -19,8 +19,8 @@ class Fonts
 		DEFAULT_M  = Res.font.Aachen_Medium_Plain.build(28);
 		DEFAULT_L  = Res.font.Aachen_Medium_Plain.build(35);
 
-		DEFAULT_S.setOffset(0, 3);
-		DEFAULT_M.setOffset(0, 3);
-		DEFAULT_L.setOffset(0, 3);
+		DEFAULT_S.setOffset(0, 1);
+		DEFAULT_M.setOffset(0, 1);
+		DEFAULT_L.setOffset(0, 1);
 	}
 }

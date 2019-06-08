@@ -46,6 +46,9 @@ class StartCounterUi extends Object
 				delay: i * 1,
 				onComplete: function()
 				{
+					if (i < 2) SoundManager.playCounterSound();
+					else SoundManager.playStartGameSound();
+
 					TweenMax.to(e, .5, {
 						y: e.y + 100,
 						alpha: 0,

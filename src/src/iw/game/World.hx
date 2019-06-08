@@ -14,6 +14,8 @@ import haxe.Timer;
 import hpp.util.GeomUtil;
 import hxd.Key;
 import hxd.Res;
+import hxd.res.Sound;
+import hxd.snd.Channel;
 import iw.data.AssetData;
 import iw.data.CarDatas;
 import iw.data.LevelData;
@@ -651,6 +653,7 @@ class World extends Layers
 	{
 		if (!carLife.isInvulnerable && playerCar.isCarBodyTouchGround && gameTime > 1000)
 		{
+			SoundManager.playLooseLifeSound();
 			carLife.damage();
 			onLooseLife();
 

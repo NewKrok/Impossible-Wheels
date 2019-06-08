@@ -40,8 +40,6 @@ class GameState extends Base2dState
 
 	var backgroundLoopMusic:Sound;
 	var backgroundLoopChannel:Channel;
-	var engineMusic:Sound;
-	var engineChannel:Channel;
 
 	public function new(stage:Base2dStage, appModel:AppModel, levelId:UInt)
 	{
@@ -54,13 +52,19 @@ class GameState extends Base2dState
 
 		gameModel.observables.isLost.bind(function(v)
 		{
-			if (v) TweenMax.delayedCall(1, reset);
+			if (v)
+			{
+				SoundManager.playLooseSound();
+				TweenMax.delayedCall(1, reset);
+			}
 		});
 
 		gameModel.observables.isLevelCompleted.bind(function(v)
 		{
 			if (v)
 			{
+				SoundManager.playWinSound();
+
 				gameModel.calculateTotalScore(gameModel.collectedCoins == levelData.collectableItems.length ? ScoreCalculator.getCollectedCoinMaxBonus() : 0);
 				openSubState(levelCompletePage);
 
@@ -128,12 +132,8 @@ class GameState extends Base2dState
 
 			appModel.observables.isMusicEnabled.bind(function (v) {
 				backgroundLoopChannel.pause = !v;
-				engineChannel.pause = !v;
 			});
 		}
-
-		engineMusic = if (Sound.supportedFormat(Mp3)) Res.sound.Inside_Freezer else null;
-		if (engineMusic != null) engineChannel = engineMusic.play(true, .3);
 
 		pausePage = new PausePage(
 			resumeRequest,
@@ -267,9 +267,7 @@ class GameState extends Base2dState
 		if (backgroundLoopMusic != null)
 		{
 			backgroundLoopMusic.stop();
-			backgroundLoopMusic.dispose();
-			engineMusic.stop();
-			engineMusic.dispose();
+			backgroundLoopMusic = null;
 		}
 
 		world.destroy();

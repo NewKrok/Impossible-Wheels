@@ -32,6 +32,7 @@ import js.Browser;
 	var coconutButton:BaseButton;
 
 	var devCredit:CreditEntry;
+	var musicCredit:CreditEntry;
 	var soundCredit:CreditEntry;
 
 	override function build():Void
@@ -102,15 +103,23 @@ import js.Browser;
 			"(NewKrok)"
 		);
 
-		soundCredit = new CreditEntry(
+		musicCredit = new CreditEntry(
 			entries,
 			function() { Browser.window.open("https://soundimage.org/", "_blank"); },
-			"sound_by",
+			"music_by",
 			"Eric Matyas",
 			"(soundimage.org)"
 		);
 
-		entries.y = HppG.stage2d.height / 2 - entries.innerHeight / 2 - 125;
+		soundCredit = new CreditEntry(
+			entries,
+			function() { Browser.window.open("https://www.gamedevmarket.net/asset/score-and-times/", "_blank"); },
+			"sound_by",
+			"GameSoundSoulutions",
+			"gamedevmarket.net"
+		);
+
+		entries.y = 50;
 
 		libraryBackground.y = entries.y + 70;
 	}
@@ -140,7 +149,6 @@ import js.Browser;
 		}
 
 		devCredit.refresh();
-		//devCredit.disable();
 		devCredit.alpha = 0;
 		TweenMax.to(devCredit, .4, {
 			alpha: 1,
@@ -148,12 +156,19 @@ import js.Browser;
 			onComplete: function(){ devCredit.enable(); }
 		});
 
+		musicCredit.refresh();
+		musicCredit.alpha = 0;
+		TweenMax.to(musicCredit, .4, {
+			alpha: 1,
+			delay: 1.2,
+			onComplete: function(){ musicCredit.enable(); }
+		});
+
 		soundCredit.refresh();
-		//soundCredit.disable();
 		soundCredit.alpha = 0;
 		TweenMax.to(soundCredit, .4, {
 			alpha: 1,
-			delay: 1.2,
+			delay: 1.4,
 			onComplete: function(){ soundCredit.enable(); }
 		});
 	}

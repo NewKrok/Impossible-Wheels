@@ -202,7 +202,7 @@ class MenuState extends Base2dState
 		if (backgroundLoopMusic != null)
 		{
 			backgroundLoopMusic.stop();
-			backgroundLoopMusic.dispose();
+			backgroundLoopMusic = null;
 		}
 
 		world.destroy();

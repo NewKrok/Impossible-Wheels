@@ -49,7 +49,7 @@ import iw.Fonts;
 
 		label = createLabel(flow, false, null, labelId);
 		firstInfoLabel = createLabel(flow, true, firstInfo);
-		createLabel(flow, false, secondaryInfo);
+		createLabel(flow, false, secondaryInfo, null);
 
 		flow.x = flowBackground.x = HppG.stage2d.width / 2 - flow.getSize().width / 2;
 		flowBackground.x -= 10;
@@ -67,7 +67,7 @@ import iw.Fonts;
 
 		if (isReversed) infoBackground = new Graphics(label);
 
-		var labelText = new TextWithSize(Fonts.DEFAULT_L, label);
+		var labelText = new TextWithSize(content == null || content.length < 50 ? Fonts.DEFAULT_M : Fonts.DEFAULT_S, label);
 		labelText.smooth = true;
 		labelText.textColor = isReversed ? 0xFFFFFF : 0x000000;
 		labelText.textAlign = Align.Center;
@@ -77,6 +77,8 @@ import iw.Fonts;
 
 		// It's really-really strange, but without it, it's position is totally wrong
 		labelText.maxWidth = labelText.calcTextWidth(labelText.text);
+
+		if (content != null && content.length > 50) labelText.maxWidth = 600;
 
 		if (isReversed)
 		{

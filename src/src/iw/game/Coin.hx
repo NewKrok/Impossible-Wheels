@@ -37,6 +37,8 @@ class Coin extends Object
 		isCollected = true;
 		anim.speed = 60;
 
+		SoundManager.playCoinSound();
+
 		TweenMax.to(anim, .5, {
 			y: -100,
 			onUpdate: function()

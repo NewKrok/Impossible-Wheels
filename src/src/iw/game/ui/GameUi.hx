@@ -101,17 +101,22 @@ import tink.state.Observable;
 		startCounterUi = new StartCounterUi(this);
 	}
 
-	public function onTrick(t) switch (t)
+	public function onTrick(t)
 	{
-		case TrickType.Flip(d, m): notificationUi.show(
-			(m > 1 ? m + "x " : "") + Language.get(d == TrickDirection.Front ? "frontflip" : "backflip"),
-			new Bitmap(d == TrickDirection.Front ? Res.image.ui.frontflip_icon.toTile() : Res.image.ui.backflip_icon.toTile())
-		);
+		SoundManager.playTrickSound();
 
-		case TrickType.Wheelie(d, l): notificationUi.show(
-			(Math.floor(l / 100) / 10) + "s " + Language.get("wheelie"),
-			new Bitmap(d == TrickDirection.Front ? Res.image.ui.front_wheelie_icon.toTile() : Res.image.ui.back_wheelie_icon.toTile())
-		);
+		switch (t)
+		{
+			case TrickType.Flip(d, m): notificationUi.show(
+				(m > 1 ? m + "x " : "") + Language.get(d == TrickDirection.Front ? "frontflip" : "backflip"),
+				new Bitmap(d == TrickDirection.Front ? Res.image.ui.frontflip_icon.toTile() : Res.image.ui.backflip_icon.toTile())
+			);
+
+			case TrickType.Wheelie(d, l): notificationUi.show(
+				(Math.floor(l / 100) / 10) + "s " + Language.get("wheelie"),
+				new Bitmap(d == TrickDirection.Front ? Res.image.ui.front_wheelie_icon.toTile() : Res.image.ui.back_wheelie_icon.toTile())
+			);
+		}
 	}
 
 	public function showCounter()

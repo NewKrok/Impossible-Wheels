@@ -66,8 +66,10 @@ import hpp.util.NumberUtil;
 			{
 				scoreText.text = NumberUtil.formatNumber(Math.floor(scoreHelper));
 			},
+			onStart: SoundManager.playScoreSound,
 			onComplete: function()
 			{
+				SoundManager.stopScoreSound();
 				if (bonus > 0)
 				{
 					bonusText.visible = true;
@@ -89,5 +91,7 @@ import hpp.util.NumberUtil;
 		TweenMax.killTweensOf(this);
 		scoreHelper = 0;
 		scoreText.text = "";
+
+		SoundManager.stopScoreSound();
 	}
 }
