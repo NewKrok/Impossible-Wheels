@@ -31,6 +31,7 @@
 		"total_score": "Total Score",
 		"opponent_score": "Your Opponent's Score",
 		"level_failed": "Level Failed!",
-		"level_completed": "Level Completed!"
+		"level_completed": "Level Completed!",
+		"new_highscore": "NEW HIGHSCORE!"
 	}
 }

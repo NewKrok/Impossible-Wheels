@@ -20,6 +20,7 @@ import hpp.util.NumberUtil;
 	var g:Graphics;
 	var scoreText:Text;
 	var bonusText:Text;
+	var newHighScoreText:Text;
 	var scoreHelper:Float;
 
 	public function new(p:Object)
@@ -48,9 +49,17 @@ import hpp.util.NumberUtil;
 		bonusText.x = HppG.stage2d.width / 2 + 20;
 		bonusText.y = g.getSize().height / 2 - scoreText.textHeight / 2;
 		Language.registerTextHolder(cast bonusText, "bonus_score", ["$score" => 0]);
+
+		newHighScoreText = new Text(Fonts.DEFAULT_S, this);
+		newHighScoreText.smooth = true;
+		newHighScoreText.textColor = 0xFFFFFF;
+		newHighScoreText.textAlign = Align.Left;
+		newHighScoreText.x = HppG.stage2d.width / 2 + 20;
+		newHighScoreText.y = g.getSize().height / 2 - scoreText.textHeight / 2;
+		newHighScoreText.text = Language.get("new_highscore");
 	}
 
-	public function setScore(s:UInt, bonus:UInt = 0)
+	public function setScore(s:UInt, bonus:UInt = 0, isNewHighScore:Bool = false)
 	{
 		TweenMax.killTweensOf(this);
 		scoreHelper = 0;
@@ -58,6 +67,7 @@ import hpp.util.NumberUtil;
 		objectUi.y = g.getSize().height / 2 - objectUi.getSize().height / 2;
 		scoreText.text = "0";
 		bonusText.visible = false;
+		newHighScoreText.visible = false;
 
 		TweenMax.to(this, 1, {
 			scoreHelper: s,
@@ -78,6 +88,12 @@ import hpp.util.NumberUtil;
 					bonusText.y = g.getSize().height / 2 - bonusText.textHeight / 2;
 				}
 
+				if (isNewHighScore)
+				{
+					newHighScoreText.visible = true;
+					newHighScoreText.x = scoreText.x + scoreText.textWidth + 20;
+					newHighScoreText.y = g.getSize().height / 2 - newHighScoreText.textHeight / 2;
+				}
 			}
 		});
 	}

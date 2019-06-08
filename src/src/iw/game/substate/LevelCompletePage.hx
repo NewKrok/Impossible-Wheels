@@ -61,6 +61,7 @@ import tink.state.Observable;
 	var successBadge:Object;
 	var successBadgeFlow:Flow;
 	var starView:StarView;
+	var isNewHighScore:Bool = false;
 
 	public function new(
 		lifeValue:Observable<UInt>,
@@ -206,6 +207,7 @@ import tink.state.Observable;
 	}
 
 	public function setStarCount(c) starView.setCount(c);
+	public function setIsNewHighScore(v) isNewHighScore = v;
 
 	override public function onOpen():Void
 	{
@@ -326,7 +328,7 @@ import tink.state.Observable;
 	function showTotalResult()
 	{
 		totalScoreResult.alpha = 1;
-		totalScoreResult.setScore(totalScore);
+		totalScoreResult.setScore(totalScore, 0, isNewHighScore);
 	}
 
 	function showOpponentsResult()
@@ -340,12 +342,12 @@ import tink.state.Observable;
 		SoundManager.playLevelCompletedSound();
 
 		successBadge.scaleX = successBadge.scaleY = 1.4;
-		successBadge.x = HppG.stage2d.width - 220 - 80;
+		successBadge.x = HppG.stage2d.width - 220 - 60;
 		TweenMax.to(successBadge, .5, {
 			alpha: 1,
 			scaleX: 1,
 			scaleY: 1,
-			x: HppG.stage2d.width - 220 - 100,
+			x: HppG.stage2d.width - 220 - 80,
 			onUpdate: function() {
 				successBadge.x = successBadge.x;
 				successBadge.scaleX = successBadge.scaleX;
@@ -360,12 +362,12 @@ import tink.state.Observable;
 		SoundManager.playLevelFailedSound();
 
 		failBadge.scaleX = failBadge.scaleY = 1.4;
-		failBadge.x = 120;
+		failBadge.x = 90;
 		TweenMax.to(failBadge, .5, {
 			alpha: 1,
 			scaleX: 1,
 			scaleY: 1,
-			x: 100,
+			x: 70,
 			onUpdate: function() {
 				failBadge.x = failBadge.x;
 				failBadge.scaleX = failBadge.scaleX;

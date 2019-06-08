@@ -67,14 +67,17 @@ class GameState extends Base2dState
 				backgroundLoopChannel.volume = .4;
 				SoundManager.playWinSound();
 
-				gameModel.calculateTotalScore(gameModel.collectedCoins == levelData.collectableItems.length ? ScoreCalculator.getCollectedCoinMaxBonus() : 0);
-				levelCompletePage.setStarCount(StarCountUtil.scoreToStarCount(gameModel.totalScore, levelData.starValues));
-				openSubState(levelCompletePage);
-
 				var levelStates = appModel.levelStates;
 				var levelState:LevelState;
 
 				levelState = levelStates.get(levelId);
+
+				gameModel.calculateTotalScore(gameModel.collectedCoins == levelData.collectableItems.length ? ScoreCalculator.getCollectedCoinMaxBonus() : 0);
+				levelCompletePage.setStarCount(StarCountUtil.scoreToStarCount(gameModel.totalScore, levelData.starValues));
+				levelCompletePage.setIsNewHighScore(levelState.score != 0 && gameModel.totalScore > levelState.score);
+
+				openSubState(levelCompletePage);
+
 				if (!levelState.isCompleted)
 				{
 					levelState.isCompleted = true;

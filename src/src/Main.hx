@@ -72,7 +72,6 @@ class Main extends Base2dApp
 }
 
 // TODO
-// Implement "New highscore" info
 // Add game completed window
 // Add Enable/Disable next level button logic
 // Add dynamic physics elements
