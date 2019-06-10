@@ -166,4 +166,30 @@ import js.Browser;
 	{
 		TweenMax.killTweensOf(logo);
 	}
+
+	override public function dispose():Void
+	{
+		TweenMax.killTweensOf(logo);
+		TweenMax.killTweensOf(startButton);
+		TweenMax.killTweensOf(leftFlow);
+
+		startButton.dispose();
+		startButton = null;
+		fppButton.dispose();
+		fppButton = null;
+		githubButton.dispose();
+		githubButton = null;
+		facebookButton.dispose();
+		facebookButton = null;
+		youtubeButton.dispose();
+		youtubeButton = null;
+		settingsButton.dispose();
+		settingsButton = null;
+		infoButton.dispose();
+		infoButton = null;
+
+		container.removeChildren();
+
+		super.dispose();
+	}
 }

@@ -1,9 +1,6 @@
 package iw.data;
 
-import haxe.Json;
-import haxe.Log;
 import iw.data.CarData;
-//import hc.util.SavedDataUtil;
 
 /**
  * ...
@@ -22,7 +19,7 @@ class CarDatas
 
 	public static function loadData(jsonData:String):Void
 	{
-		try
+		/*try
 		{
 			carDatas = Json.parse(jsonData).carDatas;
 
@@ -49,20 +46,12 @@ class CarDatas
 		{
 			Log.trace("[CarDatas] parsing error");
 			carDatas = null;
-		}
+		}*/
 	}
 
+	// There are no other cars at the moment but maybe it will be useful later
 	public static function getData(carId:UInt):CarData
 	{
-		/*for (i in 0...carDatas.length)
-		{
-			if (carDatas[i].id == carId)
-			{
-				return carDatas[i];
-			}
-		}
-		return null;*/
-
 		return {
 				name: "Player car 1",
 				id: 0,
@@ -78,8 +67,6 @@ class CarDatas
 	public static function getLeveledData(carId:UInt):CarLeveledData
 	{
 		var baseData:CarData = getData(carId);
-		//var level:UInt = 0;//SavedDataUtil.getPlayerInfo().carDatas[carId].level;
-		//var level:UInt = SavedDataUtil.getPlayerInfo().carDatas[carId].level;
 		var level = 0;
 
 		return {

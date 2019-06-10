@@ -29,7 +29,8 @@ class NotificationUi extends Object
 		TweenMax.to(n, .5, {
 			x: -n.getSize().width,
 			alpha: 0,
-			onUpdate: function(){ n.x = n.x; }
+			onUpdate: function() { n.x = n.x; },
+			onComplete: function() { n.remove(); }
 		});
 
 		order();
@@ -47,6 +48,15 @@ class NotificationUi extends Object
 				delay: i * .2,
 				onUpdate: function(){ n.y = n.y; }
 			});
+		}
+	}
+
+	public function dispose()
+	{
+		for (n in notifications)
+		{
+			TweenMax.killTweensOf(n);
+			n.remove();
 		}
 	}
 }

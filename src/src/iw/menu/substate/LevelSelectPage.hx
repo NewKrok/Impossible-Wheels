@@ -67,4 +67,16 @@ class LevelSelectPage extends Base2dSubState
 	{
 		for (button in levelButtons) button.refresh(appModel.levelStates.get(button.id));
 	}
+
+	override public function dispose():Void
+	{
+		Language.unregisterTextHolder(cast backButton.label);
+
+		backButton.dispose();
+		backButton = null;
+
+		for (b in levelButtons) b.dispose();
+
+		super.dispose();
+	}
 }

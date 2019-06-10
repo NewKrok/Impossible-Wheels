@@ -156,4 +156,31 @@ class SettingsPage extends Base2dSubState
 			});
 		}
 	}
+
+	override public function dispose():Void
+	{
+		TweenMax.killTweensOf(languageEntry);
+		TweenMax.killTweensOf(soundEntry);
+		TweenMax.killTweensOf(musicEntry);
+		TweenMax.killTweensOf(effectsEntry);
+		TweenMax.killTweensOf(fullscreenEntry);
+
+		Language.unregisterTextHolder(cast backButton.label);
+
+		backButton.dispose();
+		backButton = null;
+
+		languageEntry.dispose();
+		languageEntry = null;
+		soundEntry.dispose();
+		soundEntry = null;
+		musicEntry.dispose();
+		musicEntry = null;
+		effectsEntry.dispose();
+		effectsEntry = null;
+		fullscreenEntry.dispose();
+		fullscreenEntry = null;
+
+		super.dispose();
+	}
 }

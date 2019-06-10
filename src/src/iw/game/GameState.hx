@@ -295,6 +295,10 @@ class GameState extends Base2dState
 		}
 
 		world.destroy();
+		world = null;
+
+		ui.dispose();
+		ui = null;
 
 		super.dispose();
 	}

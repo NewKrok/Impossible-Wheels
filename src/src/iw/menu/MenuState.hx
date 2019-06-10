@@ -2,9 +2,15 @@ package iw.menu;
 
 import com.greensock.TweenMax;
 import com.greensock.easing.Quad;
+import hpp.heaps.Base2dStage;
+import hpp.heaps.Base2dState;
+import hpp.heaps.HppG;
+import hpp.util.Log;
+import hxd.Res;
 import hxd.res.Sound;
 import hxd.snd.Channel;
 import hxd.snd.Manager;
+import iw.AppModel;
 import iw.game.GameState;
 import iw.game.World;
 import iw.menu.MenuModel.MenuSubState;
@@ -12,13 +18,6 @@ import iw.menu.substate.InfoPage;
 import iw.menu.substate.LevelSelectPage;
 import iw.menu.substate.SettingsPage;
 import iw.menu.substate.WelcomePage;
-import hpp.heaps.Base2dStage;
-import hpp.heaps.Base2dState;
-import hpp.heaps.HppG;
-import hpp.util.Log;
-import hxd.Res;
-import iw.AppModel;
-import tink.state.State;
 
 /**
  * ...
@@ -207,11 +206,15 @@ class MenuState extends Base2dState
 		}
 
 		world.destroy();
+		world = null;
 
 		welcomePage.dispose();
+		welcomePage = null;
 		infoPage.dispose();
+		infoPage = null;
 		settingsPage.dispose();
-		levelSelectPage.dispose();
+		settingsPage = null;
+		// levelSelect is the active sub state, in this case the state dispose it automatically
 
 		super.dispose();
 	}

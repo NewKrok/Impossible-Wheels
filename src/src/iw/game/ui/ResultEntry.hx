@@ -48,7 +48,7 @@ import hpp.util.NumberUtil;
 		bonusText.textAlign = Align.Left;
 		bonusText.x = HppG.stage2d.width / 2 + 20;
 		bonusText.y = g.getSize().height / 2 - scoreText.textHeight / 2;
-		Language.registerTextHolder(cast bonusText, "bonus_score", ["$score" => 0]);
+		bonusText.text = Language.get("bonus_score", ["$score" => 0]);
 
 		newHighScoreText = new Text(Fonts.DEFAULT_S, this);
 		newHighScoreText.smooth = true;
@@ -83,7 +83,7 @@ import hpp.util.NumberUtil;
 				if (bonus > 0)
 				{
 					bonusText.visible = true;
-					Language.updateTextHolderParams(cast bonusText, ["$score" => bonus]);
+					bonusText.text = Language.get("bonus_score", ["$score" => bonus]);
 					bonusText.x = scoreText.x + scoreText.textWidth + 20;
 					bonusText.y = g.getSize().height / 2 - bonusText.textHeight / 2;
 				}

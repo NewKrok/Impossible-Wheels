@@ -3,8 +3,8 @@ package iw.menu.ui;
 import h2d.Flow;
 import h2d.Graphics;
 import h2d.Interactive;
-import h2d.Layers;
 import h2d.Object;
+import h2d.Text;
 import h2d.Text.Align;
 import hxd.Cursor;
 import hpp.heaps.HppG;
@@ -16,7 +16,7 @@ import iw.Fonts;
  * ...
  * @author Krisztian Somoracz
  */
-@:tink class CreditEntry extends Layers
+@:tink class CreditEntry extends Object
 {
 	var onClick:Void->Void = _;
 	var labelId:String = _;
@@ -32,6 +32,7 @@ import iw.Fonts;
 
 	var background:Graphics;
 	var flowBackground:Graphics;
+
 	var infoBackground:Graphics;
 
 	var interactive:Interactive;
@@ -49,7 +50,7 @@ import iw.Fonts;
 
 		label = createLabel(flow, false, null, labelId);
 		firstInfoLabel = createLabel(flow, true, firstInfo);
-		createLabel(flow, false, secondaryInfo, null);
+		createLabel(flow, false, secondaryInfo);
 
 		flow.x = flowBackground.x = HppG.stage2d.width / 2 - flow.getSize().width / 2;
 		flowBackground.x -= 10;
@@ -119,5 +120,26 @@ import iw.Fonts;
 		infoBackground.endFill();
 
 		flow.reflow();
+	}
+
+	public function dispose()
+	{
+		interactive.onClick = null;
+		interactive.onOver = null;
+		interactive.onOut = null;
+		interactive.remove();
+		interactive = null;
+
+		background.clear();
+		background = null;
+		flowBackground.clear();
+		flowBackground = null;
+		infoBackground.clear();
+		infoBackground = null;
+
+		for (c in label.children)
+			if (cast(c, Text) != null) Language.unregisterTextHolder(cast c);
+
+		removeChildren();
 	}
 }

@@ -172,4 +172,41 @@ import js.Browser;
 			onComplete: function(){ soundCredit.enable(); }
 		});
 	}
+
+	override public function dispose():Void
+	{
+		TweenMax.killTweensOf(haxeButton);
+		TweenMax.killTweensOf(heapsButton);
+		TweenMax.killTweensOf(napeButton);
+		TweenMax.killTweensOf(hppButton);
+		TweenMax.killTweensOf(tweenmaxButton);
+		TweenMax.killTweensOf(coconutButton);
+
+		Language.unregisterTextHolder(cast backButton.label);
+
+		haxeButton.dispose();
+		haxeButton = null;
+		heapsButton.dispose();
+		heapsButton = null;
+		napeButton.dispose();
+		napeButton = null;
+		hppButton.dispose();
+		hppButton = null;
+		tweenmaxButton.dispose();
+		tweenmaxButton = null;
+		coconutButton.dispose();
+		coconutButton = null;
+
+		devCredit.dispose();
+		devCredit = null;
+		musicCredit.dispose();
+		musicCredit = null;
+		soundCredit.dispose();
+		soundCredit = null;
+
+		libraryBackground.clear();
+		libraryBackground = null;
+
+		super.dispose();
+	}
 }

@@ -2,9 +2,7 @@ package iw.game.car;
 
 import apostx.replaykit.IPlaybackPerformer;
 import h2d.Bitmap;
-import h2d.Layers;
 import haxe.Unserializer;
-import iw.data.CarData;
 
 class ReplayCar extends AbstractCar implements IPlaybackPerformer
 {

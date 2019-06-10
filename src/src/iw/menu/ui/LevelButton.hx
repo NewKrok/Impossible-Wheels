@@ -1,11 +1,11 @@
 package iw.menu.ui;
 
+import h2d.Object;
 import iw.util.SaveUtil;
 import com.greensock.TweenMax;
 import h2d.Bitmap;
 import h2d.Flow;
 import h2d.Interactive;
-import h2d.Layers;
 import h2d.Text;
 import iw.util.SaveUtil.LevelState;
 import iw.util.StarCountUtil;
@@ -19,7 +19,7 @@ import iw.Fonts;
  * ...
  * @author Krisztian Somoracz
  */
-@:tink class LevelButton extends Layers
+@:tink class LevelButton extends Object
 {
 	public var onClick:Void->Void = _;
 	public var id(default, null):UInt = _;
@@ -135,5 +135,19 @@ import iw.Fonts;
 			levelDetailsFlow.reflow();
 			levelDetailsFlow.x = getSize().width / 2;
 		}
+	}
+
+	public function dispose()
+	{
+		interactive.onClick = null;
+		interactive.onOver = null;
+		interactive.onOut = null;
+		interactive.remove();
+		interactive = null;
+
+		Language.unregisterTextHolder(cast levelLabel);
+		Language.unregisterTextHolder(cast unlockText);
+
+		removeChildren();
 	}
 }

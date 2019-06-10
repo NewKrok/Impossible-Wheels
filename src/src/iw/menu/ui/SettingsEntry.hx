@@ -2,7 +2,6 @@ package iw.menu.ui;
 
 import h2d.Flow;
 import h2d.Graphics;
-import h2d.Layers;
 import h2d.Object;
 import h2d.Text;
 import hpp.heaps.HppG;
@@ -15,7 +14,7 @@ import iw.Fonts;
  * ...
  * @author Krisztian Somoracz
  */
-@:tink class SettingsEntry extends Layers
+@:tink class SettingsEntry extends Object
 {
 	var labelId:String = _;
 	var optionALabelId:String = _;
@@ -31,6 +30,8 @@ import iw.Fonts;
 	var background:Graphics;
 	var flowBackground:Graphics;
 	var labelBackground:Graphics;
+
+	var labelText:Text;
 
 	var buttonA:LinkedButton;
 	var buttonB:LinkedButton;
@@ -67,7 +68,7 @@ import iw.Fonts;
 		// It was needed because of the proper horizontal position
 		labelBackground.drawRect(0, 0, 190, 43);
 
-		var labelText = new Text(Fonts.DEFAULT_L, label);
+		labelText = new Text(Fonts.DEFAULT_L, label);
 		labelText.smooth = true;
 		labelText.textColor = 0x000000;
 		labelText.textAlign = Align.Center;
@@ -85,7 +86,7 @@ import iw.Fonts;
 			},
 			baseGraphic: Res.image.ui.toggle_button.toTile(),
 			overGraphic: Res.image.ui.toggle_button_selected.toTile(),
-			disabledGraphic: Res.image.ui.toggle_button_selected.toTile(),
+			selectedGraphic: Res.image.ui.toggle_button_selected.toTile(),
 			font: Fonts.DEFAULT_M,
 			textOffset: { x: 0, y: -9 },
 			overAlpha: .5
@@ -113,5 +114,26 @@ import iw.Fonts;
 		flowBackground.endFill();
 
 		labelBackground.drawRect(0, 0, 190, 43);
+	}
+
+	public function dispose()
+	{
+		Language.unregisterTextHolder(cast labelText);
+		Language.unregisterTextHolder(cast cast buttonA.label);
+		Language.unregisterTextHolder(cast cast buttonB.label);
+
+		buttonA.dispose();
+		buttonA = null;
+		buttonB.dispose();
+		buttonB = null;
+
+		background.clear();
+		background = null;
+		flowBackground.clear();
+		flowBackground = null;
+		labelBackground.clear();
+		labelBackground = null;
+
+		removeChildren();
 	}
 }

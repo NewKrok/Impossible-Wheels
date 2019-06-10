@@ -1,7 +1,7 @@
 package iw.game.ui;
 
 import h2d.Bitmap;
-import h2d.Layers;
+import h2d.Object;
 import h2d.Text;
 import hpp.heaps.HppG;
 import hpp.heaps.ui.BaseButton;
@@ -15,7 +15,7 @@ import tink.state.Observable;
  * ...
  * @author Krisztian Somoracz
  */
-@:tink class GameUi extends Layers
+@:tink class GameUi extends Object
 {
 	var pauseRequest:Void->Void = _;
 	var level:UInt = _;
@@ -26,13 +26,13 @@ import tink.state.Observable;
 	var isGamePaused:Observable<Bool> = _;
 	var isGameStarted:Observable<Bool> = _;
 
-	var info:Layers;
+	var info:Object;
 	var notificationUi:NotificationUi;
 	var startCounterUi:StartCounterUi;
 	var levelInfoUi:LevelInfoUi;
 	var pauseButton:BaseButton;
 
-	public function new(parent:Layers)
+	public function new(parent:Object)
 	{
 		super(parent);
 
@@ -57,7 +57,7 @@ import tink.state.Observable;
 
 	function build()
 	{
-		info = new Layers(this);
+		info = new Object(this);
 		info.x = 20;
 		info.y = 20;
 
@@ -122,5 +122,11 @@ import tink.state.Observable;
 	public function showCounter()
 	{
 		startCounterUi.start();
+	}
+
+	public function dispose()
+	{
+		notificationUi.dispose();
+		notificationUi = null;
 	}
 }

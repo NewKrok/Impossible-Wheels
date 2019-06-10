@@ -54,8 +54,8 @@ class Main extends Base2dApp
 
 		SoundManager.init(appModel.observables.isSoundEnabled, appModel.observables.isMusicEnabled);
 
-		changeState(GameState, [appModel, 1]); // just for testing
-		//changeState(MenuState, [appModel]);
+		//changeState(GameState, [appModel, 1]); // just for testing
+		changeState(MenuState, [appModel]);
 	}
 
 	static function main()
@@ -69,11 +69,8 @@ class Main extends Base2dApp
 }
 
 // TODO
-// Add dynamic physics elements
-// Clear memory properly after state change
 // Create levels
 // Create enemies/replays
-// Handle next level request
-// Minimize the result
 // Add mobile touch control
 // Add game preloader
+// Minimize the result
