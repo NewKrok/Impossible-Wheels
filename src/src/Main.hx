@@ -1,24 +1,20 @@
 package;
 
 import coconut.data.List;
-import iw.AppModel;
-import iw.Fonts;
-import iw.SoundManager;
-import iw.data.CarDatas;
-import iw.game.GameState;
-import haxe.Json;
-import iw.menu.MenuState;
-import iw.util.LevelUtil;
-import iw.util.SaveUtil;
 import hpp.heaps.Base2dApp;
 import hpp.heaps.Base2dStage.StageScaleMode;
 import hpp.util.DeviceData;
 import hpp.util.JsFullScreenUtil;
-import hpp.util.Language;
 import hpp.util.Log;
 import hxd.Key;
 import hxd.Res;
-import hxd.Save;
+import iw.AppModel;
+import iw.Fonts;
+import iw.SoundManager;
+import iw.game.GameState;
+import iw.menu.MenuState;
+import iw.util.LevelUtil;
+import iw.util.SaveUtil;
 
 class Main extends Base2dApp
 {
@@ -54,6 +50,7 @@ class Main extends Base2dApp
 			{ id: 11, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) },
 			{ id: 12, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) }
 		]));
+		if (SaveUtil.data.game.wasGameCompleted) appModel.onGameCompleted();
 
 		SoundManager.init(appModel.observables.isSoundEnabled, appModel.observables.isMusicEnabled);
 
@@ -72,11 +69,13 @@ class Main extends Base2dApp
 }
 
 // TODO
-// Add game completed window
 // Add Enable/Disable next level button logic
+// Add static flag elements
 // Add dynamic physics elements
 // Clear memory properly after state change
 // Create levels
 // Create enemies/replays
 // Handle next level request
 // Minimize the result
+// Add mobile touch control
+// Add game preloader

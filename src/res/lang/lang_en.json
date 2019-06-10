@@ -32,6 +32,9 @@
 		"opponent_score": "Your Opponent's Score",
 		"level_failed": "Level Failed!",
 		"level_completed": "Level Completed!",
-		"new_highscore": "NEW HIGHSCORE!"
+		"new_highscore": "NEW HIGHSCORE!",
+		"game_completed": "Congratulations! Your have completed all levels!",
+		"im_the_king": "I'm the KING!",
+		"please_share": "If you enjoyed it, please don't forget to share it with your friends."
 	}
 }

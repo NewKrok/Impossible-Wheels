@@ -13,6 +13,7 @@ import hpp.heaps.ui.BaseButton;
 import hpp.heaps.ui.PlaceHolder;
 import hpp.util.Language;
 import hxd.Res;
+import iw.game.GameCompletedPage;
 import iw.game.ui.CoinUi;
 import iw.game.ui.LifeUi;
 import iw.game.ui.ResultEntry;
@@ -62,6 +63,8 @@ import tink.state.Observable;
 	var successBadgeFlow:Flow;
 	var starView:StarView;
 	var isNewHighScore:Bool = false;
+
+	public var needShowGameCompletedWindow:Bool = false;
 
 	public function new(
 		lifeValue:Observable<UInt>,
@@ -348,11 +351,16 @@ import tink.state.Observable;
 			scaleX: 1,
 			scaleY: 1,
 			x: HppG.stage2d.width - 220 - 80,
-			onUpdate: function() {
+			onUpdate: function()
+			{
 				successBadge.x = successBadge.x;
 				successBadge.scaleX = successBadge.scaleX;
 				successBadge.scaleY = successBadge.scaleY;
 			},
+			onComplete: needShowGameCompletedWindow ? function()
+			{
+				new GameCompletedPage(container);
+			} : null,
 			ease: Back.easeOut
 		});
 	}

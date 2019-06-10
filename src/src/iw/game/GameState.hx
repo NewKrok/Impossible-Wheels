@@ -73,24 +73,32 @@ class GameState extends Base2dState
 				levelState = levelStates.get(levelId);
 
 				gameModel.calculateTotalScore(gameModel.collectedCoins == levelData.collectableItems.length ? ScoreCalculator.getCollectedCoinMaxBonus() : 0);
+				var didPlayerWin:Bool = gameModel.totalScore > levelData.opponentsScore;
+
 				levelCompletePage.setStarCount(StarCountUtil.scoreToStarCount(gameModel.totalScore, levelData.starValues));
 				levelCompletePage.setIsNewHighScore(levelState.score != 0 && gameModel.totalScore > levelState.score);
+				levelCompletePage.needShowGameCompletedWindow = didPlayerWin && levelId == 11 && !appModel.wasGameCompleted;
 
 				openSubState(levelCompletePage);
 
-				if (!levelState.isCompleted)
+				if (didPlayerWin)
 				{
-					levelState.isCompleted = true;
-					if (levelId < 11)
+					if (!levelState.isCompleted)
 					{
-						var nextLevelState = { isUnlocked: true, isCompleted: false, score: 0 };
-						levelStates.set(levelId + 1, nextLevelState);
+						levelState.isCompleted = true;
+						if (levelId < 11)
+						{
+							var nextLevelState = { isUnlocked: true, isCompleted: false, score: 0 };
+							levelStates.set(levelId + 1, nextLevelState);
+						}
 					}
-				}
-				if (levelState.score < gameModel.totalScore) levelState.score = gameModel.totalScore;
+					if (levelState.score < gameModel.totalScore) levelState.score = gameModel.totalScore;
 
-				levelStates.set(levelId, levelState);
-				appModel.setLevelStates(levelStates);
+					levelStates.set(levelId, levelState);
+					appModel.setLevelStates(levelStates);
+
+					if (levelId == 11) appModel.onGameCompleted();
+				}
 			}
 			else
 			{

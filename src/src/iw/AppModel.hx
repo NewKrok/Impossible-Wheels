@@ -20,6 +20,7 @@ class AppModel implements Model
 	@:observable var isSoundEnabled:Bool = null;
 	@:observable var isMusicEnabled:Bool = null;
 	@:observable var isEffectEnabled:Bool = null;
+	@:observable var wasGameCompleted:Bool = false;
 
 	@:skipCheck @:observable var levelDatas:List<Level> = null;
 	@:skipCheck @:observable var levelStates:Map<UInt, LevelState> = null;
@@ -89,6 +90,14 @@ class AppModel implements Model
 	@:transition function setLevelDatas(value:List<Level>) return { levelDatas: value };
 
 	public function getLevelData(id:UInt) return levelDatas.toArray().filter(function(l) { return l.id == id; })[0];
+
+	@:transition function onGameCompleted()
+	{
+		SaveUtil.data.game.wasGameCompleted = true;
+		SaveUtil.save();
+
+		return { wasGameCompleted: true };
+	}
 }
 
 @:enum abstract LangId(String) from String to String {

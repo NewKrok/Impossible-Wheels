@@ -32,6 +32,9 @@
 		"opponent_score": "Az Ellenfeled Összpontja",
 		"level_failed": "Szint elbukva!",
 		"level_completed": "Szint Teljesítve!",
-		"new_highscore": "ÚJ REKORD!"
+		"new_highscore": "ÚJ REKORD!",
+		"game_completed": "Gratulálunk! Teljesítetted az összes szintet!",
+		"im_the_king": "KIRÁLY vagyok!",
+		"please_share": "Ha élvezted a játékot, kérlek ne felejtsd el megosztani a barátaiddal is."
 	}
 }
