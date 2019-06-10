@@ -2,7 +2,7 @@ package iw.game;
 
 import com.greensock.TweenMax;
 import h2d.Bitmap;
-import h2d.Layers;
+import h2d.Object;
 import h2d.Particles;
 import h2d.Tile;
 import hxd.Res;
@@ -13,11 +13,11 @@ import hxd.Res;
  */
 class EffectHandler
 {
-	var parent:Layers;
+	var parent:Object;
 	var particles:Particles;
 	var imageCache:Array<Bitmap>;
 
-	public function new(s2d:Layers)
+	public function new(s2d:Object)
 	{
 		this.parent = s2d;
 
@@ -61,7 +61,7 @@ class EffectHandler
 
 		particles.addGroup(g);
 
-		TweenMax.delayedCall(.5, function(){ removeEffect(g); });
+		TweenMax.delayedCall(.5, function() { removeEffect(g); });
 	}
 
 	public function addCoinExplosion(x:Float, y:Float, scale:Float = 1)
@@ -76,7 +76,8 @@ class EffectHandler
 		tile.dx = cast -tile.width / 2;
 		tile.dy = cast -tile.height / 2;
 
-		TweenMax.to(image, .2, {
+		TweenMax.to(image, .2,
+		{
 			scaleX: 3,
 			scaleY: 3,
 			alpha: .1,

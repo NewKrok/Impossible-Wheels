@@ -2,7 +2,7 @@ package iw.game.car;
 
 import com.greensock.TweenMax;
 import h2d.Bitmap;
-import h2d.Layers;
+import h2d.Object;
 import h2d.Particles;
 import haxe.Timer;
 import iw.data.CarData;
@@ -52,15 +52,15 @@ class AbstractCar
 	var particles:Particles;
 	var smokeParticleGroup:ParticleGroup;
 	var explosionParticleGroup:ParticleGroup;
-	var container:Layers;
+	var container:Object;
 
 	var isCrushed:Bool = false;
 
 	var isEffectEnabled:Observable<Bool>;
 
-	public function new(parent:Layers, carData:CarData, scale:Float = 1, isEffectEnabled:Observable<Bool>)
+	public function new(parent:Object, carData:CarData, scale:Float = 1, isEffectEnabled:Observable<Bool>)
 	{
-		container = new Layers(parent);
+		container = new Object(parent);
 		particles = new Particles(parent);
 
 		carScale = scale;

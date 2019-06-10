@@ -2,8 +2,7 @@ package iw.game.car;
 
 import apostx.replaykit.IRecorderPerformer;
 import h2d.Bitmap;
-import h2d.Layers;
-import h2d.Sprite;
+import h2d.Object;
 import haxe.Serializer;
 import hxd.Res;
 import iw.data.CarData;
@@ -80,7 +79,7 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 	var direction:Int = 1;
 	var space:Space;
 
-	public function new(parent:Layers, space:Space, x:Float, y:Float, carData:CarData, carScale:Float = 1, isEffectEnabled:Observable<Bool>, filterCategory:UInt = 0, filterMask:UInt = 0)
+	public function new(parent:Object, space:Space, x:Float, y:Float, carData:CarData, carScale:Float = 1, isEffectEnabled:Observable<Bool>, filterCategory:UInt = 0, filterMask:UInt = 0)
 	{
 		super(parent, carData, carScale, isEffectEnabled);
 		carLeveledData = CarDatas.getLeveledData(carData.id);

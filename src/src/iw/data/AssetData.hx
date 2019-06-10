@@ -32,7 +32,7 @@ class AssetData
 			case "table_warning":
 				bmp = new Bitmap(Res.image.game_asset.alert_flag.toTile(), parent);
 				bmp.tile.dx = bmp.tile.width / 2;
-				bmp.tile.dy = bmp.tile.height / 2 - 10;
+				bmp.tile.dy = bmp.tile.height / 2 - 15;
 
 			case _: bmp = null;
 		}

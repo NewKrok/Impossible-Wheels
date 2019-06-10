@@ -8,8 +8,8 @@ import com.greensock.easing.Linear;
 import com.greensock.easing.Quad;
 import h2d.Bitmap;
 import h2d.Graphics;
-import h2d.Layers;
 import h2d.Mask;
+import h2d.Object;
 import haxe.Timer;
 import hpp.heaps.HppG;
 import hpp.util.GeomUtil;
@@ -40,7 +40,7 @@ import tink.state.State;
  * ...
  * @author Krisztian Somoracz
  */
-class World extends Layers
+class World extends Object
 {
 	// Enable it to make replays. After focus lost it trace the replay string into console.
 	static inline var isRecordingMode:Bool = false;
@@ -63,7 +63,7 @@ class World extends Layers
 	var isLost:Observable<Bool>;
 	var onCoinCollected:Void->Void;
 
-	var camera:Layers;
+	var camera:Object;
 	var cameraMask:Mask;
 	var space:Space;
 	var groundBodies:Array<Body>;
@@ -144,7 +144,7 @@ class World extends Layers
 		background.endFill();
 
 		cameraMask = new Mask(HppG.stage2d.width, HppG.stage2d.height, this);
-		camera = new Layers(cameraMask);
+		camera = new Object(cameraMask);
 
 		if (!isDemo) effects = new EffectHandler(camera);
 
