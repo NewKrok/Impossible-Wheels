@@ -23,8 +23,8 @@ class LevelUtil
 			if (level.staticElementData == null) level.staticElementData = [];
 			level.staticElementData.push({
 				position: { x: level.finishPoint.x, y: level.finishPoint.y },
-				pivotX: 5,
-				pivotY: 63,
+				pivotX: -13,
+				pivotY: -8,
 				scaleX: 1,
 				scaleY: 1,
 				rotation: 0,

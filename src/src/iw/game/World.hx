@@ -136,7 +136,7 @@ class World extends Layers
 
 	public function build():ActionFlow
 	{
-		Log.info('Build world, level ${levelData.levelId}');
+		Log.info('Build World level ${levelData.levelId}');
 
 		var background = new Graphics(this);
 		background.beginFill(0xFFFFFF);
@@ -384,11 +384,14 @@ class World extends Layers
 		for (e in levelData.staticElementData)
 		{
 			var img = AssetData.getBitmap(e.elementId, camera);
-			img.tile.dx = cast -e.pivotX;
-			img.tile.dy = cast -e.pivotY;
+			if (e.pivotX != null)
+			{
+				img.tile.dx = cast -e.pivotX;
+				img.tile.dy = cast -e.pivotY;
+			}
 			img.x = e.position.x;
 			img.y = e.position.y;
-			img.rotation = e.rotation;
+			img.rotation = e.rotation * (Math.PI / 180);
 			img.scaleX = e.scaleX;
 			img.scaleY = e.scaleY;
 		}
@@ -644,7 +647,9 @@ class World extends Layers
 
 	function checkLevelComplete():Void
 	{
-		if (GeomUtil.getDistance(cast levelData.finishPoint, cast playerCar.wheelRightGraphics) < 20) onLevelComplete();
+		if (playerCar.wheelRightGraphics.x > levelData.finishPoint.x
+			&& GeomUtil.getDistance(cast levelData.finishPoint, cast playerCar.wheelRightGraphics) < 100)
+				onLevelComplete();
 	}
 
 	function checkLife()

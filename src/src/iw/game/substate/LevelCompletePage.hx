@@ -65,6 +65,7 @@ import tink.state.Observable;
 	var isNewHighScore:Bool = false;
 
 	public var needShowGameCompletedWindow:Bool = false;
+	public var isLastLevel:Bool = false;
 
 	public function new(
 		lifeValue:Observable<UInt>,
@@ -168,7 +169,7 @@ import tink.state.Observable;
 
 		nextLevelButton = new BaseButton(flow, {
 			onClick: function(_) { onNextLevelRequest(); },
-			labelText: Language.get("resume"),
+			labelText: Language.get("next_level"),
 			baseGraphic: Res.image.ui.long_button.toTile(),
 			font: Fonts.DEFAULT_M,
 			overAlpha: .5
@@ -240,39 +241,9 @@ import tink.state.Observable;
 		titleBackground.drawRect(0, 0, HppG.stage2d.width, 43);
 		titleBackground.endFill();
 
-		exitButton.alpha = 0;
-		exitButton.y = 20;
-		TweenMax.killTweensOf(exitButton);
-		TweenMax.to(exitButton, .3, { alpha: 1, y: 0, onUpdate: function () { exitButton.y = exitButton.y; } });
-
-		// Really dirty but when I'm using just this: "delay: .1" or ".delay(.1)" it breaks completly the "y tween"
-		restartButton.alpha = 0;
-		TweenMax.killTweensOf(restartButton);
-		TweenMax.to(restartButton, .1, {
-			onComplete: function ()
-			{
-				restartButton.y = 20;
-				TweenMax.to(restartButton, .3, {
-					alpha: 1,
-					y: 0,
-					onUpdate: function () { restartButton.y = restartButton.y; }
-				});
-			}
-		});
-
-		nextLevelButton.alpha = 0;
-		TweenMax.killTweensOf(nextLevelButton);
-		TweenMax.to(nextLevelButton, .2, {
-			onComplete: function ()
-			{
-				nextLevelButton.y = 20;
-				TweenMax.to(nextLevelButton, .3, {
-					alpha: 1,
-					y: 0,
-					onUpdate: function () { nextLevelButton.y = nextLevelButton.y; }
-				});
-			}
-		});
+		exitButton.visible = false;
+		restartButton.visible = false;
+		nextLevelButton.visible = false;
 
 		lifeScoreResult.alpha = 0;
 		lifeScoreResult.reset();
@@ -304,7 +275,36 @@ import tink.state.Observable;
 		TweenMax.killTweensOf(successBadge);
 		successBadge.alpha = 0;
 
-		TweenMax.delayedCall(11, (totalScore > opponentScore) ? handleWin : handleLoose);
+		TweenMax.delayedCall(11, function()
+		{
+			if (totalScore > opponentScore) handleWin();
+			else handleLoose();
+
+			exitButton.visible = true;
+			exitButton.alpha = 0;
+			exitButton.y = 20;
+			TweenMax.killTweensOf(exitButton);
+			TweenMax.to(exitButton, .3, { alpha: 1, y: 0, onUpdate: function () { exitButton.y = exitButton.y; } });
+
+			// Really dirty but when I'm using just this: "delay: .1" or ".delay(.1)" it breaks completly the "y tween"
+			restartButton.visible = true;
+			restartButton.alpha = 0;
+			TweenMax.killTweensOf(restartButton);
+			TweenMax.to(restartButton, .1, {
+				onComplete: function ()
+				{
+					restartButton.y = 20;
+					TweenMax.to(restartButton, .3, {
+						alpha: 1,
+						y: 0,
+						onUpdate: function () { restartButton.y = restartButton.y; }
+					});
+				}
+			});
+
+			content.y = HppG.stage2d.height / 2 - content.getSize().height / 2;
+			failBadge.y = successBadge.y = content.y + 55;
+		});
 	}
 
 	function showLifeResult()
@@ -363,6 +363,24 @@ import tink.state.Observable;
 			} : null,
 			ease: Back.easeOut
 		});
+
+		if (!isLastLevel)
+		{
+			nextLevelButton.visible = true;
+			nextLevelButton.alpha = 0;
+			TweenMax.killTweensOf(nextLevelButton);
+			TweenMax.to(nextLevelButton, .2, {
+				onComplete: function ()
+				{
+					nextLevelButton.y = 20;
+					TweenMax.to(nextLevelButton, .3, {
+						alpha: 1,
+						y: 0,
+						onUpdate: function () { nextLevelButton.y = nextLevelButton.y; }
+					});
+				}
+			});
+		}
 	}
 
 	function handleLoose()

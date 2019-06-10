@@ -33,7 +33,7 @@ class LevelInfoUi extends Object
 		label.smooth = true;
 		label.textColor = 0xFFFFFF;
 		label.textAlign = Align.Center;
-		label.text = Language.get("level", ["$id" => level + 1]);
+		label.text = Language.get("level", ["$id" => level]);
 		label.x = mask.width / 2;
 		label.y = mask.height / 2 - label.textHeight / 2;
 	}

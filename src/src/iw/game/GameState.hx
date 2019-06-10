@@ -5,6 +5,7 @@ import h2d.filter.Blur;
 import hpp.heaps.Base2dStage;
 import hpp.heaps.Base2dState;
 import hpp.heaps.HppG;
+import hpp.util.Log;
 import hxd.Event;
 import hxd.Key;
 import hxd.Res;
@@ -44,6 +45,8 @@ class GameState extends Base2dState
 
 	public function new(stage:Base2dStage, appModel:AppModel, levelId:UInt)
 	{
+		Log.info('Create game request, level $levelId');
+
 		this.appModel = appModel;
 		gameModel = new GameModel(
 		{
@@ -78,6 +81,7 @@ class GameState extends Base2dState
 				levelCompletePage.setStarCount(StarCountUtil.scoreToStarCount(gameModel.totalScore, levelData.starValues));
 				levelCompletePage.setIsNewHighScore(levelState.score != 0 && gameModel.totalScore > levelState.score);
 				levelCompletePage.needShowGameCompletedWindow = didPlayerWin && levelId == 11 && !appModel.wasGameCompleted;
+				levelCompletePage.isLastLevel = levelId == 11;
 
 				openSubState(levelCompletePage);
 
@@ -192,7 +196,7 @@ class GameState extends Base2dState
 		ui = new GameUi(
 			stage,
 			pauseRequest,
-			levelData.levelId,
+			gameModel.levelId,
 			gameModel.observables.gameTime,
 			gameModel.observables.collectedCoins,
 			levelData.collectableItems.length,
