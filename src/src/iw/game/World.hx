@@ -389,6 +389,7 @@ class World extends Object
 				img.tile.dx = cast -e.pivotX;
 				img.tile.dy = cast -e.pivotY;
 			}
+			img.smooth = true;
 			img.x = e.position.x;
 			img.y = e.position.y;
 			img.rotation = e.rotation * (Math.PI / 180);

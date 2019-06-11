@@ -38,24 +38,24 @@ class Main extends Base2dApp
 		appModel.setLevelDatas(List.fromArray([
 			{ id: 0, levelData: LevelUtil.LevelDataFromJson(Res.data.level.demo.entry.getText()) },
 			{ id: 1, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) },
-			{ id: 2, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) },
-			{ id: 3, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) },
-			{ id: 4, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) },
-			{ id: 5, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) },
-			{ id: 6, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) },
-			{ id: 7, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) },
-			{ id: 8, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) },
-			{ id: 9, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) },
-			{ id: 10, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) },
-			{ id: 11, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) },
-			{ id: 12, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) }
+			{ id: 2, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
+			{ id: 3, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
+			{ id: 4, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
+			{ id: 5, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
+			{ id: 6, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
+			{ id: 7, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
+			{ id: 8, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
+			{ id: 9, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
+			{ id: 10, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
+			{ id: 11, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
+			{ id: 12, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) }
 		]));
 		if (SaveUtil.data.game.wasGameCompleted) appModel.onGameCompleted();
 
 		SoundManager.init(appModel.observables.isSoundEnabled, appModel.observables.isMusicEnabled);
 
-		//changeState(GameState, [appModel, 1]); // just for testing
-		changeState(MenuState, [appModel]);
+		changeState(GameState, [appModel, 2]); // just for testing
+		//changeState(MenuState, [appModel]);
 	}
 
 	static function main()
