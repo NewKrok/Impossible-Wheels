@@ -3,12 +3,14 @@ Physics based HTML5 2D car game, written in Haxe.
 
 ## Try it now
 - http://flashplusplus.net/haxe/demo/iw/index.html
-- Demo, Just the first 2 levels are playable
+- Demo, Just the first 3 levels are playable
 - There is no preloader yet
 - Not minified yet (~13MB o.O)
 
 ## Screenshot(s)
 ![screenshot_main_menu_v1](https://user-images.githubusercontent.com/13141660/55689407-564db880-5984-11e9-99cf-dc60f2388ff1.jpg)
+![image](https://user-images.githubusercontent.com/13141660/59469264-9aea4a00-8e34-11e9-9797-cda406b638f9.png)
+![image](https://user-images.githubusercontent.com/13141660/59469310-c836f800-8e34-11e9-9cdf-f2873cc3e6d6.png)
 
 ## Dependencies
 - **Heaps 1.6.1** A mature cross platform graphics engine designed for high performance games. https://heaps.io/
