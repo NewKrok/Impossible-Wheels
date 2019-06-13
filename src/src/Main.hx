@@ -39,7 +39,7 @@ class Main extends Base2dApp
 			{ id: 0, levelData: LevelUtil.LevelDataFromJson(Res.data.level.demo.entry.getText()) },
 			{ id: 1, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) },
 			{ id: 2, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
-			{ id: 3, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
+			{ id: 3, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_2.entry.getText()) },
 			{ id: 4, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
 			{ id: 5, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
 			{ id: 6, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
@@ -54,7 +54,7 @@ class Main extends Base2dApp
 
 		SoundManager.init(appModel.observables.isSoundEnabled, appModel.observables.isMusicEnabled);
 
-		changeState(GameState, [appModel, 2]); // just for testing
+		changeState(GameState, [appModel, 3]); // just for testing
 		//changeState(MenuState, [appModel]);
 	}
 
