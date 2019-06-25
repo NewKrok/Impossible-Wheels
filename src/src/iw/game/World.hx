@@ -649,6 +649,7 @@ class World extends Object
 	function checkLevelComplete():Void
 	{
 		if (playerCar.wheelRightGraphics.x > levelData.finishPoint.x
+			&& (!playerCar.leftWheelOnAir || !playerCar.rightWheelOnAir)
 			&& GeomUtil.getDistance(cast levelData.finishPoint, cast playerCar.wheelRightGraphics) < 100)
 				onLevelComplete();
 	}
