@@ -81,7 +81,7 @@ class GameState extends Base2dState
 				levelCompletePage.setStarCount(StarCountUtil.scoreToStarCount(gameModel.totalScore, levelData.starValues));
 				levelCompletePage.setIsNewHighScore(levelState.score != 0 && gameModel.totalScore > levelState.score);
 				levelCompletePage.needShowGameCompletedWindow = didPlayerWin && levelId == 11 && !appModel.wasGameCompleted;
-				levelCompletePage.isLastLevel = levelId == 8;
+				levelCompletePage.isLastLevel = levelId == 6;
 
 				openSubState(levelCompletePage);
 
@@ -90,7 +90,7 @@ class GameState extends Base2dState
 					if (!levelState.isCompleted)
 					{
 						levelState.isCompleted = true;
-						if (levelId < 8)
+						if (levelId < 6)
 						{
 							var nextLevelState = { isUnlocked: true, isCompleted: false, score: 0 };
 							levelStates.set(levelId + 1, nextLevelState);
@@ -101,7 +101,7 @@ class GameState extends Base2dState
 					levelStates.set(levelId, levelState);
 					appModel.setLevelStates(levelStates);
 
-					if (levelId == 11) appModel.onGameCompleted();
+					if (levelId == 6) appModel.onGameCompleted();
 				}
 			}
 			else

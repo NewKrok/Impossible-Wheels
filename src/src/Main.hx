@@ -42,16 +42,14 @@ class Main extends Base2dApp
 			{ id: 3, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_2.entry.getText()) },
 			{ id: 4, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_3.entry.getText()) },
 			{ id: 5, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_4.entry.getText()) },
-			{ id: 6, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
-			{ id: 7, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
-			{ id: 8, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) }
+			{ id: 6, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_5.entry.getText()) }
 		]));
 		if (SaveUtil.data.game.wasGameCompleted) appModel.onGameCompleted();
 
 		SoundManager.init(appModel.observables.isSoundEnabled, appModel.observables.isMusicEnabled);
 
-		changeState(GameState, [appModel, 5]); // just for testing
-		//changeState(MenuState, [appModel]);
+		//changeState(GameState, [appModel, 6]); // just for testing
+		changeState(MenuState, [appModel]);
 	}
 
 	static function main()
@@ -65,7 +63,6 @@ class Main extends Base2dApp
 }
 
 // TODO
-// Create levels
 // Create enemies/replays
 // Add mobile touch control
 // Check ios/osx performance

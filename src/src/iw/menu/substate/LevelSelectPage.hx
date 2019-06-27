@@ -54,10 +54,10 @@ class LevelSelectPage extends Base2dSubState
 		flow.horizontalSpacing = 20;
 		flow.verticalSpacing = 20;
 		flow.multiline = true;
-		flow.maxWidth = HppG.stage2d.width;
+		flow.maxWidth = HppG.stage2d.width - 200;
 
 		// +1 because demo level is the first level
-		for (i in 0...8) levelButtons.push(new LevelButton(flow, startLevel.bind(i + 1), i + 1, appModel.getLevelData(i + 1).levelData.starValues));
+		for (i in 0...6) levelButtons.push(new LevelButton(flow, startLevel.bind(i + 1), i + 1, appModel.getLevelData(i + 1).levelData.starValues));
 
 		flow.x = HppG.stage2d.width / 2 - flow.getSize().width / 2;
 		flow.y = 50;
