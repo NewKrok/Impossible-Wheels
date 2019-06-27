@@ -328,16 +328,16 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 	{
 		direction = -1;
 
-		wheelLeftPhysics.angularVel = -carLeveledData.speed / 2;
-		wheelRightPhysics.angularVel = -carLeveledData.speed / 2;
+		wheelLeftPhysics.angularVel = Math.min(-carLeveledData.speed / 2, wheelLeftPhysics.angularVel);
+		wheelRightPhysics.angularVel = Math.min(-carLeveledData.speed / 2, wheelLeftPhysics.angularVel);
 	}
 
 	public function accelerateToRight():Void
 	{
 		direction = 1;
 
-		wheelLeftPhysics.angularVel = carLeveledData.speed;
-		wheelRightPhysics.angularVel = carLeveledData.speed;
+		wheelLeftPhysics.angularVel = Math.max(carLeveledData.speed, wheelLeftPhysics.angularVel);
+		wheelRightPhysics.angularVel = Math.max(carLeveledData.speed, wheelLeftPhysics.angularVel);
 	}
 
 	public function rotateLeft():Void
