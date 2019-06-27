@@ -108,4 +108,5 @@ class AppModel implements Model
 typedef Level = {
 	var id(default, never):UInt;
 	var levelData(default, never):LevelData;
+	var replay(default, never):String;
 }

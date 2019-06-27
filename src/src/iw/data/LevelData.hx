@@ -19,7 +19,6 @@ typedef LevelData =
 	@:skipCheck var polygonGroundData(default, never):Array<Array<Array<PolygonBackgroundData>>>;
 	@:skipCheck var polygonBackgroundData(default, never):Array<Array<Array<PolygonBackgroundData>>>;
 	@:skipCheck var collectableItems(default, never):Array<SimplePoint>;
-	@:skipCheck @:optional var replay(default, never):String;
 	@:skipCheck @:optional var bridgePoints(default, never):Array<BridgeData>;
 	@:skipCheck @:optional var libraryElements(default, never):Array<LibraryElement>;
 

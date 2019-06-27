@@ -36,19 +36,48 @@ class Main extends Base2dApp
 		appModel.setIsEffectEnabled(SaveUtil.data.app.isEffectEnabled);
 		appModel.setLevelStates(SaveUtil.data.game.levelStates);
 		appModel.setLevelDatas(List.fromArray([
-			{ id: 0, levelData: LevelUtil.LevelDataFromJson(Res.data.level.demo.entry.getText()) },
-			{ id: 1, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()) },
-			{ id: 2, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()) },
-			{ id: 3, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_2.entry.getText()) },
-			{ id: 4, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_3.entry.getText()) },
-			{ id: 5, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_4.entry.getText()) },
-			{ id: 6, levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_5.entry.getText()) }
+			{
+				id: 0,
+				levelData: LevelUtil.LevelDataFromJson(Res.data.level.demo.entry.getText()),
+				replay: ""
+			},
+			{
+				id: 1,
+				levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_0.entry.getText()),
+				replay: Res.data.replay.world_0.replay_0_0.entry.getText()
+			},
+			{
+				id: 2,
+				levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_1.entry.getText()),
+				replay: Res.data.replay.world_0.replay_0_1.entry.getText()
+			},
+			{
+				id: 3,
+				levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_2.entry.getText()),
+				replay: Res.data.replay.world_0.replay_0_2.entry.getText()
+			},
+			{
+				id: 4,
+				levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_3.entry.getText()),
+				replay: Res.data.replay.world_0.replay_0_3.entry.getText()
+			},
+			{
+				id: 5,
+				levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_4.entry.getText()),
+				replay: Res.data.replay.world_0.replay_0_4.entry.getText()
+			},
+			{
+				id: 6,
+				levelData: LevelUtil.LevelDataFromJson(Res.data.level.world_0.level_0_5.entry.getText()),
+				replay: Res.data.replay.world_0.replay_0_5.entry.getText()
+			}
 		]));
+
 		if (SaveUtil.data.game.wasGameCompleted) appModel.onGameCompleted();
 
 		SoundManager.init(appModel.observables.isSoundEnabled, appModel.observables.isMusicEnabled);
 
-		//changeState(GameState, [appModel, 6]); // just for testing
+		//changeState(GameState, [appModel, 1]); // just for testing
 		changeState(MenuState, [appModel]);
 	}
 
@@ -63,6 +92,7 @@ class Main extends Base2dApp
 }
 
 // TODO
+// Add score for tricks
 // Create enemies/replays
 // Add mobile touch control
 // Check ios/osx performance

@@ -23,7 +23,11 @@ class CarLife
 		});
 	}
 
-	public function reset() if (delayCall != null) delayCall.kill();
+	public function reset()
+	{
+		if (delayCall != null) delayCall.kill();
+		isInvulnerable = false;
+	}
 
 	public function destroy()
 	{

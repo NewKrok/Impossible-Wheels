@@ -167,6 +167,7 @@ class World extends Object
 							createGroundPhysics(i, j, backgroundData.polygon);
 
 			case 2:
+				createReplayCar();
 				if (!isDemo)
 				{
 					createPlayerCar();
@@ -174,7 +175,6 @@ class World extends Object
 					trickCalculator = new TrickCalculator(playerCar);
 					trickCalculator.onTrick = onTrick;
 				}
-				createReplayCar();
 
 			case 3:
 				createBridges();
@@ -398,6 +398,17 @@ class World extends Object
 		}
 	}
 
+	public function initGhost(replayData:String):ActionFlow
+	{
+		destroyPlayback();
+
+		replayCar.alpha = .5;
+		playback = new Playback(replayCar, replayData);
+		playback.showSnapshot(0);
+
+		return replayResult;
+	}
+
 	public function playReplay(replayData:String):ActionFlow
 	{
 		destroyPlayback();
@@ -501,6 +512,7 @@ class World extends Object
 				levelData.startPoint.x,
 				levelData.startPoint.y
 			);
+			playerCar.alpha = 1;
 
 			carLife.reset();
 
@@ -573,7 +585,7 @@ class World extends Object
 			var tempY = replayCar.carBodyGraphics.y;
 			var tempRotation = replayCar.carBodyGraphics.rotation;
 
-			playback.showSnapshot(gameTime);
+			playback.showSnapshot(gameTime + (isDemo ? 0 : 1500));
 			replayCar.update(delta);
 
 			// Not the best detection but there is no way to detect it with Playback

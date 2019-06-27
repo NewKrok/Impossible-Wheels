@@ -66,6 +66,7 @@ import tink.state.Observable;
 
 	public var needShowGameCompletedWindow:Bool = false;
 	public var isLastLevel:Bool = false;
+	public var isNextLevelEnabled:Bool = false;
 
 	public function new(
 		lifeValue:Observable<UInt>,
@@ -364,23 +365,7 @@ import tink.state.Observable;
 			ease: Back.easeOut
 		});
 
-		if (!isLastLevel)
-		{
-			nextLevelButton.visible = true;
-			nextLevelButton.alpha = 0;
-			TweenMax.killTweensOf(nextLevelButton);
-			TweenMax.to(nextLevelButton, .2, {
-				onComplete: function ()
-				{
-					nextLevelButton.y = 20;
-					TweenMax.to(nextLevelButton, .3, {
-						alpha: 1,
-						y: 0,
-						onUpdate: function () { nextLevelButton.y = nextLevelButton.y; }
-					});
-				}
-			});
-		}
+		updateNextLevelButton();
 	}
 
 	function handleLoose()
@@ -401,6 +386,29 @@ import tink.state.Observable;
 			},
 			ease: Back.easeOut
 		});
+
+		updateNextLevelButton();
+	}
+
+	function updateNextLevelButton()
+	{
+		if (isNextLevelEnabled)
+		{
+			nextLevelButton.visible = true;
+			nextLevelButton.alpha = 0;
+			TweenMax.killTweensOf(nextLevelButton);
+			TweenMax.to(nextLevelButton, .2, {
+				onComplete: function ()
+				{
+					nextLevelButton.y = 20;
+					TweenMax.to(nextLevelButton, .3, {
+						alpha: 1,
+						y: 0,
+						onUpdate: function () { nextLevelButton.y = nextLevelButton.y; }
+					});
+				}
+			});
+		}
 	}
 
 	override public function onClose():Void

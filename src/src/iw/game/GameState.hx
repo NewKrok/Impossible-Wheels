@@ -33,6 +33,7 @@ class GameState extends Base2dState
 	var appModel:AppModel;
 	var gameModel:GameModel;
 	var levelData:LevelData;
+	var replay:String;
 
 	var world:World;
 	var ui:GameUi;
@@ -53,6 +54,7 @@ class GameState extends Base2dState
 			levelId: levelId
 		});
 		levelData = appModel.getLevelData(gameModel.levelId).levelData;
+		replay = appModel.getLevelData(gameModel.levelId).replay;
 
 		gameModel.observables.isLost.bind(function(v)
 		{
@@ -80,8 +82,9 @@ class GameState extends Base2dState
 
 				levelCompletePage.setStarCount(StarCountUtil.scoreToStarCount(gameModel.totalScore, levelData.starValues));
 				levelCompletePage.setIsNewHighScore(levelState.score != 0 && gameModel.totalScore > levelState.score);
-				levelCompletePage.needShowGameCompletedWindow = didPlayerWin && levelId == 11 && !appModel.wasGameCompleted;
+				levelCompletePage.needShowGameCompletedWindow = didPlayerWin && levelId == 6 && !appModel.wasGameCompleted;
 				levelCompletePage.isLastLevel = levelId == 6;
+				levelCompletePage.isNextLevelEnabled = didPlayerWin || levelState.isCompleted;
 
 				openSubState(levelCompletePage);
 
@@ -205,12 +208,14 @@ class GameState extends Base2dState
 			gameModel.observables.isGameStarted
 		);
 
+		// TODO Add score for tricks
 		world.onTrick = ui.onTrick;
 	}
 
 	function init()
 	{
 		reset();
+		world.initGhost(replay);
 	}
 
 	function reset()
