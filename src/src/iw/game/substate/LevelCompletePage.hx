@@ -31,6 +31,7 @@ import tink.state.Observable;
 	var lifeValue:Observable<UInt>;
 	var timeValue:Observable<Float>;
 	var coinValue:Observable<UInt>;
+	var trickValue:Observable<UInt>;
 	var totalCoinCount:UInt;
 	var opponentScore:UInt;
 	var totalScore:Observable<UInt>;
@@ -54,6 +55,7 @@ import tink.state.Observable;
 	var lifeScoreResult:ResultEntry;
 	var timeScoreResult:ResultEntry;
 	var coinScoreResult:ResultEntry;
+	var trickScoreResult:ResultEntry;
 	var totalScoreResult:ResultEntry;
 	var opponentScoreResult:ResultEntry;
 
@@ -72,6 +74,7 @@ import tink.state.Observable;
 		lifeValue:Observable<UInt>,
 		timeValue:Observable<Float>,
 		coinValue:Observable<UInt>,
+		trickValue:Observable<UInt>,
 		totalCoinCount:UInt,
 		opponentScore:UInt,
 		totalScore:Observable<UInt>
@@ -79,6 +82,7 @@ import tink.state.Observable;
 		this.lifeValue = lifeValue;
 		this.timeValue = timeValue;
 		this.coinValue = coinValue;
+		this.trickValue = trickValue;
 		this.totalCoinCount = totalCoinCount;
 		this.opponentScore = opponentScore;
 		this.totalScore = totalScore;
@@ -122,6 +126,13 @@ import tink.state.Observable;
 		coinScoreResult = new ResultEntry(
 			content,
 			new CoinUi(null, coinValue, totalCoinCount)
+		);
+
+		var trickIcon = new Bitmap(Res.image.ui.tricks.toTile());
+		trickIcon.smooth = true;
+		trickScoreResult = new ResultEntry(
+			content,
+			trickIcon
 		);
 
 		var totalScoreLabel = new Text(Fonts.DEFAULT_M);
@@ -255,6 +266,9 @@ import tink.state.Observable;
 		coinScoreResult.alpha = 0;
 		coinScoreResult.reset();
 
+		trickScoreResult.alpha = 0;
+		trickScoreResult.reset();
+
 		totalScoreResult.alpha = 0;
 		totalScoreResult.reset();
 
@@ -264,8 +278,9 @@ import tink.state.Observable;
 		TweenMax.delayedCall(1, showLifeResult);
 		TweenMax.delayedCall(3, showTimeResult);
 		TweenMax.delayedCall(5, showCoinResult);
-		TweenMax.delayedCall(7, showTotalResult);
-		TweenMax.delayedCall(9, showOpponentsResult);
+		TweenMax.delayedCall(7, showTrickResult);
+		TweenMax.delayedCall(9, showTotalResult);
+		TweenMax.delayedCall(11, showOpponentsResult);
 
 		content.y = HppG.stage2d.height / 2 - content.getSize().height / 2;
 		failBadge.y = successBadge.y = content.y + 55;
@@ -276,7 +291,7 @@ import tink.state.Observable;
 		TweenMax.killTweensOf(successBadge);
 		successBadge.alpha = 0;
 
-		TweenMax.delayedCall(11, function()
+		TweenMax.delayedCall(13, function()
 		{
 			if (totalScore > opponentScore) handleWin();
 			else handleLoose();
@@ -327,6 +342,12 @@ import tink.state.Observable;
 			ScoreCalculator.collectedCoinsToScore(coinValue.value),
 			coinValue.value == totalCoinCount ? ScoreCalculator.getCollectedCoinMaxBonus() : 0
 		);
+	}
+
+	function showTrickResult()
+	{
+		trickScoreResult.alpha = 1;
+		trickScoreResult.setScore(trickValue.value);
 	}
 
 	function showTotalResult()
@@ -416,6 +437,7 @@ import tink.state.Observable;
 		TweenMax.killDelayedCallsTo(showLifeResult);
 		TweenMax.killDelayedCallsTo(showTimeResult);
 		TweenMax.killDelayedCallsTo(showCoinResult);
+		TweenMax.killDelayedCallsTo(showTrickResult);
 		TweenMax.killDelayedCallsTo(showTotalResult);
 		TweenMax.killDelayedCallsTo(showOpponentsResult);
 		TweenMax.killDelayedCallsTo(handleWin);

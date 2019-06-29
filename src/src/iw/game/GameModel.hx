@@ -14,6 +14,7 @@ class GameModel implements Model
 	@:editable var gameTime:Float = 0;
 
 	@:observable var collectedCoins:UInt = 0;
+	@:observable var trickScore:UInt = 0;
 	@:observable var lifeCount:UInt = 3;
 	@:observable var isLevelCompleted:Bool = false;
 	@:observable var isLost:Bool = false;
@@ -24,6 +25,7 @@ class GameModel implements Model
 	@:observable var totalScore:UInt = 0;
 
 	@:transition function collectCoin() return { collectedCoins: collectedCoins + 1 };
+	@:transition function addTrickScore(score:UInt) return { trickScore: trickScore + score };
 
 	@:transition function onLevelComplete() return {
 		isLevelCompleted: true,
@@ -54,6 +56,7 @@ class GameModel implements Model
 		isGameStarted: false,
 		isGamePaused: false,
 		collectedCoins: 0,
+		trickScore: 0,
 		lifeCount: 3
 	};
 
@@ -71,6 +74,7 @@ class GameModel implements Model
 		result += ScoreCalculator.lifeCountToScore(lifeCount);
 		result += ScoreCalculator.elapsedTimeToScore(gameTime);
 		result += ScoreCalculator.collectedCoinsToScore(collectedCoins);
+		result += trickScore;
 		result += bonusScore;
 
 		return { totalScore: result };

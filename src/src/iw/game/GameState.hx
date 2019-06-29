@@ -170,6 +170,7 @@ class GameState extends Base2dState
 			gameModel.observables.lifeCount,
 			gameModel.observables.gameTime,
 			gameModel.observables.collectedCoins,
+			gameModel.observables.trickScore,
 			levelData.collectableItems.length,
 			levelData.opponentsScore,
 			gameModel.observables.totalScore,
@@ -209,7 +210,11 @@ class GameState extends Base2dState
 		);
 
 		// TODO Add score for tricks
-		world.onTrick = ui.onTrick;
+		world.onTrick = function(t)
+		{
+			gameModel.addTrickScore(ScoreCalculator.trickToScore(t));
+			ui.onTrick(t);
+		}
 	}
 
 	function init()

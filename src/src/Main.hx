@@ -92,7 +92,6 @@ class Main extends Base2dApp
 }
 
 // TODO
-// Add score for tricks
 // Create enemies/replays
 // Add mobile touch control
 // Check ios/osx performance
