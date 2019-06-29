@@ -43,7 +43,7 @@ import tink.state.State;
 class World extends Object
 {
 	// Enable it to make replays. After focus lost it trace the replay string into console.
-	static inline var isRecordingMode:Bool = false;
+	static inline var isRecordingMode:Bool = true;
 
 	public static var WORLD_PIECE_SIZE:SimplePoint = { x: 5000, y: 2000 };
 	public static var LEVEL_MAX_TIME:UInt = 5 * 60 * 1000;
@@ -197,7 +197,6 @@ class World extends Object
 						}
 					});
 				}
-
 				reset();
 
 				if (buildResult.onComplete != null) buildResult.onComplete();
@@ -307,6 +306,8 @@ class World extends Object
 				{ x: levelData.bridgePoints[i].bridgeBX, y: levelData.bridgePoints[i].bridgeBY }
 			);
 		}
+
+		updateBridges();
 	}
 
 	function createBridge(pointA:SimplePoint, pointB:SimplePoint):Void

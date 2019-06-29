@@ -11,6 +11,7 @@ import h2d.Object;
 class NotificationUi extends Object
 {
 	var notifications:Array<Notification> = [];
+	var removedNotifications:Array<Notification> = [];
 
 	public function show(message:String, icon:Bitmap = null)
 	{
@@ -24,13 +25,17 @@ class NotificationUi extends Object
 	function onNotificationRemove(n)
 	{
 		notifications.remove(n);
+		removedNotifications.push(n);
 
 		TweenMax.killTweensOf(n);
 		TweenMax.to(n, .5, {
 			x: -n.getSize().width,
 			alpha: 0,
 			onUpdate: function() { n.x = n.x; },
-			onComplete: function() { n.remove(); }
+			onComplete: function() {
+				removedNotifications.remove(n);
+				n.remove();
+			}
 		});
 
 		order();
@@ -51,6 +56,15 @@ class NotificationUi extends Object
 		}
 	}
 
+	public function reset()
+	{
+		for (n in removedNotifications)
+		{
+			TweenMax.killTweensOf(n);
+			n.remove();
+		}
+	}
+
 	public function dispose()
 	{
 		for (n in notifications)
@@ -58,5 +72,7 @@ class NotificationUi extends Object
 			TweenMax.killTweensOf(n);
 			n.remove();
 		}
+
+		reset();
 	}
 }

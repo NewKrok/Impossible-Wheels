@@ -89,6 +89,16 @@ class AbstractCar
 			if (v) particles.addGroup(smokeParticleGroup);
 			else particles.removeGroup(smokeParticleGroup);
 		});
+
+		carBodyGraphics.move(-2000, -2000);
+		wheelLeftGraphics.move(-2000, -2000);
+		wheelRightGraphics.move(-2000, -2000);
+		backSpring.move(-2000, -2000);
+		frontSpring.move(-2000, -2000);
+		wheelBackBottomHolderGraphics.move(-2000, -2000);
+		wheelFrontBottomHolderGraphics.move(-2000, -2000);
+		wheelBackTopHolderGraphics.move(-2000, -2000);
+		wheelFrontTopHolderGraphics.move(-2000, -2000);
 	}
 
 	function buildGraphics():Void

@@ -229,6 +229,7 @@ class GameState extends Base2dState
 
 		gameModel.reset();
 		world.reset();
+		ui.reset();
 		ui.showCounter();
 
 		TweenMax.delayedCall(2, gameModel.startLevel);

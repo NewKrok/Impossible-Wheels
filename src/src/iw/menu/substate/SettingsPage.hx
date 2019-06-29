@@ -44,7 +44,7 @@ class SettingsPage extends Base2dSubState
 		super();
 	}
 
-	function updateFullScreenState() fullscreenEntry.chooseOption(JsFullScreenUtil.isFullScreen());
+	function updateFullScreenState() if (fullscreenEntry != null) fullscreenEntry.chooseOption(JsFullScreenUtil.isFullScreen());
 
 	override function build():Void
 	{

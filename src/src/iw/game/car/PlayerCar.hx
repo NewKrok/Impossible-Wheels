@@ -112,6 +112,8 @@ class PlayerCar extends AbstractCar implements IRecorderPerformer
 		flagGraphic.tile.dx = cast -flagGraphic.tile.width / 2;
 		flagGraphic.tile.dy = -flagGraphic.tile.height;
 
+		flagGraphic.move( -2000, -2000);
+
 		super.buildGraphics();
 	}
 

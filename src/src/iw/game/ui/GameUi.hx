@@ -124,6 +124,8 @@ import tink.state.Observable;
 		startCounterUi.start();
 	}
 
+	public function reset() notificationUi.reset();
+
 	public function dispose()
 	{
 		notificationUi.dispose();
