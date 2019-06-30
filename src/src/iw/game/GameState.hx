@@ -14,6 +14,7 @@ import hxd.res.Sound;
 import hxd.snd.Channel;
 import hxd.snd.Manager;
 import iw.AppModel;
+import iw.FPSView;
 import iw.data.LevelData;
 import iw.game.GameModel;
 import iw.game.substate.LevelCompletePage;
@@ -43,6 +44,8 @@ class GameState extends Base2dState
 
 	var backgroundLoopMusic:Sound;
 	var backgroundLoopChannel:Channel;
+
+	var fpsView:FPSView;
 
 	public function new(stage:Base2dStage, appModel:AppModel, levelId:UInt)
 	{
@@ -216,6 +219,8 @@ class GameState extends Base2dState
 			ui.onTrick(t);
 		}
 		world.setExternalController(ui.touchState);
+
+		fpsView = new FPSView(stage);
 	}
 
 	function init()
@@ -251,6 +256,8 @@ class GameState extends Base2dState
 		world.update(delta);
 
 		gameModel.gameTime = world.getGameTime();
+
+		fpsView.update();
 	}
 
 	function resumeRequest()
@@ -311,6 +318,8 @@ class GameState extends Base2dState
 
 		ui.dispose();
 		ui = null;
+
+		fpsView.remove();
 
 		super.dispose();
 	}

@@ -2,6 +2,9 @@ package iw.menu;
 
 import com.greensock.TweenMax;
 import com.greensock.easing.Quad;
+import h2d.Text;
+import h2d.filter.Glow;
+import h3d.Engine;
 import hpp.heaps.Base2dStage;
 import hpp.heaps.Base2dState;
 import hpp.heaps.HppG;
@@ -18,6 +21,7 @@ import iw.menu.substate.InfoPage;
 import iw.menu.substate.LevelSelectPage;
 import iw.menu.substate.SettingsPage;
 import iw.menu.substate.WelcomePage;
+import iw.FPSView;
 
 /**
  * ...
@@ -37,6 +41,8 @@ class MenuState extends Base2dState
 
 	var backgroundLoopMusic:Sound;
 	var backgroundLoopChannel:Channel;
+
+	var fpsView:FPSView;
 
 	public function new(stage:Base2dStage, appModel:AppModel)
 	{
@@ -130,6 +136,8 @@ class MenuState extends Base2dState
 			menuModel.isInFocus = true;
 			chooseDemoReplay();
 		}
+
+		fpsView = new FPSView(stage);
 	}
 
 	function chooseDemoReplay()
@@ -162,6 +170,8 @@ class MenuState extends Base2dState
 	override public function update(delta:Float)
 	{
 		world.update(delta);
+
+		fpsView.update();
 	}
 
 	override public function onSubStateOpened():Void
@@ -214,6 +224,7 @@ class MenuState extends Base2dState
 		infoPage = null;
 		settingsPage.dispose();
 		settingsPage = null;
+		fpsView.remove();
 		// levelSelect is the active sub state, in this case the state dispose it automatically
 
 		super.dispose();

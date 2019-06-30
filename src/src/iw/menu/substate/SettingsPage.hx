@@ -178,8 +178,12 @@ class SettingsPage extends Base2dSubState
 		musicEntry = null;
 		effectsEntry.dispose();
 		effectsEntry = null;
-		fullscreenEntry.dispose();
-		fullscreenEntry = null;
+
+		if (fullscreenEntry != null)
+		{
+			fullscreenEntry.dispose();
+			fullscreenEntry = null;
+		}
 
 		super.dispose();
 	}
