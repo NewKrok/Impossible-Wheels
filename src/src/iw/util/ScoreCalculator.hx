@@ -17,7 +17,7 @@ class ScoreCalculator
 
 	public static function lifeCountToScore(l:UInt):UInt return l * lifeToScoreValue;
 
-	public static function elapsedTimeToScore(t:Float):Int return Math.floor((1 - t / 60000) * maxScoreForTime);
+	public static function elapsedTimeToScore(t:Float):Int return Math.floor((1 - t / (60000 * 5)) * maxScoreForTime);
 
 	public static function collectedCoinsToScore(c:UInt):UInt return c * coinToScoreValue;
 

@@ -77,7 +77,7 @@ class Main extends Base2dApp
 
 		SoundManager.init(appModel.observables.isSoundEnabled, appModel.observables.isMusicEnabled);
 
-		changeState(GameState, [appModel, 1]); // just for testing
+		changeState(GameState, [appModel, 3]); // just for testing
 		//changeState(MenuState, [appModel]);
 	}
 
