@@ -84,7 +84,7 @@ class GameState extends Base2dState
 				levelCompletePage.setIsNewHighScore(levelState.score != 0 && gameModel.totalScore > levelState.score);
 				levelCompletePage.needShowGameCompletedWindow = didPlayerWin && levelId == 6 && !appModel.wasGameCompleted;
 				levelCompletePage.isLastLevel = levelId == 6;
-				levelCompletePage.isNextLevelEnabled = didPlayerWin || levelState.isCompleted;
+				levelCompletePage.isNextLevelEnabled = levelId != 6 && (didPlayerWin || levelState.isCompleted);
 
 				openSubState(levelCompletePage);
 

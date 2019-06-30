@@ -77,7 +77,7 @@ class Main extends Base2dApp
 
 		SoundManager.init(appModel.observables.isSoundEnabled, appModel.observables.isMusicEnabled);
 
-		changeState(GameState, [appModel, 3]); // just for testing
+		changeState(GameState, [appModel, 6]); // just for testing
 		//changeState(MenuState, [appModel]);
 	}
 
@@ -92,7 +92,6 @@ class Main extends Base2dApp
 }
 
 // TODO
-// Create enemies/replays
 // Add mobile touch control
 // Check ios/osx performance
 // Add game preloader
