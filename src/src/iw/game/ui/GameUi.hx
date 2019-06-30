@@ -1,14 +1,17 @@
 package iw.game.ui;
 
 import h2d.Bitmap;
+import h2d.Flow;
 import h2d.Object;
 import h2d.Text;
 import hpp.heaps.HppG;
 import hpp.heaps.ui.BaseButton;
+import hpp.util.DeviceData;
 import hpp.util.Language;
 import hxd.Res;
 import iw.game.TrickCalculator.TrickDirection;
 import iw.game.TrickCalculator.TrickType;
+import iw.game.World.Controller;
 import tink.state.Observable;
 
 /**
@@ -31,6 +34,18 @@ import tink.state.Observable;
 	var startCounterUi:StartCounterUi;
 	var levelInfoUi:LevelInfoUi;
 	var pauseButton:BaseButton;
+
+	var touchControlLeft:BaseButton;
+	var touchControlRight:BaseButton;
+	var touchControlUp:BaseButton;
+	var touchControlDown:BaseButton;
+
+	public var touchState:Controller = {
+		up: false,
+		down: false,
+		left: false,
+		right: false
+	};
 
 	public function new(parent:Object)
 	{
@@ -99,6 +114,51 @@ import tink.state.Observable;
 		notificationUi.y = info.y + info.getSize().height + 15;
 
 		startCounterUi = new StartCounterUi(this);
+
+		if (DeviceData.isMobile())
+		{
+			var rightBlock = new Flow(this);
+			rightBlock.layout = Horizontal;
+			rightBlock.horizontalSpacing = 20;
+			var t = Res.image.ui.touch_accelerate.toTile();
+			t.dx = -t.width;
+			t.flipX();
+			touchControlDown = new BaseButton(rightBlock, {
+				onPush: function(_) { touchState.down = true; },
+				onRelease: function(_) { touchState.down = false; },
+				baseGraphic: t,
+				overScale: .95
+			});
+			touchControlUp = new BaseButton(rightBlock, {
+				onPush: function(_) { touchState.up = true; },
+				onRelease: function(_) { touchState.up = false; },
+				baseGraphic: Res.image.ui.touch_accelerate.toTile(),
+				overScale: .95
+			});
+			rightBlock.x = HppG.stage2d.width - rightBlock.getSize().width - 10;
+			rightBlock.y = HppG.stage2d.height - rightBlock.getSize().height - 10;
+
+			var leftBlock = new Flow(this);
+			leftBlock.layout = Horizontal;
+			leftBlock.horizontalSpacing = 20;
+			t = Res.image.ui.touch_rotate.toTile();
+			t.dx = -t.width;
+			t.flipX();
+			touchControlLeft = new BaseButton(leftBlock, {
+				onPush: function(_) { touchState.left = true; },
+				onRelease: function(_) { touchState.left = false; },
+				baseGraphic: t,
+				overScale: .95
+			});
+			touchControlRight = new BaseButton(leftBlock, {
+				onPush: function(_) { touchState.right = true; },
+				onRelease: function(_) { touchState.right = false; },
+				baseGraphic: Res.image.ui.touch_rotate.toTile(),
+				overScale: .95
+			});
+			leftBlock.x = 10;
+			leftBlock.y = HppG.stage2d.height - leftBlock.getSize().height - 10;
+		}
 	}
 
 	public function onTrick(t)
@@ -124,7 +184,15 @@ import tink.state.Observable;
 		startCounterUi.start();
 	}
 
-	public function reset() notificationUi.reset();
+	public function reset()
+	{
+		notificationUi.reset();
+
+		touchState.up = false;
+		touchState.down = false;
+		touchState.left = false;
+		touchState.right = false;
+	}
 
 	public function dispose()
 	{

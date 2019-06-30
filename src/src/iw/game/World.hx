@@ -43,7 +43,7 @@ import tink.state.State;
 class World extends Object
 {
 	// Enable it to make replays. After focus lost it trace the replay string into console.
-	static inline var isRecordingMode:Bool = true;
+	static inline var isRecordingMode:Bool = false;
 
 	public static var WORLD_PIECE_SIZE:SimplePoint = { x: 5000, y: 2000 };
 	public static var LEVEL_MAX_TIME:UInt = 5 * 60 * 1000;
@@ -67,6 +67,7 @@ class World extends Object
 	var cameraMask:Mask;
 	var space:Space;
 	var groundBodies:Array<Body>;
+	var externalController:Controller;
 
 	var coins:Array<Coin>;
 	var effects:EffectHandler;
@@ -203,6 +204,7 @@ class World extends Object
 				return;
 		}
 
+		// TODO Maybe implement later the level preloader - atm it's not needed
 		//levelPreloader.step();
 		buildStep++;
 		Timer.delay(asyncBuild, 10);
@@ -554,11 +556,22 @@ class World extends Object
 
 			if (!isLost.value && isControlEnabled.value)
 			{
-				if (Key.isDown(Key.UP)) playerCar.accelerateToRight();
-				else if (Key.isDown(Key.DOWN)) playerCar.accelerateToLeft();
+				if (externalController != null)
+				{
+					if (externalController.up) playerCar.accelerateToRight();
+					else if (externalController.down) playerCar.accelerateToLeft();
 
-				if (Key.isDown(Key.LEFT)) playerCar.rotateLeft();
-				else if (Key.isDown(Key.RIGHT)) playerCar.rotateRight();
+					if (externalController.left) playerCar.rotateLeft();
+					else if (externalController.right) playerCar.rotateRight();
+				}
+				else
+				{
+					if (Key.isDown(Key.UP)) playerCar.accelerateToRight();
+					else if (Key.isDown(Key.DOWN)) playerCar.accelerateToLeft();
+
+					if (Key.isDown(Key.LEFT)) playerCar.rotateLeft();
+					else if (Key.isDown(Key.RIGHT)) playerCar.rotateRight();
+				}
 
 				trickCalculator.update(gameTime);
 				checkCoinPickUp();
@@ -719,6 +732,8 @@ class World extends Object
 		if (coins != null) for (c in coins) c.resume();
 	}
 
+	public function setExternalController(controller:Controller) externalController = controller;
+
 	public function destroy()
 	{
 		TweenMax.killTweensOf(cameraZoomHelper);
@@ -754,4 +769,11 @@ class World extends Object
 
 typedef ActionFlow = {
 	var onComplete:Void->Void;
+}
+
+typedef Controller = {
+	var up:Bool;
+	var down:Bool;
+	var left:Bool;
+	var right:Bool;
 }

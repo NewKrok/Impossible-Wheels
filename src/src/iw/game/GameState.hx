@@ -215,6 +215,7 @@ class GameState extends Base2dState
 			gameModel.addTrickScore(ScoreCalculator.trickToScore(t));
 			ui.onTrick(t);
 		}
+		world.setExternalController(ui.touchState);
 	}
 
 	function init()
