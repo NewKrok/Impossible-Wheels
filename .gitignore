@@ -1,4 +1,5 @@
 asset_source/
 src/bin/*
 !src/bin/index.html
+!src/bin/logo.png
 !src/bin/TweenMax.min.js
