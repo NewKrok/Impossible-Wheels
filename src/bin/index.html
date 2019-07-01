@@ -8,6 +8,42 @@
 	<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>-->
 	<script src="TweenMax.min.js"></script>
 
+	<script>
+		// yeah I know...
+		var totalSize = 14087828;
+		var preloader;
+		var preloaderLine;
+
+		function preload(scriptUrl)
+		{
+			preloader = document.getElementById("iw_preloader");
+			preloaderLine = document.getElementById("iw_preloader_line");
+
+			var req = new XMLHttpRequest();
+
+			req.addEventListener("progress", function(event)
+			{
+				var percentComplete = Math.floor(event.loaded / totalSize * 100);
+				preloaderLine.setAttribute("style","width:" + percentComplete + "%");
+			}, false);
+
+			req.addEventListener("load", function(event)
+			{
+				var e = event.target;
+				var s = document.createElement("script");
+				s.innerHTML = e.responseText;
+				document.documentElement.appendChild(s);
+
+				setTimeout(function(){ preloader.parentNode.removeChild(preloader); }, 1000);
+			}, false);
+
+			req.open("GET", scriptUrl);
+			req.send();
+		}
+
+		window.onload = function() { preload("ImpossibleWheels.js"); };
+	</script>
+
 	<style type="text/css">
 		html, body {
 			margin:0;
@@ -16,10 +52,53 @@
 			width:100%;
 			height:100%;
 		}
+
+		#iw_preloader {
+			width: 100%;
+			height: 100%;
+			background-color: #FFF;
+			position: absolute;
+			top: 0;
+		}
+
+		.iw_preloader_block {
+			position: absolute;
+			top: 30%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+
+		.iw_preloader_back {
+			position: relative;
+			width: 280px;
+			height: 10px;
+			background-color: #888;
+			left: 50%;
+			top: -20px;
+			transform: translateX(-50%);
+			border-radius: 5px;
+		}
+
+		#iw_preloader_line {
+			position: absolute;
+			width: 0%;
+			min-width: 10px;
+			height: 100%;
+			background-color: #000;
+			top: 0;
+			border-radius: 5px;
+		}
 	</style>
 </head>
 <body>
 	<canvas id="webgl" style="margin:0;padding:0;width:100%;height:100%;display:block;"></canvas>
-	<script type="text/javascript" src="ImpossibleWheels.js"></script>
+	<div id="iw_preloader">
+		<div class="iw_preloader_block">
+			<img src="logo.png" />
+			<div class="iw_preloader_back">
+				<div id="iw_preloader_line"></div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

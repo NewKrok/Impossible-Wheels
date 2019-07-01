@@ -93,5 +93,4 @@ class Main extends Base2dApp
 
 // TODO
 // Check ios/osx performance
-// Add game preloader
 // Minimize the result
