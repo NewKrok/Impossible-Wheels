@@ -3,8 +3,6 @@ Physics based HTML5 2D car game, written in Haxe.
 
 ## Try it now (Beta)
 - http://flashplusplus.net/haxe/demo/iw/index.html
-- Beta, every level were added but there are still some remaining tasks
-- There is no preloader yet
 - Not minified yet (~14MB o.O)
 - It's extreme slow on mobile :/ Investigation is in progress
 - There is no multi touch on mobile :/ Investigation is in progress
