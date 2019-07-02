@@ -34,6 +34,7 @@ class Main extends Base2dApp
 		appModel.setIsSoundEnabled(SaveUtil.data.app.isSoundEnabled);
 		appModel.setIsMusicEnabled(SaveUtil.data.app.isMusicEnabled);
 		appModel.setIsEffectEnabled(SaveUtil.data.app.isEffectEnabled);
+		appModel.setIsFpsEnabled(SaveUtil.data.app.isFpsEnabled);
 		appModel.setLevelStates(SaveUtil.data.game.levelStates);
 		appModel.setLevelDatas(List.fromArray([
 			{
@@ -92,5 +93,7 @@ class Main extends Base2dApp
 }
 
 // TODO
-// Check ios/osx performance
+// Fix font issue o.O
+// Multi touch
+// Fix ios vector graphic lagging
 // Minimize the result

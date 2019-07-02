@@ -138,6 +138,7 @@ class MenuState extends Base2dState
 		}
 
 		fpsView = new FPSView(stage);
+		appModel.observables.isFpsEnabled.bind(function(v) { fpsView.visible = v; });
 	}
 
 	function chooseDemoReplay()

@@ -556,22 +556,11 @@ class World extends Object
 
 			if (!isLost.value && isControlEnabled.value)
 			{
-				if (externalController != null)
-				{
-					if (externalController.up) playerCar.accelerateToRight();
-					else if (externalController.down) playerCar.accelerateToLeft();
+				if (Key.isDown(Key.UP) || Key.isDown(Key.W) || (externalController != null && externalController.up )) playerCar.accelerateToRight();
+				else if (Key.isDown(Key.DOWN) || Key.isDown(Key.S) || (externalController != null && externalController.down)) playerCar.accelerateToLeft();
 
-					if (externalController.left) playerCar.rotateLeft();
-					else if (externalController.right) playerCar.rotateRight();
-				}
-				else
-				{
-					if (Key.isDown(Key.UP)) playerCar.accelerateToRight();
-					else if (Key.isDown(Key.DOWN)) playerCar.accelerateToLeft();
-
-					if (Key.isDown(Key.LEFT)) playerCar.rotateLeft();
-					else if (Key.isDown(Key.RIGHT)) playerCar.rotateRight();
-				}
+				if (Key.isDown(Key.LEFT) || Key.isDown(Key.A) || (externalController != null && externalController.left)) playerCar.rotateLeft();
+				else if (Key.isDown(Key.RIGHT) || Key.isDown(Key.D) || (externalController != null && externalController.right)) playerCar.rotateRight();
 
 				trickCalculator.update(gameTime);
 				checkCoinPickUp();

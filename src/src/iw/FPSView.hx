@@ -1,20 +1,9 @@
 package iw;
 
 import h2d.Object;
-import h2d.filter.Glow;
-import h3d.Engine;
-import iw.util.SaveUtil;
-import com.greensock.TweenMax;
-import h2d.Bitmap;
-import h2d.Flow;
-import h2d.Interactive;
 import h2d.Text;
-import iw.util.SaveUtil.LevelState;
-import iw.util.StarCountUtil;
-import hpp.util.Language;
-import hpp.util.NumberUtil;
-import hxd.Cursor;
-import hxd.Res;
+import h3d.Engine;
+import hpp.heaps.ui.PlaceHolder;
 import iw.Fonts;
 
 /**
@@ -29,11 +18,12 @@ import iw.Fonts;
 	{
 		super(parent);
 
-		fpsText = new Text(Fonts.DEFAULT_L, this);
+		new PlaceHolder(this, 75, 30, 0x0, 1);
+
+		fpsText = new Text(Fonts.DEFAULT_S, this);
 		fpsText.textColor = 0xFFFF00;
-		fpsText.filter = new Glow(0x0);
-		fpsText.x = 10;
-		fpsText.y = 10;
+		fpsText.x = 9;
+		fpsText.y = 2;
 	}
 
 	public function update()

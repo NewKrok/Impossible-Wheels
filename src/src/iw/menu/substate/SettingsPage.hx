@@ -27,6 +27,7 @@ class SettingsPage extends Base2dSubState
 	var soundEntry:SettingsEntry;
 	var musicEntry:SettingsEntry;
 	var effectsEntry:SettingsEntry;
+	var fpsEntry:SettingsEntry;
 	var fullscreenEntry:SettingsEntry;
 
 	// Manually saved because with @:tink every params will be null in the build function
@@ -103,6 +104,16 @@ class SettingsPage extends Base2dSubState
 			appModel.isEffectEnabled
 		);
 
+		fpsEntry = new SettingsEntry(
+			flow,
+			"show_fps",
+			"on",
+			"off",
+			appModel.setIsFpsEnabled.bind(true),
+			appModel.setIsFpsEnabled.bind(false),
+			appModel.isFpsEnabled
+		);
+
 		if (!appModel.isMobile)
 		{
 			fullscreenEntry = new SettingsEntry(
@@ -146,13 +157,20 @@ class SettingsPage extends Base2dSubState
 			delay: .6,
 		});
 
+		fpsEntry.refresh();
+		fpsEntry.alpha = 0;
+		TweenMax.to(fpsEntry, .4, {
+			alpha: 1,
+			delay: .8,
+		});
+
 		if (fullscreenEntry != null)
 		{
 			fullscreenEntry.refresh();
 			fullscreenEntry.alpha = 0;
 			TweenMax.to(fullscreenEntry, .4, {
 				alpha: 1,
-				delay: .8,
+				delay: 1,
 			});
 		}
 	}
@@ -163,6 +181,7 @@ class SettingsPage extends Base2dSubState
 		TweenMax.killTweensOf(soundEntry);
 		TweenMax.killTweensOf(musicEntry);
 		TweenMax.killTweensOf(effectsEntry);
+		TweenMax.killTweensOf(fpsEntry);
 		TweenMax.killTweensOf(fullscreenEntry);
 
 		Language.unregisterTextHolder(cast backButton.label);
@@ -178,6 +197,8 @@ class SettingsPage extends Base2dSubState
 		musicEntry = null;
 		effectsEntry.dispose();
 		effectsEntry = null;
+		fpsEntry.dispose();
+		fpsEntry = null;
 
 		if (fullscreenEntry != null)
 		{

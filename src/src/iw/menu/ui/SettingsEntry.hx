@@ -66,13 +66,13 @@ import iw.Fonts;
 
 		labelBackground = new Graphics(label);
 		// It was needed because of the proper horizontal position
-		labelBackground.drawRect(0, 0, 190, 43);
+		labelBackground.drawRect(0, 0, 220, 43);
 
 		labelText = new Text(Fonts.DEFAULT_L, label);
 		labelText.smooth = true;
 		labelText.textColor = 0x000000;
 		labelText.textAlign = Align.Center;
-		labelText.maxWidth = 190;
+		labelText.maxWidth = 220;
 		Language.registerTextHolder(cast labelText, labelId);
 		labelText.y = 43 / 2 - labelText.textHeight / 2;
 	}

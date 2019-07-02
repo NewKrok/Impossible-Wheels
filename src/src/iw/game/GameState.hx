@@ -5,6 +5,7 @@ import h2d.filter.Blur;
 import hpp.heaps.Base2dStage;
 import hpp.heaps.Base2dState;
 import hpp.heaps.HppG;
+import hpp.util.DeviceData;
 import hpp.util.Log;
 import hxd.Event;
 import hxd.Key;
@@ -218,9 +219,11 @@ class GameState extends Base2dState
 			gameModel.addTrickScore(ScoreCalculator.trickToScore(t));
 			ui.onTrick(t);
 		}
-		world.setExternalController(ui.touchState);
+
+		if (DeviceData.isMobile()) world.setExternalController(ui.touchState);
 
 		fpsView = new FPSView(stage);
+		appModel.observables.isFpsEnabled.bind(function(v) { fpsView.visible = v; });
 	}
 
 	function init()

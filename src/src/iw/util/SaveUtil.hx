@@ -21,7 +21,8 @@ class SaveUtil
 				lang: "en",
 				isSoundEnabled: true,
 				isMusicEnabled: true,
-				isEffectEnabled: !DeviceData.isMobile()
+				isEffectEnabled: !DeviceData.isMobile(),
+				isFpsEnabled: false
 			},
 			game: {
 				// Unlock the first level by default (0 is the demo level)
@@ -48,6 +49,7 @@ typedef ApplicationInfo = {
 	var isSoundEnabled:Bool;
 	var isMusicEnabled:Bool;
 	var isEffectEnabled:Bool;
+	var isFpsEnabled:Bool;
 }
 
 typedef GameInfo = {

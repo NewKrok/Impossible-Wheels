@@ -20,6 +20,7 @@ class AppModel implements Model
 	@:observable var isSoundEnabled:Bool = null;
 	@:observable var isMusicEnabled:Bool = null;
 	@:observable var isEffectEnabled:Bool = null;
+	@:observable var isFpsEnabled:Bool = null;
 	@:observable var wasGameCompleted:Bool = false;
 
 	@:skipCheck @:observable var levelDatas:List<Level> = null;
@@ -74,6 +75,16 @@ class AppModel implements Model
 
 		return {
 			isEffectEnabled: value
+		}
+	};
+
+	@:transition function setIsFpsEnabled(value:Bool)
+	{
+		SaveUtil.data.app.isFpsEnabled = value;
+		SaveUtil.save();
+
+		return {
+			isFpsEnabled: value
 		}
 	};
 
