@@ -1,11 +1,14 @@
 package;
 
 import coconut.data.List;
+import h3d.Engine;
+import haxe.Timer;
 import hpp.heaps.Base2dApp;
 import hpp.heaps.Base2dStage.StageScaleMode;
 import hpp.util.DeviceData;
 import hpp.util.JsFullScreenUtil;
 import hpp.util.Log;
+import hxd.App;
 import hxd.Key;
 import hxd.Res;
 import iw.AppModel;
@@ -78,22 +81,23 @@ class Main extends Base2dApp
 
 		SoundManager.init(appModel.observables.isSoundEnabled, appModel.observables.isMusicEnabled);
 
-		//changeState(GameState, [appModel, 1]); // just for testing
-		changeState(MenuState, [appModel]);
+		changeState(GameState, [appModel, 1]); // just for testing
+		//changeState(MenuState, [appModel]);
 	}
 
 	static function main()
 	{
-		Res.initEmbed();
+		Res.initEmbed({compressSounds:true});
 		Key.initialize();
 		JsFullScreenUtil.init("webgl");
 
-		new Main();
+		// It looks Heaps need a little time to init assets, but I don't see related event to handle it properly
+		// Without this delay sometimes it use wrong font
+		Timer.delay(function() { new Main(); }, 500);
 	}
 }
 
 // TODO
-// Fix font issue o.O
 // Multi touch
-// Fix ios vector graphic lagging
-// Minimize the result
+// Minimize the result - It looks can't use closure
+// Fix ios vector graphic lagging - looks like heaps issue

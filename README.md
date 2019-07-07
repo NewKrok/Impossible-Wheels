@@ -1,10 +1,9 @@
 # Impossible-Wheels
-Physics based HTML5 2D car game, written in Haxe. 
+Physics based HTML5 2D car game, written in Haxe.
 
 ## Try it now (Beta)
 - http://flashplusplus.net/haxe/demo/iw/index.html
-- Not minified yet (~14MB o.O)
-- It's extreme slow on mobile :/ Investigation is in progress
+- Not minified yet, after closure it throw an error (~9MB)
 - There is no multi touch on mobile :/ Investigation is in progress
 
 ## Screenshot(s)

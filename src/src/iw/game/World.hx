@@ -269,8 +269,6 @@ class World extends Object
 
 			groundBodies.push(body);
 		}
-
-		g.endFill();
 	}
 
 	function createPlayerCar():Void

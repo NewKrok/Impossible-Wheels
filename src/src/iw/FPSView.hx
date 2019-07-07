@@ -28,12 +28,9 @@ import iw.Fonts;
 
 	public function update()
 	{
-		// Just for debugging
-		if (true)
-		{
-			var fps = Engine.getCurrent().fps;
-			fpsText.text = Math.floor(fps) + " fps";
-			fpsText.textColor = fps < 40 ? 0xFF0000 : 0xFFFF00;
-		}
+		var fps = Engine.getCurrent().fps;
+
+		fpsText.text = Math.floor(fps) + " fps" + "\n";
+		fpsText.textColor = fps < 40 ? 0xFF0000 : 0xFFFF00;
 	}
 }
