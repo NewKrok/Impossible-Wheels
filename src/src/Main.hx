@@ -97,7 +97,6 @@ class Main extends Base2dApp
 	}
 }
 
-// TODO
-// Multi touch
+// TODO - maybe once...
 // Minimize the result - It looks can't use closure
 // Fix ios vector graphic lagging - looks like heaps issue

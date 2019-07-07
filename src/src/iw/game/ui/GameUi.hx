@@ -127,13 +127,15 @@ import tink.state.Observable;
 				onPush: function(_) { touchState.down = true; },
 				onRelease: function(_) { touchState.down = false; },
 				baseGraphic: t,
-				overScale: .95
+				overScale: .95,
+				handleMultiTouch: true
 			});
 			touchControlUp = new BaseButton(rightBlock, {
 				onPush: function(_) { touchState.up = true; },
 				onRelease: function(_) { touchState.up = false; },
 				baseGraphic: Res.image.ui.touch_accelerate.toTile(),
-				overScale: .95
+				overScale: .95,
+				handleMultiTouch: true
 			});
 			rightBlock.x = HppG.stage2d.width - rightBlock.getSize().width - 10;
 			rightBlock.y = HppG.stage2d.height - rightBlock.getSize().height - 10;
@@ -148,13 +150,15 @@ import tink.state.Observable;
 				onPush: function(_) { touchState.left = true; },
 				onRelease: function(_) { touchState.left = false; },
 				baseGraphic: t,
-				overScale: .95
+				overScale: .95,
+				handleMultiTouch: true
 			});
 			touchControlRight = new BaseButton(leftBlock, {
 				onPush: function(_) { touchState.right = true; },
 				onRelease: function(_) { touchState.right = false; },
 				baseGraphic: Res.image.ui.touch_rotate.toTile(),
-				overScale: .95
+				overScale: .95,
+				handleMultiTouch: true
 			});
 			leftBlock.x = 10;
 			leftBlock.y = HppG.stage2d.height - leftBlock.getSize().height - 10;

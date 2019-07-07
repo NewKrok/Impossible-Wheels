@@ -1,10 +1,8 @@
 # Impossible-Wheels
 Physics based HTML5 2D car game, written in Haxe.
 
-## Try it now (Beta)
+## Try it now
 - http://flashplusplus.net/haxe/demo/iw/index.html
-- Not minified yet, after closure it throw an error (~9MB)
-- There is no multi touch on mobile :/ Investigation is in progress
 
 ## Screenshot(s)
 ![screenshot_main_menu_v1](https://user-images.githubusercontent.com/13141660/55689407-564db880-5984-11e9-99cf-dc60f2388ff1.jpg)
@@ -18,6 +16,11 @@ Physics based HTML5 2D car game, written in Haxe.
 - **TweenMax** The most feature-packed (and popular) animation tool https://greensock.com/tweenmax
 - **Coconut Data** A powerful lib for handle/bind/observe data https://lib.haxe.org/p/coconut.data
 - **ReplayKit** Library for recording and replaying gameplays https://github.com/apostx/haxe_replaykit
+
+## TODO
+- Not minified yet, after closure it throw an error (~9MB)
+- Sometimes really slow on mobile - maybe mobile low power mode
+- Laggy background on mobiles
 
 Our webpage:
 http://flashplusplus.net
