@@ -2,7 +2,7 @@
 Physics based HTML5 2D car game, written in Haxe.
 
 ## Try it now
-- http://flashplusplus.net/haxe/demo/iw/index.html
+http://flashplusplus.net/html-game/impossible-wheels
 
 ## Screenshot(s)
 ![screenshot_main_menu_v1](https://user-images.githubusercontent.com/13141660/55689407-564db880-5984-11e9-99cf-dc60f2388ff1.jpg)
