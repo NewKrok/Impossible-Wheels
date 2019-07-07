@@ -42,9 +42,11 @@ import iw.Fonts;
 		super(parent);
 
 		background = new Bitmap(Res.image.ui.level_button_background.toTile(), this);
+		background.smooth = true;
 		background.y = 15;
 
 		playIcon = new Bitmap(Res.image.ui.play_icon.toTile(), this);
+		playIcon.smooth = true;
 		playIcon.visible = false;
 		playIcon.x = background.tile.width / 2 - playIcon.tile.width / 2;
 		playIcon.y = 65;

@@ -16,7 +16,12 @@ class StarView extends Flow
 	{
 		super(parent);
 
-		for (i in 0...3) stars.push(new Bitmap(Res.image.ui.star_icon.toTile()));
+		for (i in 0...3)
+		{
+			var s = new Bitmap(Res.image.ui.star_icon.toTile());
+			s.smooth = true;
+			stars.push(s);
+		}
 	}
 
 	public function setCount(count:UInt)

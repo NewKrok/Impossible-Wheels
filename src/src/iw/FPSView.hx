@@ -22,6 +22,7 @@ import iw.Fonts;
 
 		fpsText = new Text(Fonts.DEFAULT_S, this);
 		fpsText.textColor = 0xFFFF00;
+		fpsText.smooth = true;
 		fpsText.x = 9;
 		fpsText.y = 2;
 	}

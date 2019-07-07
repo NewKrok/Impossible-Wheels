@@ -113,7 +113,7 @@ import iw.Fonts;
 		flowBackground.drawRect(0, 0, flowWidth + 20, 43);
 		flowBackground.endFill();
 
-		labelBackground.drawRect(0, 0, 190, 43);
+		labelBackground.drawRect(0, 0, 220, 43);
 	}
 
 	public function dispose()
